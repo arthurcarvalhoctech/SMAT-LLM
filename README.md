@@ -12,7 +12,7 @@ Ferramenta para identificação de conflitos semânticos em cenários de merge.
 pip install -r requirements.txt
 ```
 
-- Altere o arquivo de configuração [`SMAT/nimrod/tests/env-config.json`](nimrod/tests/env-config.json): atualize o campo `input_path` com o [caminho do arquivo de cenários](/input-smat.json) e configure a chave da API do Gemini em `api_params` (campo `api-key`).
+- Altere o arquivo de configuração [`/SMAT/nimrod/tests/env-config.json`](/SMAT/nimrod/tests/env-config.json): atualize o campo `input_path` com o [caminho do arquivo de cenários](/input-smat.json) e configure a chave da API do Gemini em `api_params` (campo `api-key`).
   - Se não tiver uma chave, crie [acessando esse url com sua conta Google](https://aistudio.google.com/u/1/api-keys).
 
 - Em `input-smat.json`, atualize os caminhos em `scenarioJars` para apontarem para os jars corretos no seu sistema.
