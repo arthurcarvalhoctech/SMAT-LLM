@@ -1,0 +1,6 @@
+beautifulsoup4
+setuptools
+tree-sitter
+tree-sitter-java
+types-requests
+google-genai

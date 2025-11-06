@@ -1,0 +1,28 @@
+[
+  {
+    "projectName": "Discount",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": ""
+    },
+    "targets": {
+      "DiscountCalculator": [
+        {
+          "method": "apply(int price)",
+          "leftChangesSummary": "Left adds a condition that changes discount value if true",
+          "rightChangesSummary": "Right changes discount value"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/path/jar_files/build/jar/base.jar",
+      "left": "/path/jar_files/build/jar/left.jar",
+      "right": "/path/jar_files/build/jar/right.jar",
+      "merge": "/path/jar_files/build/jar/merge.jar"
+    },
+    "jarType": "transformed"
+  }
+]

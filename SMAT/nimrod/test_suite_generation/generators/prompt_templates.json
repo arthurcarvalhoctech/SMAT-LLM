@@ -1,0 +1,32 @@
+{
+  "prompt_templates": {
+    "zero_shot": {
+      "system_message": {
+        "role": "system",
+        "content": "You are a senior Java developer with expertise in JUnit testing.\nYour task is to provide JUnit tests for the given method in the class under test, considering the changes introduced in the left and right branches.\nYou have to answer with the test code only, inside code blocks (```).\nThe tests should start with @Test."
+      },
+      "user_init_message": {
+        "role": "user", 
+        "content": "Here is the context of the method under test in the class {class_name} on the {branch} branch:"
+      },
+      "context_templates": {
+        "changes_summary": {
+          "role": "user",
+          "content": "Left {left_changes_summary}.\nRight {right_changes_summary}"
+        },
+        "class_fields": {
+          "role": "user", 
+          "content": "Class fields:\n{class_fields}"
+        },
+        "constructors": {
+          "role": "user",
+          "content": "Constructors:\n{constructors}"
+        }
+      },
+      "method_context_message": {
+        "role": "user",
+        "content": "Target Method Under Test:\n{method_code}\n\nNow generate JUnit tests for the method under test, considering the given context. Remember to create meaningful assertions.\n\nIMPORTANT: Use only 1 or 2-parameter assertions (e.g., assertEquals(expected, actual)). Do NOT use 3-parameter assertions with messages.\n\nWrite all tests inside code blocks (```), and start each test with @Test."
+      }
+    }
+  }
+}
