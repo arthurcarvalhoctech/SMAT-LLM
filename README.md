@@ -5,11 +5,18 @@ Ferramenta para identificação de conflitos semânticos em cenários de merge.
 ## Instruções rápidas
 
 - Clone o repositório.
-- Instale e configure o Java 8 (veja seção detalhada abaixo)
+- Instale e configure o Java 8:
+
+```bash
+sudo apt update
+sudo apt install openjdk-8-jdk
+java -version  # Para verificar
+```
+
 - Instale as dependências do `requirements.txt`:
 
-```powershell
-pip install -r requirements.txt
+```bash
+pip install -r SMAT/requirements.txt
 ```
 
 - Altere o arquivo de configuração [`/SMAT/nimrod/tests/env-config.json`](/SMAT/nimrod/tests/env-config.json): atualize o campo `input_path` com o [caminho do arquivo de cenários](/input-smat.json) e configure a chave da API do Gemini em `api_params` (campo `api-key`).
@@ -19,7 +26,7 @@ pip install -r requirements.txt
 
 - Para rodar o experimento use:
 
-```powershell
+```bash
 python3 run_experiment.py
 ```
 
@@ -29,11 +36,3 @@ Se você usa o Windows como sistema operacional, ao clonar este projeto, provave
 Para resolver isso, você deve instalar o **Windows Subsystem for Linux (WSL)**; basta seguir as etapas descritas neste [guia](https://learn.microsoft.com/pt-br/windows/wsl/install). Ao final da instalação, abra o terminal Linux no seu Windows e clone o projeto normalmente.
 
 Para executar o projeto, recomendamos o uso do **VSCode**, pois ele possui extensões que se integram ao WSL. Após instalar o WSL, ao abrir o VSCode, será exibida uma mensagem sugerindo o download da extensão **Remote - WSL**. Com essa extensão, é possível editar todos os arquivos que estão no WSL através do VSCode e executar o projeto pelo terminal.
-
-## Instalação do Java 8
-
-```bash
-sudo apt update
-sudo apt install openjdk-8-jdk
-java -version  # Para verificar
-```
