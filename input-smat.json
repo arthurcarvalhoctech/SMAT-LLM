@@ -18,10 +18,10 @@
       ]
     },
     "scenarioJars": {
-      "base": "/path/jar_files/build/jar/base.jar",
-      "left": "/path/jar_files/build/jar/left.jar",
-      "right": "/path/jar_files/build/jar/right.jar",
-      "merge": "/path/jar_files/build/jar/merge.jar"
+      "base": "/app/jar_files/build/jar/base.jar",
+      "left": "/app/jar_files/build/jar/left.jar",
+      "right": "/app/jar_files/build/jar/right.jar",
+      "merge": "/app/jar_files/build/jar/merge.jar"
     },
     "jarType": "transformed"
   }
