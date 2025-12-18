@@ -213,7 +213,10 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
 
     def extract_snippet(self, source_code: str, start_byte: int, end_byte: int) -> str:
         """Extracts a snippet of code from the source code using the start and end byte offsets"""
-        return source_code[start_byte:end_byte]
+        # Convert string to bytes, extract the snippet, then convert back to string
+        source_bytes = source_code.encode('utf-8')
+        snippet_bytes = source_bytes[start_byte:end_byte]
+        return snippet_bytes.decode('utf-8')
 
     def extract_class_info(self, source_code_path: str, full_method_name: str, full_class_name: str) -> tuple:
         """
@@ -319,8 +322,8 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
         else:
             scenario_infos_dict = {}
 
-        if class_name not in scenario_infos_dict:
-            scenario_infos_dict[class_name] = []
+        # Always reset the class entry to avoid accumulating entries from multiple branches
+        scenario_infos_dict[class_name] = []
 
         """
         method_item ->
