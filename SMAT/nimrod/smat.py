@@ -1,5 +1,11 @@
+import logging
 from typing import List
 
+from nimrod.core.feature_flags import (
+    DYNAMIC_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
+    DYNAMIC_INTERFERENCE_DETECTION_ENV_VAR,
+    is_dynamic_interference_detection_enabled,
+)
 from nimrod.dynamic_analysis.main import DynamicAnalysis
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
 from nimrod.output_generation.output_generator import OutputGenerator, OutputGeneratorContext
@@ -17,6 +23,14 @@ class SMAT:
     self._output_generators = output_generators
 
   def run_tool_for_semmantic_conflict_detection(self, scenario: MergeScenarioUnderAnalysis) -> None:
+    if not is_dynamic_interference_detection_enabled():
+      logging.warning(
+          "%s (%s=false).",
+          DYNAMIC_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
+          DYNAMIC_INTERFERENCE_DETECTION_ENV_VAR,
+      )
+      return
+
     test_suites = self._generate_test_suites_for_scenario(scenario)
     executions = self._test_suites_execution.execute_test_suites(test_suites, scenario.scenario_jars)
     semantic_conflicts = self._dynamic_analysis.check_for_semantic_conflicts(executions)    

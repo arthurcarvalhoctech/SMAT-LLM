@@ -201,6 +201,60 @@ Formato:
 - `jarType` deve ser `transformed` ou `original` e deve aparecer no caminho dos
   jars.
 
+### 2.4 Flags dos fluxos de detecção de interferências
+
+O SMAT tem dois fluxos independentes:
+
+1. **Dinâmico baseado em testes** (ligado por padrão): gera testes a partir de
+   `left`/`right`, executa em `base`/`left`/`right`/`merge` e aplica os
+   critérios de conflito semântico.
+2. **Pré-análise com Laya** (desligado por padrão): usa o modelo de decisão
+   Laya para levantar hipóteses sobre os três critérios de estado do artigo
+   antes da detecção dinâmica. Ele **não substitui** a detecção por execução.
+
+| Variável | Padrão | Efeito |
+|---|---|---|
+| `SMAT_DYNAMIC_INTERFERENCE_DETECTION` | `true` | Liga/desliga o fluxo dinâmico baseado em testes. |
+| `SMAT_LAYA_INTERFERENCE_DETECTION` | `false` | Liga/desliga a pré-análise com Laya. |
+| `SMAT_LAYA_MODEL` | `english` | Checkpoint do Laya (`english`, `multilingual` ou `typed-decisions`). |
+| `SMAT_LAYA_THRESHOLD` | `0.5` | Probabilidade mínima para marcar um critério como acionado. |
+| `SMAT_LAYA_MAX_LEN` | `512` | Limite de tokens do estado enviado ao Laya. |
+| `SMAT_LAYA_LOG_DIR` | `.../reports/laya` | Diretório dos logs `.log` e `.jsonl`. |
+
+Combinações possíveis:
+
+| Dinâmico | Laya | Resultado |
+|---|---|---|
+| `true` | `false` | Apenas a detecção atual (padrão). |
+| `false` | `true` | Apenas a pré-análise Laya. |
+| `true` | `true` | Laya primeiro, depois a detecção dinâmica. |
+| `false` | `false` | Nenhum fluxo; o SMAT informa que nenhum está ativo. |
+
+Quando o fluxo dinâmico é desabilitado, o console exibe:
+
+```text
+O fluxo de detecção de interferências baseado em testes não está ativo.
+```
+
+A instalação do Laya é opcional:
+
+```bash
+python -m pip install -r SMAT/requirements-laya.txt
+```
+
+No Docker, use `INSTALL_LAYA=true` no build. O primeiro uso baixa o checkpoint
+do Hugging Face. Os logs ficam em:
+
+```text
+SMAT/output-test-dest/reports/laya/laya_interference_<run_id>.log
+SMAT/output-test-dest/reports/laya/laya_interference_<run_id>.jsonl
+```
+
+O `docker-compose.yml` repassa todas essas variáveis ao container. Em execuções
+locais, o `.env` é carregado automaticamente. Detalhes do fluxo, dos três
+critérios e do formato do log estão em
+[`docs/fluxo-laya.md`](docs/fluxo-laya.md).
+
 ## 3. Datasets
 
 ### 3.1 mergedataset
@@ -416,6 +470,17 @@ vazio.
   aumente o retry/backoff.
 - **`groupadd: invalid group ID` no Docker**: execute com `USER_ID` e
   `GROUP_ID`, como no comando acima.
+- **`Duplicate dispatch rule for <built-in function intern>`**: a imagem
+  Ubuntu 22.04 usa o `python3.11` **3.11.0rc1**, que não tem
+  `sys.get_int_max_str_digits` e quebra o `torch._dynamo`. Reconstrua a imagem
+  com o Dockerfile atualizado:
+  ```bash
+  INSTALL_LAYA=true USER_ID=$(id -u) GROUP_ID=$(id -g) \
+    docker compose build --no-cache smat
+  ```
+  Confirme com `docker compose run --rm smat python3 -VV` (deve ser uma versão
+  final, como `3.11.15`). O log do fluxo Laya agora inclui o traceback completo
+  na primeira ocorrência de cada erro.
 - **Resultados misturados**: arquive ou apague `SMAT/output-test-dest` entre
   execuções.
 

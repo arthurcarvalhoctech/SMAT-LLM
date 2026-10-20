@@ -6,6 +6,7 @@ services:
       args:
         USER_ID: ${USER_ID}
         GROUP_ID: ${GROUP_ID}
+        INSTALL_LAYA: ${INSTALL_LAYA:-false}
     image: smat-ubuntu
     container_name: smat_container
     environment:
@@ -22,6 +23,14 @@ services:
       - LLM_NUM_OUTPUTS=${LLM_NUM_OUTPUTS:-}
       - LLM_PROMPT_KEYS=${LLM_PROMPT_KEYS:-}
       - LLM_PROMPT_TEMPLATE=${LLM_PROMPT_TEMPLATE:-}
+      # Test-based dynamic interference detection pipeline (true/false).
+      - SMAT_DYNAMIC_INTERFERENCE_DETECTION=${SMAT_DYNAMIC_INTERFERENCE_DETECTION:-true}
+      # Laya pre-analysis flow (optional; true/false).
+      - SMAT_LAYA_INTERFERENCE_DETECTION=${SMAT_LAYA_INTERFERENCE_DETECTION:-false}
+      - SMAT_LAYA_MODEL=${SMAT_LAYA_MODEL:-english}
+      - SMAT_LAYA_THRESHOLD=${SMAT_LAYA_THRESHOLD:-0.5}
+      - SMAT_LAYA_MAX_LEN=${SMAT_LAYA_MAX_LEN:-512}
+      - SMAT_LAYA_LOG_DIR=${SMAT_LAYA_LOG_DIR:-}
       # Provider-specific keys.
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
@@ -41,7 +50,12 @@ services:
       # The same absolute path is kept inside the container so the JSON paths
       # work both locally and in Docker.
       - /home/arthur/UFPE/mergedataset:/home/arthur/UFPE/mergedataset:ro
+      # Persist Hugging Face weights downloaded by Laya between runs.
+      - smat-hf-cache:/home/appuser/.cache/huggingface
       # Mount the ASTER dataset read-only. Uncomment and adjust the host path.
       # - /caminho/aster:/data/aster:ro
     stdin_open: true
     tty: true
+
+volumes:
+  smat-hf-cache:

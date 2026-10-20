@@ -4,15 +4,24 @@ from typing import Dict, List
 from nimrod.dynamic_analysis.behavior_change_checker import BehaviorChangeChecker
 from nimrod.dynamic_analysis.criteria.first_semantic_conflict_criteria import FirstSemanticConflictCriteria
 from nimrod.dynamic_analysis.criteria.second_semantic_conflict_criteria import SecondSemanticConflictCriteria
+from nimrod.core.feature_flags import (
+  DYNAMIC_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
+  LAYA_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
+  NO_INTERFERENCE_FLOW_ENABLED_MESSAGE,
+  is_dynamic_interference_detection_enabled,
+  is_laya_interference_detection_enabled,
+)
 from nimrod.dynamic_analysis.main import DynamicAnalysis
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
+from nimrod.laya_interference import LayaFlowConfig, LayaInterferenceFlow
 from nimrod.output_generation.behavior_change_output_generator import BehaviorChangeOutputGenerator
 from nimrod.output_generation.output_generator import OutputGenerator
 from nimrod.output_generation.semantic_conflicts_output_generator import SemanticConflictsOutputGenerator
 from nimrod.output_generation.test_suites_output_generator import TestSuitesOutputGenerator
+from nimrod.pipeline import run_scenarios
 from nimrod.smat import SMAT
 from nimrod.test_suite_generation.main import TestSuiteGeneration
-from nimrod.tests.utils import setup_logging, get_config
+from nimrod.tests.utils import setup_logging, get_config, get_base_output_path
 from nimrod.test_suite_generation.generators.test_suite_generator import TestSuiteGenerator
 from nimrod.test_suite_generation.generators.randoop_test_suite_generator import RandoopTestSuiteGenerator
 from nimrod.test_suite_generation.generators.evosuite_differential_test_suite_generator import EvosuiteDifferentialTestSuiteGenerator
@@ -116,9 +125,7 @@ def parse_scenarios_from_input(config: Dict[str, str]) -> List[MergeScenarioUnde
         exit(1)
 
 
-def main():
-  setup_logging()
-  config = get_config()
+def _build_dynamic_flow(config: Dict[str, str]) -> SMAT:
   test_suite_generators = get_test_suite_generators(config)
   test_suite_generation = TestSuiteGeneration(test_suite_generators)
   test_suites_execution = TestSuitesExecution(
@@ -129,14 +136,56 @@ def main():
   ], BehaviorChangeChecker())
   output_generators = get_output_generators(config)
 
-  smat = SMAT(test_suite_generation, test_suites_execution, dynamic_analysis, output_generators)
-  scenarios = parse_scenarios_from_input(config)
+  return SMAT(
+      test_suite_generation,
+      test_suites_execution,
+      dynamic_analysis,
+      output_generators,
+  )
 
-  for scenario in scenarios:
-    if scenario.run_analysis:
-      smat.run_tool_for_semmantic_conflict_detection(scenario)
-    else:
-      logging.info(f"Skipping tool execution for project {scenario.project_name}")
+
+def _build_laya_flow() -> LayaInterferenceFlow:
+  default_log_dir = os.path.join(
+      os.path.dirname(get_base_output_path()), "reports", "laya"
+  )
+  config = LayaFlowConfig.from_env(default_log_dir=default_log_dir)
+  return LayaInterferenceFlow(config)
+
+
+def main():
+  setup_logging()
+
+  dynamic_enabled = is_dynamic_interference_detection_enabled()
+  laya_enabled = is_laya_interference_detection_enabled()
+
+  if not dynamic_enabled:
+    logging.warning(DYNAMIC_INTERFERENCE_DETECTION_DISABLED_MESSAGE)
+  if not laya_enabled:
+    logging.info(LAYA_INTERFERENCE_DETECTION_DISABLED_MESSAGE)
+
+  if not dynamic_enabled and not laya_enabled:
+    logging.warning(NO_INTERFERENCE_FLOW_ENABLED_MESSAGE)
+    return
+
+  logging.info(
+      "Active interference detection flows: dynamic=%s laya=%s",
+      dynamic_enabled,
+      laya_enabled,
+  )
+
+  config = get_config()
+  dynamic_flow = _build_dynamic_flow(config) if dynamic_enabled else None
+  laya_flow = _build_laya_flow() if laya_enabled else None
+
+  if laya_flow is not None:
+    logging.info("Laya pre-analysis logs: %s", laya_flow.log_dir)
+
+  scenarios = parse_scenarios_from_input(config)
+  run_scenarios(
+      scenarios,
+      laya_flow=laya_flow,
+      dynamic_flow=dynamic_flow,
+  )
 
 
 if __name__ == '__main__':

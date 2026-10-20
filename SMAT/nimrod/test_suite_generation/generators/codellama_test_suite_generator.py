@@ -1,17 +1,21 @@
 import json
 import logging
 import os
-from pathlib import Path
 from typing import List, Dict, Union, Any
 import re
 
-import tree_sitter_java as tsjava
-from tree_sitter import Language, Parser, QueryCursor
+from tree_sitter import QueryCursor
 
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
+from nimrod.source_code import (
+    extract_java_class_info,
+    extract_java_snippet,
+    find_source_code_paths as find_java_source_code_paths,
+    parse_java_code,
+)
 from nimrod.test_suite_generation.generators.test_suite_generator import TestSuiteGenerator
 from nimrod.test_suite_generation.generators.prompt_manager import PromptManager
-from nimrod.test_suite_generation.generators.llm_api import GeminiApi, create_llm_api
+from nimrod.test_suite_generation.generators.llm_api import create_llm_api
 from nimrod.test_suite_generation.generators.llm_config import (
     llm_env_configured,
     resolve_llm_config,
@@ -157,116 +161,20 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
 
     def parse_code(self, source_code_path: str) -> tuple:
         """Parses the Java source code using the Tree-sitter parser and return the language, source code, and generated AST"""
-        JAVA_LANGUAGE = Language(tsjava.language())
-        parser = Parser(JAVA_LANGUAGE)
-        with open(source_code_path, 'r') as f:
-            source_code = f.read()
-        tree = parser.parse(bytes(source_code, "utf8"))
-        return JAVA_LANGUAGE, source_code, tree
+        return parse_java_code(source_code_path)
 
     def extract_snippet(self, source_code: str, start_byte: int, end_byte: int) -> str:
         """Extracts a snippet of code from the source code using the start and end byte offsets"""
-        # Convert string to bytes, extract the snippet, then convert back to string
-        source_bytes = source_code.encode('utf-8')
-        snippet_bytes = source_bytes[start_byte:end_byte]
-        return snippet_bytes.decode('utf-8')
+        return extract_java_snippet(source_code, start_byte, end_byte)
 
     def extract_class_info(self, source_code_path: str, full_method_name: str, full_class_name: str) -> tuple:
         """
         Extracts the class fields, constructor, and body of the method under test from the source code
         using the generated AST to query the information
         """
-        try:
-            class_name = full_class_name.split('.')[-1]
-            method_name = full_method_name.split('(')[0]
-            JAVA_LANGUAGE, source_code, tree = self.parse_code(source_code_path)
-
-            query_text = f"""
-                (class_declaration
-                    name: (identifier) @class_name
-                    body: (class_body
-                        [
-                        (field_declaration) @field_declaration
-                        (constructor_declaration
-                            name: (identifier) @constructor_name) @constructor_declaration
-                        (method_declaration
-                            name: (identifier) @method_name) @method_def
-                        (class_declaration) @nested_class
-                        (#eq? @method_name "{method_name}")
-                        (#eq? @constructor_name "{class_name}")
-                        ]
-                    )
-                    (#eq? @class_name "{class_name}")
-                )
-
-                ; Searches for methods in any class (including nested ones)
-                (method_declaration
-                    name: (identifier) @any_method_name
-                    (#eq? @any_method_name "{method_name}")
-                ) @any_method_def
-
-                ; Searches for fields in any class (including nested ones)
-                (field_declaration) @any_field_declaration
-            """
-            query = JAVA_LANGUAGE.query(query_text)
-            cursor = QueryCursor(query)
-            captures_dict = cursor.captures(tree.root_node)
-
-            captures = []
-            for capture_name, nodes in captures_dict.items():
-                for node in nodes:
-                    captures.append((node, capture_name))
-
-            if not captures:
-                raise Exception(f"No captures found for the class '{class_name}' in '{source_code_path}'")
-
-            class_fields: List[str] = []
-            class_constructors: List[str] = []
-            class_method: str = ""
-
-            for node, capture_name in captures:
-                captured_text = self.extract_snippet(source_code, node.start_byte, node.end_byte)
-
-                if capture_name == "field_declaration":
-                    class_fields.append(captured_text)
-                elif capture_name == "constructor_declaration":
-                    class_constructors.append(captured_text)
-                elif capture_name == "method_def":
-                    class_method = captured_text
-                elif capture_name == "any_method_def" and not class_method:
-                    class_method = captured_text
-                elif capture_name == "any_field_declaration" and method_name in captured_text and not class_method:
-                    class_method = captured_text
-
-            if not class_method:
-                logging.debug(f"Method/field '{method_name}' not found with main query, trying broader field search")
-
-                # More specific query for fields with exact name (including in nested classes)
-                field_query_text = f"""
-                    (field_declaration
-                        declarator: (variable_declarator
-                            name: (identifier) @field_name
-                        )
-                        (#eq? @field_name "{method_name}")
-                    ) @target_field_declaration
-                """
-                
-                field_query = JAVA_LANGUAGE.query(field_query_text)
-                field_cursor = QueryCursor(field_query)
-                field_captures_dict = field_cursor.captures(tree.root_node)
-                
-                for capture_name, nodes in field_captures_dict.items():
-                    for node in nodes:
-                        if capture_name == "target_field_declaration":
-                            class_method = self.extract_snippet(source_code, node.start_byte, node.end_byte)
-                            logging.debug(f"Found field '{method_name}' as target: {class_method[:100]}...")
-                            break
-
-            return class_fields, class_constructors, class_method
-
-        except Exception as e:
-            logging.error(f"An error occurred while extracting class info for '{full_class_name}': {e}")
-            raise e
+        return extract_java_class_info(
+            source_code_path, full_method_name, full_class_name
+        )
 
     def save_scenario_infos(self, scenario_infos_path: str, class_name: str, methods: Union[List[str], List[Dict[str, str]]], source_code_path: str) -> None:
         """Stores relevant scenario information (for each class and method) in a JSON file"""
@@ -442,84 +350,7 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
           - <scenario>/transformed/<branch>/*.jar + <scenario>/source/<branch>.java
           - Legacy <repo>/jar_files/{left,right}.java (toy scenarios)
         """
-        first_jar = input_jar.split(":")[0]
-        path_parts = Path(first_jar).parts
-
-        if jar_type in path_parts:
-            type_index = path_parts.index(jar_type)
-            scenario_root = Path(*path_parts[:type_index])
-        else:
-            scenario_root = Path(first_jar).parent
-
-        source_root = scenario_root / "source"
-
-        if source_root.is_dir():
-            found: Dict[str, str] = {b: "" for b in ("base", "left", "right", "merge")}
-            scores: Dict[str, int] = {b: 0 for b in found}
-
-            for root, _, files in os.walk(source_root):
-                root_name = os.path.basename(root)
-                for file_name in files:
-                    if not file_name.endswith(".java"):
-                        continue
-                    stem = file_name[:-len(".java")]
-                    for branch in found:
-                        if stem == branch:
-                            score = 2 if root_name == class_name else 1
-                        elif stem == f"{class_name}_{branch}":
-                            score = 2
-                        elif stem.endswith(f"_{branch}") and class_name in stem:
-                            score = 1
-                        else:
-                            continue
-
-                        if score > scores[branch]:
-                            found[branch] = str(Path(root) / file_name)
-                            scores[branch] = score
-
-            # Some datasets (e.g. ASTER) have only one source version.
-            if not found["left"] or not found["right"]:
-                for root, _, files in os.walk(source_root):
-                    generic = os.path.join(root, f"{class_name}.java")
-                    if os.path.isfile(generic):
-                        if not found["left"]:
-                            found["left"] = generic
-                        if not found["right"]:
-                            found["right"] = generic
-                        break
-
-            missing = [b for b in ("left", "right") if not found[b]]
-            if missing:
-                raise FileNotFoundError(
-                    f"Could not find source files for {missing} of class '{class_name}' "
-                    f"under '{source_root}'. Expected <Class>_<branch>.java, "
-                    f"<Class>/<branch>.java, <branch>.java or <Class>.java."
-                )
-
-            return found
-
-        # Legacy layout used by the toy Discount scenario.
-        from nimrod.tests.utils import get_base_output_path
-        base_output = get_base_output_path()
-        legacy_root = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(base_output))),
-            "jar_files",
-        )
-        legacy_left = os.path.join(legacy_root, "left.java")
-        legacy_right = os.path.join(legacy_root, "right.java")
-
-        if os.path.isfile(legacy_left) and os.path.isfile(legacy_right):
-            logging.warning(
-                "Source directory '%s' not found; falling back to legacy sources in '%s'.",
-                source_root,
-                legacy_root,
-            )
-            return {"left": legacy_left, "right": legacy_right, "base": "", "merge": ""}
-
-        raise FileNotFoundError(
-            f"Source directory '{source_root}' not found and legacy sources were not "
-            f"available in '{legacy_root}'."
-        )
+        return find_java_source_code_paths(input_jar, jar_type, class_name)
 
     def fetch_source_code_branch(self, input_jar: str, jar_type: str, class_name: str, project_name: str) -> tuple:
         """Retrieves the source code path and branch for the given JAR path."""
