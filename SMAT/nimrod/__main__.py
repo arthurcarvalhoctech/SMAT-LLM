@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import Dict, List
 from nimrod.dynamic_analysis.behavior_change_checker import BehaviorChangeChecker
 from nimrod.dynamic_analysis.criteria.first_semantic_conflict_criteria import FirstSemanticConflictCriteria
@@ -17,6 +18,10 @@ from nimrod.test_suite_generation.generators.randoop_test_suite_generator import
 from nimrod.test_suite_generation.generators.evosuite_differential_test_suite_generator import EvosuiteDifferentialTestSuiteGenerator
 from nimrod.test_suite_generation.generators.evosuite_test_suite_generator import EvosuiteTestSuiteGenerator
 from nimrod.test_suite_generation.generators.codellama_test_suite_generator import CodellamaTestSuiteGenerator
+from nimrod.test_suite_generation.generators.llm_config import (
+  infer_provider_from_env,
+  llm_env_configured,
+)
 from nimrod.test_suite_generation.generators.project_test_suite_generator import ProjectTestSuiteGenerator
 from nimrod.test_suites_execution.main import TestSuitesExecution, TestSuiteExecutor
 from nimrod.tools.bin import MOD_RANDOOP, RANDOOP
@@ -27,9 +32,21 @@ from nimrod.input_parsing.input_parser import CsvInputParser, JsonInputParser
 
 def get_llm_test_suite_generators(config: Dict[str, str]) -> List[TestSuiteGenerator]:
   """
-  Creates test suite generators for all available LLM models configured in api_params.
-  Each model gets its own generator instance to enable parallel processing and comparison.
+  Creates test suite generators for the configured LLM.
+
+  When LLM_* environment variables are present, a single generator is created
+  from the environment and the api_params entries are ignored. Otherwise, one
+  generator is created for each entry in api_params.
   """
+  if llm_env_configured():
+    model_key = (
+        os.environ.get("LLM_MODEL_KEY")
+        or os.environ.get("LLM_PROVIDER")
+        or infer_provider_from_env()
+        or "llm"
+    )
+    return [CodellamaTestSuiteGenerator(Java(), model_key, {})]
+
   generators: List[TestSuiteGenerator] = list()
   api_params = config.get('api_params', {})
   
@@ -43,8 +60,12 @@ def get_llm_test_suite_generators(config: Dict[str, str]) -> List[TestSuiteGener
 
 def get_test_suite_generators(config: Dict[str, str]) -> List[TestSuiteGenerator]:
   config_generators = config.get(
-      'test_suite_generators', ['randoop', 'randoop-modified', 'evosuite', 'evosuite-differential', 'codellama', 'gemini', 'project'])
+      'test_suite_generators', ['randoop', 'randoop-modified', 'evosuite', 'evosuite-differential', 'codellama', 'gemini', 'llm', 'project'])
   generators: List[TestSuiteGenerator] = list()
+  llm_generator_names = {
+      'codellama', 'gemini', 'llm', 'ollama', 'deepseek', 'openai',
+      'openai-compatible', 'anthropic',
+  }
 
   if 'randoop' in config_generators:
     generators.append(RandoopTestSuiteGenerator(Java(), RANDOOP, "RANDOOP"))
@@ -55,8 +76,8 @@ def get_test_suite_generators(config: Dict[str, str]) -> List[TestSuiteGenerator
     generators.append(EvosuiteTestSuiteGenerator(Java()))
   if 'evosuite-differential' in config_generators:
     generators.append(EvosuiteDifferentialTestSuiteGenerator(Java()))
-  if 'codellama' in config_generators or 'gemini' in config_generators:
-    # Create one generator for each configured model
+  if llm_env_configured() or any(name in config_generators for name in llm_generator_names):
+    # Create one generator for the configured LLM (environment or api_params).
     generators.extend(get_llm_test_suite_generators(config))
   if 'project' in config_generators:
     generators.append(ProjectTestSuiteGenerator(Java()))
@@ -81,7 +102,7 @@ def get_output_generators(config: Dict[str, str]) -> List[OutputGenerator]:
 
 
 def parse_scenarios_from_input(config: Dict[str, str]) -> List[MergeScenarioUnderAnalysis]:
-    json_input = config.get('input_path', "")
+    json_input = os.environ.get("SMAT_INPUT_PATH") or config.get('input_path', "")
     csv_input_path = config.get('path_hash_csv', "")
 
     if json_input != "":

@@ -1,9 +1,9 @@
 import json
 import logging
 import os
-from typing import List, Dict, Union, Any, Optional
+from pathlib import Path
+from typing import List, Dict, Union, Any
 import re
-from time import time
 
 import tree_sitter_java as tsjava
 from tree_sitter import Language, Parser, QueryCursor
@@ -11,71 +11,14 @@ from tree_sitter import Language, Parser, QueryCursor
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
 from nimrod.test_suite_generation.generators.test_suite_generator import TestSuiteGenerator
 from nimrod.test_suite_generation.generators.prompt_manager import PromptManager
-from nimrod.tests.utils import get_config
+from nimrod.test_suite_generation.generators.llm_api import GeminiApi, create_llm_api
+from nimrod.test_suite_generation.generators.llm_config import (
+    llm_env_configured,
+    resolve_llm_config,
+)
+from nimrod.tests.utils import get_base_output_path, get_config
 from nimrod.utils import load_json, save_json
 
-from google import genai
-from google.genai import types as genai_types
-
-
-class GeminiApi:
-    
-    def __init__(self, api_key: str, timeout_seconds: int, temperature: float, model: str) -> None:
-        self.api_key = api_key
-        self.timeout_seconds = timeout_seconds
-        self.temperature = temperature
-        self.model = model
-        self.client = genai.Client(api_key=api_key)
-        self.branch: Optional[str] = None
-        
-        logging.debug(f"Gemini API initialized with model: {model}, temperature: {temperature}")
-    
-    def set_branch(self, branch: str) -> None:
-        """Sets the branch to be used in the API requests."""
-        self.branch = branch
-
-    def generate_output(self, messages: List[Dict[str, str]]) -> Dict[str, Any]:
-        """Generates output by sending messages to the Gemini API."""
-        start_time = time()
-
-        content = self._convert_messages_to_gemini_format(messages)
-        generation_config = genai_types.GenerateContentConfig(
-            temperature=self.temperature,
-            seed=666,
-            max_output_tokens=8192,
-        )
-
-        response = self.client.models.generate_content(
-            model=self.model,
-            contents=[content],
-            config=generation_config,
-        )
-
-        end_time = time()
-        duration_ns = int((end_time - start_time) * 1_000_000_000)
-        response_text = response.text if hasattr(response, 'text') else str(response)
-
-        return {
-            "response": response_text,
-            "total_duration": duration_ns,
-        }
-    
-    def _convert_messages_to_gemini_format(self, messages: List[Dict[str, str]]) -> str:
-        content_parts = []
-        
-        for msg in messages:
-            role = msg.get("role", "")
-            content = msg.get("content", "")
-            
-            if role == "system":
-                content_parts.append(f"System: {content}")
-            elif role == "user":
-                content_parts.append(content)
-            elif role == "assistant":
-                content_parts.append(f"Assistant: {content}")
-        
-        return "\n\n".join(content_parts)
-        
 
 class CodellamaTestSuiteGenerator(TestSuiteGenerator):
 
@@ -86,17 +29,33 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
         self.api = None
         self.prompt_manager = PromptManager()
 
-        # Loads global configurations
+        # Environment variables take precedence over env-config.json. When the
+        # LLM_* variables are present, ignore the api_params model entry.
         global_config = get_config()
+        if not llm_env_configured():
+            global_model_config = (global_config.get("api_params", {}) or {}).get(model_key, {})
+            self.model_config = {**global_model_config, **self.model_config}
 
-        # Prompt configurations (priority: model_config > global_config > default)
+        self.llm_config = resolve_llm_config(model_key, self.model_config)
+        self.num_outputs = self.llm_config.num_outputs
+        self.prompt_keys = self.llm_config.prompt_keys
+        self.output_label = self.llm_config.output_label
+
+        # Prompt configurations (priority: environment > model_config > global_config > default)
         self.prompt_template = (
-            self.model_config.get("prompt_template") or 
+            os.environ.get("LLM_PROMPT_TEMPLATE")
+            or self.model_config.get("prompt_template") or 
             global_config.get("prompt_template") or 
             "zero_shot"
         )
         
-        logging.info(f"Inicializado {self.model_key} com template: {self.prompt_template}")
+        logging.info(
+            "Inicializado %s (provider=%s, model=%s, template=%s)",
+            self.output_label,
+            self.llm_config.provider,
+            self.llm_config.model,
+            self.prompt_template,
+        )
     
     def generate_messages_list(self, method_info: Dict[str, str], full_class_name: str,
                                branch: str, output_path: str) -> Dict[str, List[Dict[str, str]]]:
@@ -115,7 +74,8 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
             method_info=method_info,
             class_name=class_name,
             branch=branch,
-            template_name=self.prompt_template
+            template_name=self.prompt_template,
+            prompt_keys=self.prompt_keys,
         )
         
         # Saves generated messages
@@ -131,26 +91,16 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
         return messages_dict
     
     def _ensure_api_initialized(self) -> None:
-        """Initializes the API if it has not been initialized yet."""
+        """Initializes the provider client if it has not been initialized yet."""
         if self.api is not None:
             return
 
-        config = get_config()
-        api_params = config["api_params"]
-        model_params = self.model_config or api_params[self.model_key]
-        api_key = model_params["api_key"]
-
-        self.api = GeminiApi(
-            api_key=api_key,
-            timeout_seconds=model_params.get("timeout_seconds", 60),
-            temperature=model_params.get("temperature", 0),
-            model=model_params.get("model", "gemini-2.5-flash-lite"),
-        )
+        self.api = create_llm_api(self.llm_config)
 
     def get_generator_tool_name(self) -> str:
         self._ensure_api_initialized()
         config_suffix = self._generate_config_suffix()
-        return f"{self.model_key.upper()}{config_suffix}"
+        return f"{self.output_label.upper()}{config_suffix}"
     
     def _generate_config_suffix(self) -> str:
         """Generates a suffix with configuration information for folder identification"""
@@ -161,10 +111,13 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
         prompt_code = "ZS" if self.prompt_template == "zero_shot" else "1S"
 
         # Temperature: T00, T05, T07, etc. (always with 2 digits)
-        temp_value = int(self.api.temperature * 100)  # 0.7 -> 70, 0.05 -> 5, 0 -> 0
+        temp_value = int(round(self.api.temperature * 100))  # 0.7 -> 70, 0.05 -> 5, 0 -> 0
         temp_code = f"T{temp_value:02d}"  # Formats with 2 digits: T00, T05, T07
+
+        # Seed: S42, S123, etc.
+        seed_code = f"S{self.api.seed}"
         
-        return f"_{prompt_code}_{temp_code}"
+        return f"_{prompt_code}_{temp_code}_{seed_code}"
 
     def _get_test_suite_class_paths(self, path: str) -> List[str]:
         paths: List[str] = []
@@ -481,24 +434,126 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
                 
 
     def find_source_code_paths(self, input_jar: str, jar_type: str, class_name: str, project_name: str) -> Dict[str, str]:
-        """Finds the source code files for the given class name in the specified JAR path"""
+        """Finds the source code files for the target class.
+
+        Supported layouts:
+          - <scenario>/transformed/<branch>/*.jar + <scenario>/source/<Class>_<branch>.java
+          - <scenario>/transformed/<branch>/*.jar + <scenario>/source/<Class>/<branch>.java
+          - <scenario>/transformed/<branch>/*.jar + <scenario>/source/<branch>.java
+          - Legacy <repo>/jar_files/{left,right}.java (toy scenarios)
+        """
+        first_jar = input_jar.split(":")[0]
+        path_parts = Path(first_jar).parts
+
+        if jar_type in path_parts:
+            type_index = path_parts.index(jar_type)
+            scenario_root = Path(*path_parts[:type_index])
+        else:
+            scenario_root = Path(first_jar).parent
+
+        source_root = scenario_root / "source"
+
+        if source_root.is_dir():
+            found: Dict[str, str] = {b: "" for b in ("base", "left", "right", "merge")}
+            scores: Dict[str, int] = {b: 0 for b in found}
+
+            for root, _, files in os.walk(source_root):
+                root_name = os.path.basename(root)
+                for file_name in files:
+                    if not file_name.endswith(".java"):
+                        continue
+                    stem = file_name[:-len(".java")]
+                    for branch in found:
+                        if stem == branch:
+                            score = 2 if root_name == class_name else 1
+                        elif stem == f"{class_name}_{branch}":
+                            score = 2
+                        elif stem.endswith(f"_{branch}") and class_name in stem:
+                            score = 1
+                        else:
+                            continue
+
+                        if score > scores[branch]:
+                            found[branch] = str(Path(root) / file_name)
+                            scores[branch] = score
+
+            # Some datasets (e.g. ASTER) have only one source version.
+            if not found["left"] or not found["right"]:
+                for root, _, files in os.walk(source_root):
+                    generic = os.path.join(root, f"{class_name}.java")
+                    if os.path.isfile(generic):
+                        if not found["left"]:
+                            found["left"] = generic
+                        if not found["right"]:
+                            found["right"] = generic
+                        break
+
+            missing = [b for b in ("left", "right") if not found[b]]
+            if missing:
+                raise FileNotFoundError(
+                    f"Could not find source files for {missing} of class '{class_name}' "
+                    f"under '{source_root}'. Expected <Class>_<branch>.java, "
+                    f"<Class>/<branch>.java, <branch>.java or <Class>.java."
+                )
+
+            return found
+
+        # Legacy layout used by the toy Discount scenario.
         from nimrod.tests.utils import get_base_output_path
         base_output = get_base_output_path()
-        base_path = os.path.join(os.path.dirname((os.path.dirname(os.path.dirname(base_output)))), "jar_files")
+        legacy_root = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(base_output))),
+            "jar_files",
+        )
+        legacy_left = os.path.join(legacy_root, "left.java")
+        legacy_right = os.path.join(legacy_root, "right.java")
 
-        return {
-            "left": os.path.join(base_path, "left.java"),
-            "right": os.path.join(base_path, "right.java"),
-            "base": "",
-            "merge": "",
-        }
+        if os.path.isfile(legacy_left) and os.path.isfile(legacy_right):
+            logging.warning(
+                "Source directory '%s' not found; falling back to legacy sources in '%s'.",
+                source_root,
+                legacy_root,
+            )
+            return {"left": legacy_left, "right": legacy_right, "base": "", "merge": ""}
+
+        raise FileNotFoundError(
+            f"Source directory '{source_root}' not found and legacy sources were not "
+            f"available in '{legacy_root}'."
+        )
 
     def fetch_source_code_branch(self, input_jar: str, jar_type: str, class_name: str, project_name: str) -> tuple:
-        """Retrieves the source code path and branch for the given JAR path"""
-        source_code_paths = self.find_source_code_paths(input_jar, jar_type, class_name.split('.')[-1], project_name)
+        """Retrieves the source code path and branch for the given JAR path."""
+        source_code_paths = self.find_source_code_paths(
+            input_jar, jar_type, class_name.split('.')[-1], project_name
+        )
+
         branches = ["base", "left", "right", "merge"]
-        branch = next(b for b in branches if b in input_jar)
-        return source_code_paths.get(branch), branch, source_code_paths
+        first_jar = input_jar.split(":")[0]
+        parent_dir = os.path.basename(os.path.dirname(first_jar))
+        jar_stem = os.path.splitext(os.path.basename(first_jar))[0]
+
+        branch = parent_dir if parent_dir in branches else None
+        if branch is None:
+            branch = next(
+                (b for b in branches if jar_stem == b or jar_stem.endswith(f"_{b}")),
+                None,
+            )
+        if branch is None:
+            branch = next((b for b in branches if b in input_jar), None)
+
+        if branch is None:
+            raise ValueError(
+                f"Could not determine the branch from JAR path '{input_jar}'. "
+                f"Expected a path containing one of {branches}."
+            )
+
+        source_code_path = source_code_paths.get(branch, "")
+        if not source_code_path:
+            raise FileNotFoundError(
+                f"Source code for branch '{branch}' of class '{class_name}' was not found."
+            )
+
+        return source_code_path, branch, source_code_paths
 
     def record_output_duration(self, time_duration_path: str, output_path: str, class_name: str,
                                output_file_name: str, total_duration: int, project_name: str) -> None:
@@ -534,12 +589,11 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
         # Save time duration data in the 'reports' folder, located next to the 'projects' folder
         # Generates config suffix for the duration file
         config_suffix = self._generate_config_suffix().replace("_", "") if hasattr(self, '_generate_config_suffix') else ""
-        duration_filename = f"{self.model_key}{config_suffix}_time_duration.json"
+        duration_filename = f"{self.output_label}{config_suffix}_time_duration.json"
         
         time_duration_path = os.path.join(
-            os.path.dirname(
-                os.path.dirname(
-                    os.path.dirname(output_path))), "reports", duration_filename)
+            os.path.dirname(get_base_output_path()), "reports", duration_filename
+        )
 
         project_name = scenario.project_name
         targets = scenario.targets
@@ -563,7 +617,8 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
                 test_template = method_info.get("test_template", "")
                 self._process_prompts(messages_list=messages_list, test_template=test_template, output_path=output_path,
                                       branch=branch, class_name=class_name, imports=imports_dict.get(class_name, []),
-                                      i=i, time_duration_path=time_duration_path, project_name=project_name)
+                                      i=i, time_duration_path=time_duration_path, project_name=project_name,
+                                      num_outputs=self.num_outputs)
 
     def _process_prompts(self, messages_list: Dict[str, List[Dict[str, str]]], test_template: str, output_path: str, branch: str,
                          class_name: str, imports: List[str], i: int, time_duration_path: str, project_name: str,

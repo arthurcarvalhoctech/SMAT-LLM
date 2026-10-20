@@ -8,8 +8,40 @@ services:
         GROUP_ID: ${GROUP_ID}
     image: smat-ubuntu
     container_name: smat_container
+    environment:
+      # Provider selection (DeepSeek, OpenAI-compatible, Gemini or Ollama).
+      - LLM_PROVIDER=${LLM_PROVIDER:-}
+      - LLM_MODEL=${LLM_MODEL:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL_KEY=${LLM_MODEL_KEY:-}
+      - LLM_TEMPERATURE=${LLM_TEMPERATURE:-}
+      - LLM_SEED=${LLM_SEED:-}
+      - LLM_TIMEOUT_SECONDS=${LLM_TIMEOUT_SECONDS:-}
+      - LLM_MAX_OUTPUT_TOKENS=${LLM_MAX_OUTPUT_TOKENS:-}
+      - LLM_NUM_OUTPUTS=${LLM_NUM_OUTPUTS:-}
+      - LLM_PROMPT_KEYS=${LLM_PROMPT_KEYS:-}
+      - LLM_PROMPT_TEMPLATE=${LLM_PROMPT_TEMPLATE:-}
+      # Provider-specific keys.
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - TOGETHER_API_KEY=${TOGETHER_API_KEY:-}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    extra_hosts:
+      # Allows Ollama running on the host to be reached from the container.
+      - "host.docker.internal:host-gateway"
     volumes:
       # Mount the current directory to /app in the container
       - .:/app
+      # mergedataset checkout used by input-smat-mergedataset.json.
+      # The same absolute path is kept inside the container so the JSON paths
+      # work both locally and in Docker.
+      - /home/arthur/UFPE/mergedataset:/home/arthur/UFPE/mergedataset:ro
+      # Mount the ASTER dataset read-only. Uncomment and adjust the host path.
+      # - /caminho/aster:/data/aster:ro
     stdin_open: true
     tty: true

@@ -1,0 +1,7 @@
+# Local secrets and generated experiment artifacts
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+SMAT/output-test-dest/
+runs/

@@ -3,21 +3,35 @@
   "maven_home": "",
   "repo_dir": "",
   "projects_folder": "",
-  "input_path": "/app/input-smat.json",
+  "input_path": "/app/input-smat-mergedataset.json",
   "tests_dst": "",
   "path_output_csv": "",
-  "logger_level": "DEBUG",
+  "logger_level": "INFO",
   "test_suite_generators": [
-    "gemini"
+    "llm"
   ],
   "test_suite_generation_search_time_available": "45",
   "prompt_template": "zero_shot",
   "api_params": {
     "gemini": {
+      "provider": "gemini",
       "model": "gemini-2.5-flash",
-      "api_key": "my-api-key",
-      "temperature": 0,
-      "timeout_seconds": 300
+      "api_key": "",
+      "temperature": 0.0,
+      "seed": 42,
+      "timeout_seconds": 300,
+      "max_output_tokens": 8192,
+      "num_outputs": 1,
+      "prompt_keys": [
+        "prompt1",
+        "prompt2",
+        "prompt3",
+        "prompt4",
+        "prompt5",
+        "prompt6",
+        "prompt7",
+        "prompt8"
+      ]
     }
   }
 }

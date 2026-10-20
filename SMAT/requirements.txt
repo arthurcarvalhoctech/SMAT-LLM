@@ -1,6 +1,8 @@
 beautifulsoup4
 setuptools
-tree-sitter
-tree-sitter-java
+tree-sitter==0.25.1
+tree-sitter-java==0.23.5
 types-requests
-google-genai
+google-genai==2.31.0
+requests==2.32.3
+python-dotenv==1.0.1
