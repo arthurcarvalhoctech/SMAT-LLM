@@ -13,6 +13,7 @@ authoritative detector.
 import json
 import logging
 import os
+import re
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -48,6 +49,20 @@ def _default_log_dir() -> str:
     from nimrod.tests.utils import get_base_output_path
 
     return os.path.join(os.path.dirname(get_base_output_path()), "reports", "laya")
+
+
+CLASSIFICATION_INTERFERENCE = "interference"
+CLASSIFICATION_NO_INTERFERENCE = "no_interference"
+CLASSIFICATION_ERROR = "error"
+
+CLASSIFICATION_NOTE = (
+    "Laya hypothesis (triage). No triggered criterion does not prove the absence "
+    "of interference; execution-based detection remains the reference."
+)
+
+
+def _safe_file_part(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_.-]+", "_", value).strip("_") or "unnamed"
 
 
 @dataclass
@@ -105,6 +120,39 @@ class LayaAssessment:
             for criterion_id, assessment in self.criteria.items()
             if assessment.triggered
         ]
+
+    @property
+    def classification(self) -> str:
+        if self.error:
+            return CLASSIFICATION_ERROR
+        if self.triggered_criteria:
+            return CLASSIFICATION_INTERFERENCE
+        return CLASSIFICATION_NO_INTERFERENCE
+
+    def classification_dict(self, run_id: str) -> Dict[str, Any]:
+        return {
+            "run_id": run_id,
+            "timestamp": self.timestamp,
+            "project": self.project_name,
+            "class": self.class_name,
+            "method": self.method_name,
+            "method_signature": self.method_signature,
+            "jar_type": self.jar_type,
+            "model": self.model,
+            "max_len": self.max_len,
+            "threshold": self.threshold,
+            "classification": self.classification,
+            "triggered_criteria": self.triggered_criteria,
+            "primary_criterion": self.primary_criterion,
+            "affected_branch": self.affected_branch,
+            "confidence": self.confidence_label,
+            "probabilities": {
+                criterion_id: assessment.probability
+                for criterion_id, assessment in self.criteria.items()
+            },
+            "error": self.error,
+            "note": CLASSIFICATION_NOTE,
+        }
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -234,6 +282,11 @@ class LayaInterferenceFlow:
         self.jsonl_path = os.path.join(
             self.log_dir, f"laya_interference_{run_id}.jsonl"
         )
+        self.run_id = run_id
+        self.classification_dir = os.path.join(
+            self.log_dir, "classification", f"run_{run_id}"
+        )
+        self._classification_count = 0
         self._initialized = False
         self._unavailable_reason: Optional[str] = None
         self._logged_errors: set[str] = set()
@@ -295,6 +348,7 @@ class LayaInterferenceFlow:
                 if assessment is not None:
                     assessments.append(assessment)
                     self._write_assessment(assessment)
+                    self._write_classification(assessment)
 
         logging.info(
             "Finished Laya interference pre-analysis for project %s (%d method(s))",
@@ -487,6 +541,39 @@ class LayaInterferenceFlow:
             error=str(error),
             error_traceback=error_traceback,
         )
+
+    def _write_classification(self, assessment: LayaAssessment) -> None:
+        self._classification_count += 1
+        class_part = assessment.class_name.split(".")[-1]
+        file_name = "_".join(
+            [
+                f"{self._classification_count:03d}",
+                _safe_file_part(assessment.project_name),
+                _safe_file_part(class_part),
+                _safe_file_part(assessment.method_name),
+            ]
+        ) + ".json"
+        try:
+            os.makedirs(self.classification_dir, exist_ok=True)
+            with open(
+                os.path.join(self.classification_dir, file_name),
+                "w",
+                encoding="utf-8",
+            ) as classification_file:
+                json.dump(
+                    assessment.classification_dict(self.run_id),
+                    classification_file,
+                    ensure_ascii=False,
+                    indent=2,
+                    default=str,
+                )
+                classification_file.write("\n")
+        except OSError as error:
+            logging.error(
+                "Could not write the Laya classification in %s: %s",
+                self.classification_dir,
+                error,
+            )
 
     def _write_assessment(self, assessment: LayaAssessment) -> None:
         self._ensure_initialized()
