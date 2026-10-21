@@ -49,7 +49,7 @@ services:
       # mergedataset checkout used by input-smat-mergedataset.json.
       # The same absolute path is kept inside the container so the JSON paths
       # work both locally and in Docker.
-      - /home/arthur/UFPE/mergedataset:/home/arthur/UFPE/mergedataset:ro
+      - /home/rafael/Desktop/TAES_Paulo/Projeto/mergedataset:/home/rafael/Desktop/TAES_Paulo/Projeto/mergedataset:ro
       # Persist Hugging Face weights downloaded by Laya between runs.
       - smat-hf-cache:/home/appuser/.cache/huggingface
       # Mount the ASTER dataset read-only. Uncomment and adjust the host path.
