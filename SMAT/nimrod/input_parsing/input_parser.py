@@ -1,9 +1,31 @@
 import csv
 import json
+import os
+import re
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List
 
 from nimrod.core.merge_scenario_under_analysis import ScenarioInformation, MergeScenarioUnderAnalysis
+
+_ENV_VAR_PATTERN = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
+
+
+def expand_env_vars(value: str) -> str:
+    """Replace every ``${NAME}`` with the value of the environment variable NAME.
+
+    Unlike ``os.path.expandvars``, an undefined variable is an error, so a
+    misconfigured ``.env`` fails before SMAT tries to read a missing jar.
+    """
+    def _replace(match: "re.Match[str]") -> str:
+        name = match.group(1)
+        if name not in os.environ:
+            raise ValueError(
+                f"Environment variable '{name}' is used in the input file "
+                f"({value!r}) but is not set. Define it in the .env file."
+            )
+        return os.environ[name]
+
+    return _ENV_VAR_PATTERN.sub(_replace, value)
 
 # This interface is responsible for parsing user input from a file into SMAT internal model.
 # If you wish to implement a new parser, just create a new implementation of it.
@@ -36,13 +58,18 @@ class JsonInputParser(InputParser):
             ),
             targets=scenario.get('targets', dict()),
             scenario_jars=ScenarioInformation(
-                base=scenario_jars_json.get('base'),
-                left=scenario_jars_json.get('left'),
-                right=scenario_jars_json.get('right'),
-                merge=scenario_jars_json.get('merge'),
+                base=self._expand_jars(scenario_jars_json.get('base')),
+                left=self._expand_jars(scenario_jars_json.get('left')),
+                right=self._expand_jars(scenario_jars_json.get('right')),
+                merge=self._expand_jars(scenario_jars_json.get('merge')),
             ),
             jar_type=str(scenario.get('jarType'))
         )
+
+    def _expand_jars(self, value: Any) -> Any:
+        if isinstance(value, str):
+            return expand_env_vars(value)
+        return value
 
 
 class CsvInputParser(InputParser):

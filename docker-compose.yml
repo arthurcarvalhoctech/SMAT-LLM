@@ -10,6 +10,8 @@ services:
     image: smat-ubuntu
     container_name: smat_container
     environment:
+      # Dataset root. The input JSON resolves ${PATH_DATASET}/... with it.
+      - PATH_DATASET=${PATH_DATASET:?Define PATH_DATASET in the .env file}
       # Provider selection (DeepSeek, OpenAI-compatible, Gemini or Ollama).
       - LLM_PROVIDER=${LLM_PROVIDER:-}
       - LLM_MODEL=${LLM_MODEL:-}
@@ -46,10 +48,9 @@ services:
     volumes:
       # Mount the current directory to /app in the container
       - .:/app
-      # mergedataset checkout used by input-smat-mergedataset.json.
-      # The same absolute path is kept inside the container so the JSON paths
-      # work both locally and in Docker.
-      - /home/rafael/Desktop/TAES_Paulo/Projeto/mergedataset:/home/rafael/Desktop/TAES_Paulo/Projeto/mergedataset:ro
+      # mergedataset checkout, mounted at the same path it has on the host
+      # (PATH_DATASET), so ${PATH_DATASET}/... works inside the container too.
+      - ${PATH_DATASET:?Define PATH_DATASET in the .env file}:${PATH_DATASET:?Define PATH_DATASET in the .env file}:ro
       # Persist Hugging Face weights downloaded by Laya between runs.
       - smat-hf-cache:/home/appuser/.cache/huggingface
       # Mount the ASTER dataset read-only. Uncomment and adjust the host path.
