@@ -8,6 +8,7 @@ authoritative conflict detector.
 
 import inspect
 import logging
+import os
 import sys
 from typing import Any, Dict, Optional, Protocol
 
@@ -42,6 +43,25 @@ def _validate_python_runtime() -> None:
         )
 
 
+class _LocalCheckpointRouter:
+    """Serves one local checkpoint directory (e.g. a fine-tuned run) with the Router's predict shape.
+
+    ``laya.Router`` only knows the named checkpoints, so a directory is loaded with ``laya.load``.
+    ``model`` is accepted and ignored, because there is only one model. ``max_len`` is passed to
+    the agent, so ``SMAT_LAYA_MAX_LEN`` is applied; without it the checkpoint's own config value
+    (1024 for the fine-tuned model) would be used.
+    """
+
+    def __init__(self, checkpoint_dir: str) -> None:
+        from laya import load
+
+        self._agent = load(checkpoint_dir)
+
+    def predict(self, state: Any, questions: Dict[str, Any], model: Optional[str] = None,
+                max_len: Optional[int] = None) -> Dict[str, Any]:
+        return self._agent.predict(state, questions, max_len=max_len)
+
+
 class RouterLayaClient:
     """Thin wrapper around ``laya.Router`` with a lazy import."""
 
@@ -69,7 +89,10 @@ class RouterLayaClient:
             raise LayaUnavailableError(self._load_error) from error
 
         try:
-            self._router = Router()
+            if os.path.isdir(self.model):
+                self._router = _LocalCheckpointRouter(self.model)
+            else:
+                self._router = Router()
         except Exception as error:
             self._load_error = f"Não foi possível inicializar o Laya: {error}"
             raise LayaUnavailableError(self._load_error) from error
