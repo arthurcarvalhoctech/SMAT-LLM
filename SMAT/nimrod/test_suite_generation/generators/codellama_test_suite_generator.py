@@ -13,6 +13,10 @@ from nimrod.source_code import (
     find_source_code_paths as find_java_source_code_paths,
     parse_java_code,
 )
+from nimrod.test_suite_generation.generators.context_filter import (
+    context_filter_enabled,
+    filter_context,
+)
 from nimrod.test_suite_generation.generators.test_suite_generator import TestSuiteGenerator
 from nimrod.test_suite_generation.generators.prompt_manager import PromptManager
 from nimrod.test_suite_generation.generators.llm_api import create_llm_api
@@ -176,8 +180,20 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
             source_code_path, full_method_name, full_class_name
         )
 
-    def save_scenario_infos(self, scenario_infos_path: str, class_name: str, methods: Union[List[str], List[Dict[str, str]]], source_code_path: str) -> None:
-        """Stores relevant scenario information (for each class and method) in a JSON file"""
+    def save_scenario_infos(self, scenario_infos_path: str, class_name: str, methods: Union[List[str], List[Dict[str, str]]], source_code_path: str, base_source_code_path: str = "") -> None:
+        """Stores relevant scenario information (for each class and method) in a JSON file
+
+        When ``SMAT_CONTEXT_FILTER`` is enabled and the base source is known, the
+        class fields are filtered by the change (see ``context_filter``).
+        """
+        apply_filter = bool(base_source_code_path) and context_filter_enabled()
+        base_text = ""
+        branch_text = ""
+        if apply_filter:
+            with open(base_source_code_path, "r", encoding="utf-8", errors="replace") as file:
+                base_text = file.read()
+            with open(source_code_path, "r", encoding="utf-8", errors="replace") as file:
+                branch_text = file.read()
         if os.path.exists(scenario_infos_path):
             scenario_infos_dict = load_json(scenario_infos_path)
         else:
@@ -208,6 +224,8 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
 
             method = re.sub(r'\|', ',', method)
             class_fields, constructor_codes, method_code = self.extract_class_info(source_code_path, method, class_name)
+            if apply_filter and class_fields:
+                class_fields = filter_context(class_fields, method_code or "", base_text, branch_text)
 
             scenario_infos_dict[class_name].append({
                 'class_fields': class_fields if class_fields else [],
@@ -433,7 +451,13 @@ class CodellamaTestSuiteGenerator(TestSuiteGenerator):
         # Fetch the source code paths for each class and save the associated scenario information and import data
         for class_name, methods in targets.items():
             source_code_path, branch, source_paths = self.fetch_source_code_branch(input_jar, jar_type, class_name, project_name)
-            self.save_scenario_infos(scenario_infos_path, class_name, methods, source_code_path)
+            self.save_scenario_infos(
+                scenario_infos_path,
+                class_name,
+                methods,
+                source_code_path,
+                base_source_code_path=source_paths.get("base", ""),
+            )
             self.save_imports(class_name, source_code_path, imports_path)
 
         # Load scenario information and import data into dictionaries

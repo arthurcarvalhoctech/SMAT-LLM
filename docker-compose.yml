@@ -33,6 +33,9 @@ services:
       - SMAT_LAYA_THRESHOLD=${SMAT_LAYA_THRESHOLD:-0.5}
       - SMAT_LAYA_MAX_LEN=${SMAT_LAYA_MAX_LEN:-512}
       - SMAT_LAYA_LOG_DIR=${SMAT_LAYA_LOG_DIR:-}
+      # true: the LLM test generator keeps only the class fields used by the
+      # method or touched by the change (see context_filter.py).
+      - SMAT_CONTEXT_FILTER=${SMAT_CONTEXT_FILTER:-false}
       # Provider-specific keys.
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
