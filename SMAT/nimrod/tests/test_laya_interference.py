@@ -361,5 +361,33 @@ class RouterLayaClientTest(unittest.TestCase):
         self.assertIn("3.11.0rc1", str(context.exception))
 
 
+class LayaLiveSmokeTest(unittest.TestCase):
+    @unittest.skipUnless(
+        os.environ.get("SMAT_LAYA_LIVE_TEST") == "1",
+        "set SMAT_LAYA_LIVE_TEST=1 to run against the real Laya checkpoint",
+    )
+    def test_live_laya_router_smoke(self):
+        try:
+            from laya import Router
+        except ImportError:
+            self.skipTest("laya package is not installed")
+
+        router = Router()
+        result = router.predict(
+            "This is a short state used by the live smoke test.",
+            {
+                "is_test": {
+                    "type": "noul",
+                    "instructions": "Is this a test?",
+                }
+            },
+            model=os.environ.get("SMAT_LAYA_MODEL", "multilingual"),
+            max_len=1024,
+        )
+
+        self.assertIn("answers", result)
+        self.assertIn("noul", result["answers"]["is_test"])
+
+
 if __name__ == "__main__":
     unittest.main()

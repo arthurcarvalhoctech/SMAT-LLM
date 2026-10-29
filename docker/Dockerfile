@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ARG USER_ID
 ARG GROUP_ID
 ARG INSTALL_LAYA=false
+ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cpu
 
 # 1. Install system dependencies, Java and a *final* Python 3.11.
 #
@@ -55,6 +56,7 @@ COPY --chown=appuser:appuser SMAT/requirements-laya.txt .
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir -r requirements.txt ruff mypy pytest && \
     if [ "$INSTALL_LAYA" = "true" ]; then \
+        python3 -m pip install --no-cache-dir torch --index-url "$TORCH_INDEX_URL"; \
         python3 -m pip install --no-cache-dir -r requirements-laya.txt; \
     fi
 

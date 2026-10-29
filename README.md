@@ -242,8 +242,10 @@ A instalação do Laya é opcional:
 python -m pip install -r SMAT/requirements-laya.txt
 ```
 
-No Docker, use `INSTALL_LAYA=true` no build. O primeiro uso baixa o checkpoint
-do Hugging Face. Os logs ficam em:
+No Docker, use `INSTALL_LAYA=true` no build. O Dockerfile instala **torch CPU**
+por padrão (`TORCH_INDEX_URL`) e o `requirements-laya.txt` fixa
+`transformers<4.52`, combinação validada com `laya 0.4.12`. O primeiro uso baixa
+o checkpoint do Hugging Face. Os logs ficam em:
 
 ```text
 SMAT/output-test-dest/reports/laya/laya_interference_<run_id>.log
@@ -429,6 +431,12 @@ métodos do input do artigo, são **1264 chamadas por execução**.
 
 ## 6. Saídas e métricas
 
+- `SMAT/output-test-dest/scenarios/<input_stem>_<timestamp>/`
+  - `manifest.json`: dataset, timestamp, input e metadados de cada cenário.
+  - `NNN_<projeto>/`: uma pasta por cenário de merge.
+    - `base`, `left`, `right`, `merge`: fontes Java concatenados de todas as
+      classes-alvo daquela versão. São snapshots para análise; múltiplas classes
+      concatenadas não formam um arquivo Java compilável.
 - `SMAT/output-test-dest/projects/<projeto>/<merge>/<GERADOR>_<timestamp>/`
   - `*.java`: testes gerados.
   - `classes/*.class`: testes que compilaram.
@@ -463,7 +471,9 @@ vazio.
   Docker.
 - **`Source directory ... not found`**: o caminho do jar deve conter
   `transformed` ou `original`, e deve existir uma pasta `source/` irmã do
-  diretório `transformed`/`original`.
+  diretório `transformed`/`original`. Confira também se `PATH_DATASET` aponta
+  para o dataset real que contém `<projeto>/<hash>/source/`; um clone vazio faz
+  os snapshots registrarem `no base source`/`no merge source`.
 - **`API key not configured`**: preencha `LLM_API_KEY`, a chave específica do
   provedor (por exemplo `DEEPSEEK_API_KEY`) ou `api_params.<model>.api_key`.
 - **Erros 429/quota**: reduza `prompt_keys`/cenários, use uma cota paga ou
@@ -481,6 +491,15 @@ vazio.
   Confirme com `docker compose run --rm smat python3 -VV` (deve ser uma versão
   final, como `3.11.15`). O log do fluxo Laya agora inclui o traceback completo
   na primeira ocorrência de cada erro.
+- **A execução para em `Download complete`/`Reconstruction complete`**: é o
+  download do checkpoint Laya no Hugging Face, não a análise. O compose usa
+  `HF_CACHE_DIR` no host e `HF_HUB_DISABLE_XET=1`; confira `df -h` e
+  `docker system df`. Depois do primeiro download bem-sucedido, use
+  `HF_HUB_OFFLINE=1` para evitar novas checagens no Hub.
+- **Modelo Laya baixado, mas o fluxo não avança**: rebuild com o
+  `requirements-laya.txt` atual (`transformers<4.52`) e torch CPU
+  (`TORCH_INDEX_URL`). Se a inferência estiver lenta, reduza
+  `SMAT_LAYA_MAX_LEN` para `1024` (ou `512` no modelo `english`).
 - **Resultados misturados**: arquive ou apague `SMAT/output-test-dest` entre
   execuções.
 

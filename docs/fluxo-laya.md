@@ -151,6 +151,13 @@ INSTALL_LAYA=true USER_ID=$(id -u) GROUP_ID=$(id -g) \
   docker compose build smat
 ```
 
+O Dockerfile instala **torch CPU** por padrão (`TORCH_INDEX_URL`) para evitar
+uma imagem CUDA desnecessária; use outro índice se tiver GPU. O
+`requirements-laya.txt` fixa `transformers>=4.48,<4.52`, combinação validada
+com `laya 0.4.12` em um smoke test live (torch 2.15 CPU + transformers 4.51.3,
+`max_len=1024`, ~9 s). Se a inferência estiver lenta no CPU, reduza
+`SMAT_LAYA_MAX_LEN` para `1024` (ou `512` no modelo `english`).
+
 ### 6.1 Python 3.11.0rc1 no Ubuntu 22.04
 
 Se o log mostrar:
@@ -186,10 +193,35 @@ O esperado é uma versão final (por exemplo `3.11.15`) e `True`. Se o erro
 persistir, verifique também a combinação `transformers>=4.52` com
 `torch<2.7.1`; nesse caso, use `transformers<4.52` ou `torch>=2.7.1`.
 
-O primeiro `predict` baixa o checkpoint do Hugging Face. Se o pacote não estiver
-instalado ou o checkpoint não puder ser carregado, o fluxo registra o erro no
-console e no log, mas **não interrompe** a detecção dinâmica. O log inclui o
-traceback completo na primeira ocorrência de cada erro.
+### 6.2 Cache e download do checkpoint
+
+O primeiro `predict` baixa o checkpoint do Hugging Face. O `docker-compose.yml`
+monta o diretório host `HF_CACHE_DIR` (padrão
+`/home/arthur/.cache/huggingface`) em `/home/appuser/.cache/huggingface`, então
+os pesos persistem entre execuções.
+
+Variáveis relevantes:
+
+- `HF_CACHE_DIR`: diretório host do cache.
+- `HF_HUB_DISABLE_XET=1` (padrão): evita o caminho Xet, que pode travar em
+  alguns ambientes Docker/rede.
+- `HF_HUB_DOWNLOAD_TIMEOUT=120` e `HF_HUB_ETAG_TIMEOUT=30`: limites para não
+  ficar indefinidamente esperando o Hub.
+- `HF_HUB_OFFLINE=1`: depois do primeiro download bem-sucedido, use somente o
+  cache e evite novas checagens no Hub.
+
+Se o console parar em `Download complete`/`Reconstruction complete` com
+`0.00B`, o processo está no download do checkpoint, não na análise. Verifique
+espaço em disco:
+
+```bash
+df -h
+docker system df
+```
+
+Se o pacote não estiver instalado ou o checkpoint não puder ser carregado, o
+fluxo registra o erro no console e no log, mas **não interrompe** a detecção
+dinâmica. O log inclui o traceback completo na primeira ocorrência de cada erro.
 
 ## 7. Logs
 

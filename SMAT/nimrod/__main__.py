@@ -19,6 +19,7 @@ from nimrod.output_generation.output_generator import OutputGenerator
 from nimrod.output_generation.semantic_conflicts_output_generator import SemanticConflictsOutputGenerator
 from nimrod.output_generation.test_suites_output_generator import TestSuitesOutputGenerator
 from nimrod.pipeline import run_scenarios
+from nimrod.scenario_snapshot import persist_merge_scenarios
 from nimrod.smat import SMAT
 from nimrod.test_suite_generation.main import TestSuiteGeneration
 from nimrod.tests.utils import setup_logging, get_config, get_base_output_path
@@ -110,8 +111,12 @@ def get_output_generators(config: Dict[str, str]) -> List[OutputGenerator]:
   return generators
 
 
+def resolve_input_path(config: Dict[str, str]) -> str:
+    return os.environ.get("SMAT_INPUT_PATH") or config.get('input_path', "")
+
+
 def parse_scenarios_from_input(config: Dict[str, str]) -> List[MergeScenarioUnderAnalysis]:
-    json_input = os.environ.get("SMAT_INPUT_PATH") or config.get('input_path', "")
+    json_input = resolve_input_path(config)
     csv_input_path = config.get('path_hash_csv', "")
 
     if json_input != "":
@@ -174,13 +179,20 @@ def main():
   )
 
   config = get_config()
+  input_path = resolve_input_path(config) or config.get("path_hash_csv", "")
+  scenarios = parse_scenarios_from_input(config)
+
+  try:
+    persist_merge_scenarios(scenarios, input_path=input_path)
+  except Exception as error:
+    logging.error("Could not persist merge scenarios: %s", error)
+
   dynamic_flow = _build_dynamic_flow(config) if dynamic_enabled else None
   laya_flow = _build_laya_flow() if laya_enabled else None
 
   if laya_flow is not None:
     logging.info("Laya pre-analysis logs: %s", laya_flow.log_dir)
 
-  scenarios = parse_scenarios_from_input(config)
   run_scenarios(
       scenarios,
       laya_flow=laya_flow,

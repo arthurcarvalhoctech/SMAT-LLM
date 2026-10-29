@@ -83,28 +83,38 @@ def find_source_code_paths(input_jar: str, jar_type: str, class_name: str) -> Di
 
         return found
 
-    # Legacy layout used by the toy Discount scenario.
-    from nimrod.tests.utils import get_base_output_path
+    # Legacy layout used by the toy Discount scenario. Only apply it when the
+    # scenario jar itself lives under a `jar_files` directory. Applying it to a
+    # real dataset whose `source/` directory is missing would silently reuse
+    # unrelated toy sources for every class and hide a wrong PATH_DATASET.
+    if "jar_files" in Path(first_jar).parts:
+        from nimrod.tests.utils import get_base_output_path
 
-    base_output = get_base_output_path()
-    legacy_root = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(base_output))),
-        "jar_files",
-    )
-    legacy_left = os.path.join(legacy_root, "left.java")
-    legacy_right = os.path.join(legacy_root, "right.java")
-
-    if os.path.isfile(legacy_left) and os.path.isfile(legacy_right):
-        logging.warning(
-            "Source directory '%s' not found; falling back to legacy sources in '%s'.",
-            source_root,
-            legacy_root,
+        base_output = get_base_output_path()
+        legacy_root = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(base_output))),
+            "jar_files",
         )
-        return {"left": legacy_left, "right": legacy_right, "base": "", "merge": ""}
+        legacy_left = os.path.join(legacy_root, "left.java")
+        legacy_right = os.path.join(legacy_root, "right.java")
+
+        if os.path.isfile(legacy_left) and os.path.isfile(legacy_right):
+            logging.warning(
+                "Source directory '%s' not found; falling back to legacy sources in '%s'.",
+                source_root,
+                legacy_root,
+            )
+            return {"left": legacy_left, "right": legacy_right, "base": "", "merge": ""}
+
+        raise FileNotFoundError(
+            f"Source directory '{source_root}' not found and legacy sources were not "
+            f"available in '{legacy_root}'."
+        )
 
     raise FileNotFoundError(
-        f"Source directory '{source_root}' not found and legacy sources were not "
-        f"available in '{legacy_root}'."
+        f"Source directory '{source_root}' not found for scenario jar '{first_jar}'. "
+        "Check PATH_DATASET and the dataset layout; base/left/right/merge sources "
+        "must be under '<scenario>/source/'."
     )
 
 

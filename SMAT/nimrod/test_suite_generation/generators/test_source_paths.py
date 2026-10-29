@@ -1,6 +1,7 @@
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from nimrod.test_suite_generation.generators.codellama_test_suite_generator import (
     CodellamaTestSuiteGenerator,
@@ -96,6 +97,50 @@ class SourceCodePathsTest(unittest.TestCase):
         )
 
         self.assertEqual(paths["left"], str(self.source / "Foo_left.java"))
+
+    def _create_legacy_sources(self) -> Path:
+        legacy_root = self.root / "jar_files"
+        legacy_root.mkdir()
+        (legacy_root / "left.java").write_text("class DiscountCalculator {}")
+        (legacy_root / "right.java").write_text("class DiscountCalculator {}")
+        return legacy_root
+
+    def _patched_base_output_path(self) -> str:
+        # get_base_output_path() is three dirname() calls away from the legacy
+        # root, which must be <temp>/jar_files.
+        return str(self.root / "x" / "output-test-dest" / "projects")
+
+    def test_does_not_use_legacy_sources_for_real_dataset_layout(self) -> None:
+        self._create_legacy_sources()
+        real_jar = self.root / "real" / "transformed" / "left" / "app.jar"
+
+        with patch(
+            "nimrod.tests.utils.get_base_output_path",
+            return_value=self._patched_base_output_path(),
+        ):
+            with self.assertRaises(FileNotFoundError) as context:
+                self.generator.find_source_code_paths(
+                    str(real_jar), "transformed", "Foo", "Project"
+                )
+
+        self.assertIn("PATH_DATASET", str(context.exception))
+
+    def test_uses_legacy_sources_only_for_toy_jar_files_layout(self) -> None:
+        legacy_root = self._create_legacy_sources()
+        toy_jar = self.root / "jar_files" / "build" / "jar" / "left.jar"
+
+        with patch(
+            "nimrod.tests.utils.get_base_output_path",
+            return_value=self._patched_base_output_path(),
+        ):
+            paths = self.generator.find_source_code_paths(
+                str(toy_jar), "transformed", "DiscountCalculator", "Discount"
+            )
+
+        self.assertEqual(paths["left"], str(legacy_root / "left.java"))
+        self.assertEqual(paths["right"], str(legacy_root / "right.java"))
+        self.assertEqual(paths["base"], "")
+        self.assertEqual(paths["merge"], "")
 
 
 if __name__ == "__main__":

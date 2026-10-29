@@ -7,6 +7,7 @@ services:
         USER_ID: ${USER_ID}
         GROUP_ID: ${GROUP_ID}
         INSTALL_LAYA: ${INSTALL_LAYA:-false}
+        TORCH_INDEX_URL: ${TORCH_INDEX_URL:-https://download.pytorch.org/whl/cpu}
     image: smat-ubuntu
     container_name: smat_container
     environment:
@@ -33,6 +34,12 @@ services:
       - SMAT_LAYA_THRESHOLD=${SMAT_LAYA_THRESHOLD:-0.5}
       - SMAT_LAYA_MAX_LEN=${SMAT_LAYA_MAX_LEN:-512}
       - SMAT_LAYA_LOG_DIR=${SMAT_LAYA_LOG_DIR:-}
+      # Hugging Face cache/download settings for Laya.
+      - HF_HOME=${HF_HOME:-/home/appuser/.cache/huggingface}
+      - HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-0}
+      - HF_HUB_DISABLE_XET=${HF_HUB_DISABLE_XET:-1}
+      - HF_HUB_DOWNLOAD_TIMEOUT=${HF_HUB_DOWNLOAD_TIMEOUT:-120}
+      - HF_HUB_ETAG_TIMEOUT=${HF_HUB_ETAG_TIMEOUT:-30}
       # Provider-specific keys.
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
@@ -51,12 +58,10 @@ services:
       # mergedataset checkout, mounted at the same path it has on the host
       # (PATH_DATASET), so ${PATH_DATASET}/... works inside the container too.
       - ${PATH_DATASET:?Define PATH_DATASET in the .env file}:${PATH_DATASET:?Define PATH_DATASET in the .env file}:ro
-      # Persist Hugging Face weights downloaded by Laya between runs.
-      - smat-hf-cache:/home/appuser/.cache/huggingface
+      # Persist Hugging Face weights on the host, which has more free space
+      # than the Docker root filesystem. Adjust HF_CACHE_DIR in .env if needed.
+      - ${HF_CACHE_DIR:-/home/arthur/.cache/huggingface}:/home/appuser/.cache/huggingface
       # Mount the ASTER dataset read-only. Uncomment and adjust the host path.
       # - /caminho/aster:/data/aster:ro
     stdin_open: true
     tty: true
-
-volumes:
-  smat-hf-cache:

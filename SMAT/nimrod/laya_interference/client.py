@@ -8,6 +8,7 @@ authoritative conflict detector.
 
 import inspect
 import logging
+import os
 import sys
 from typing import Any, Dict, Optional, Protocol
 
@@ -59,6 +60,16 @@ class RouterLayaClient:
 
         _validate_python_runtime()
 
+        logging.info(
+            "Laya checkpoint settings: model=%s HF_HOME=%s HF_HUB_OFFLINE=%s "
+            "HF_HUB_DISABLE_XET=%s HF_HUB_DOWNLOAD_TIMEOUT=%s",
+            self.model,
+            os.environ.get("HF_HOME", "~/.cache/huggingface"),
+            os.environ.get("HF_HUB_OFFLINE", "0"),
+            os.environ.get("HF_HUB_DISABLE_XET", "0"),
+            os.environ.get("HF_HUB_DOWNLOAD_TIMEOUT", "default"),
+        )
+
         try:
             from laya import Router
         except ImportError as error:
@@ -95,6 +106,9 @@ class RouterLayaClient:
             "package": "laya",
             "model": self.model,
             "max_len": self.max_len,
+            "hf_home": os.environ.get("HF_HOME", "~/.cache/huggingface"),
+            "hf_hub_offline": os.environ.get("HF_HUB_OFFLINE", "0"),
+            "hf_hub_disable_xet": os.environ.get("HF_HUB_DISABLE_XET", "0"),
         }
 
 

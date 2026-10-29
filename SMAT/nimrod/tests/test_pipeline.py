@@ -85,5 +85,27 @@ class LayaFlowBuilderTest(unittest.TestCase):
         )
 
 
+class InputPathResolutionTest(unittest.TestCase):
+    def test_env_override_takes_precedence(self):
+        with patch.dict(
+            os.environ, {"SMAT_INPUT_PATH": "/tmp/env-input.json"}, clear=True
+        ):
+            self.assertEqual(
+                smat_main.resolve_input_path(
+                    {"input_path": "/tmp/config-input.json"}
+                ),
+                "/tmp/env-input.json",
+            )
+
+    def test_uses_config_input_path_when_env_is_absent(self):
+        with patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(
+                smat_main.resolve_input_path(
+                    {"input_path": "/tmp/config-input.json"}
+                ),
+                "/tmp/config-input.json",
+            )
+
+
 if __name__ == "__main__":
     unittest.main()

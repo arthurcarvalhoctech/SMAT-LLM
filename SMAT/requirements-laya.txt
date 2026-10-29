@@ -5,12 +5,13 @@
 # torch._dynamo with a misleading "Duplicate dispatch rule" error. The
 # project Dockerfile installs Python 3.11 via deadsnakes and guards the build.
 #
-# Install with:
-#   python -m pip install -r SMAT/requirements-laya.txt
-#
-# The package pulls torch/transformers and downloads a checkpoint from
-# Hugging Face on first use. For a CPU-only environment, you can install the
-# CPU wheel first to avoid pulling a CUDA build:
-#   python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-#
+# transformers 4.52+ pulls integrations that interact badly with some
+# torch._dynamo versions. 4.51.3 is the version validated with laya 0.4.12
+# (a live CPU smoke test completed in ~9 s with max_len=1024).
+transformers>=4.48,<4.52
 laya>=0.4.12,<0.5
+
+# Torch is installed separately by the Dockerfile from TORCH_INDEX_URL
+# (CPU by default), so `laya` does not pull a CUDA wheel. For a local install,
+# install the CPU wheel first:
+#   python -m pip install torch --index-url https://download.pytorch.org/whl/cpu

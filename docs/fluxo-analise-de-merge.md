@@ -300,6 +300,40 @@ antes do fluxo dinâmico. Para cada método-alvo ele:
 O Laya não executa código; o resultado é uma hipótese de triagem. A detecção
 por execução continua sendo a autoridade. Detalhes em `docs/fluxo-laya.md`.
 
+### 4.7 Persistência dos cenários de merge
+
+Antes de executar os fluxos, `nimrod/scenario_snapshot.py` grava um snapshot
+dos cenários em:
+
+```text
+SMAT/output-test-dest/scenarios/<input_stem>_<timestamp>/
+├── manifest.json
+├── 001_<projeto>/
+│   ├── base
+│   ├── left
+│   ├── right
+│   └── merge
+└── 002_<projeto>/
+    └── ...
+```
+
+- O nome do dataset vem do nome do arquivo de input (por exemplo,
+  `input-smat-mergedataset.json` → `input-smat-mergedataset`).
+- Cada cenário recebe uma pasta indexada `NNN_<projectName>`; o índice evita
+  colisão quando o mesmo projeto aparece mais de uma vez.
+- `base`, `left`, `right` e `merge` contêm os fontes Java de todas as
+  classes-alvo daquela versão, concatenados com cabeçalhos. O arquivo é um
+  snapshot para inspeção, não um arquivo Java compilável.
+- Fontes ausentes são registradas como comentários nos arquivos e no
+  `manifest.json`.
+- Se `base` ou `merge` aparecerem como `no base source`/`no merge source`,
+  verifique `PATH_DATASET`: ele deve apontar para o dataset real com
+  `<cenário>/source/<Classe>/{base,left,right,merge}.java`. O fallback legado
+  (`jar_files/left.java`, `jar_files/right.java`) é restrito ao cenário toy e
+  não fornece `base`/`merge`.
+- O snapshot é gravado antes de Laya e da detecção dinâmica, então existe mesmo
+  que um dos fluxos falhe.
+
 ## 5. Modelo de dados resumido
 
 ```text
@@ -420,6 +454,8 @@ PYTHONPATH="$PWD" python3 -m unittest -v \
 - `SMAT/nimrod/output_generation/output_generator.py:26-53`
 - `SMAT/nimrod/laya_interference/`
 - `SMAT/nimrod/pipeline.py`
+- `SMAT/nimrod/scenario_snapshot.py`
+- `SMAT/nimrod/tests/test_scenario_snapshot.py`
 - `docs/fluxo-laya.md`
 - `SMAT/docs/architecture.md`
 - `SMAT/docs/report.md`
