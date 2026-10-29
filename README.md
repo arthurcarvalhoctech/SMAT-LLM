@@ -515,6 +515,35 @@ Para os números do artigo, use:
 Este repositório Gemini é indicado para comparar um modelo alternativo, não
 para reproduzir exatamente as Tabelas 1–5 do artigo.
 
+## 9. Viewer de cenários (Next.js)
+
+O serviço `viewer` no `docker-compose.yml` sobe uma aplicação Next.js +
+Tailwind CSS para explorar `SMAT/output-test-dest` em modo somente leitura.
+
+```bash
+docker compose up --build -d viewer
+# http://localhost:3000
+```
+
+O container monta `./SMAT/output-test-dest` em
+`/data/output-test-dest:ro` e lista:
+
+- execuções (`scenarios/<dataset>_<timestamp>`);
+- cenários com abas `base`, `left`, `right` e `merge`;
+- classificações e logs do Laya;
+- relatórios JSON em `reports/`;
+- navegador de arquivos de todo o `output-test-dest`.
+
+Para outra porta:
+
+```bash
+VIEWER_PORT=3001 docker compose up --build -d viewer
+```
+
+O serviço `smat` continua sendo executado separadamente com
+`docker compose run --rm --build smat ...`. Mais detalhes em
+[`viewer/README.md`](viewer/README.md).
+
 ## Atenção ao usar Windows
 
 Se você usa o Windows como sistema operacional, ao clonar este projeto

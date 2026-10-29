@@ -65,3 +65,19 @@ services:
       # - /caminho/aster:/data/aster:ro
     stdin_open: true
     tty: true
+
+  viewer:
+    build:
+      context: ./viewer
+      dockerfile: Dockerfile
+    image: smat-scenario-viewer
+    container_name: smat_viewer
+    ports:
+      - "${VIEWER_PORT:-3000}:3000"
+    environment:
+      # Read-only root for the Next.js data layer.
+      - SMAT_OUTPUT_DIR=/data/output-test-dest
+    volumes:
+      # The viewer only reads the SMAT artifacts.
+      - ./SMAT/output-test-dest:/data/output-test-dest:ro
+    restart: unless-stopped

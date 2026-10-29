@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-950 text-slate-100 antialiased;
+  background-color: #f4f4f5;
+  color: #18181b;
+  background-image:
+    radial-gradient(circle at 8% -10%, rgba(24, 24, 27, 0.05), transparent 32rem),
+    radial-gradient(circle at 92% 4%, rgba(24, 24, 27, 0.035), transparent 28rem);
+  background-attachment: fixed;
+}
+
+::selection {
+  @apply bg-red-200 text-red-900;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(113, 113, 122, 0.35) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-zinc-300;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-scroll {
+  max-height: 70vh;
+}
+
+/* Light gray palette. Red is reserved for the logo and selected accents. */
+.bg-slate-950 {
+  background-color: #f4f4f5;
+}
+
+[class*="bg-slate-950/"] {
+  background-color: rgba(255, 255, 255, 0.94);
+}
+
+[class*="bg-white/[0.0"] {
+  background-color: #ffffff;
+}
+
+[class*="border-white/"] {
+  border-color: #e4e4e7;
+}
+
+[class*="divide-white/"] > :not([hidden]) ~ :not([hidden]) {
+  border-color: #e4e4e7;
+}
+
+.text-white,
+.text-slate-100 {
+  color: #18181b;
+}
+
+.text-slate-200 {
+  color: #27272a;
+}
+
+.text-slate-300 {
+  color: #3f3f46;
+}
+
+.text-slate-400 {
+  color: #52525b;
+}
+
+.text-slate-500 {
+  color: #71717a;
+}
+
+.text-slate-600 {
+  color: #a1a1aa;
+}
+
+.text-slate-700 {
+  color: #d4d4d8;
+}
+
+[class*="text-indigo-"],
+[class*="text-cyan-"],
+[class*="text-emerald-"] {
+  color: #3f3f46;
+}
+
+[class*="text-amber-"],
+[class*="text-rose-"] {
+  color: #b91c1c;
+}
+
+[class*="bg-indigo-500/"],
+[class*="bg-cyan-400"],
+[class*="bg-emerald-400"],
+[class*="bg-indigo-400"] {
+  background-color: #f4f4f5;
+}
+
+[class*="bg-amber-400"],
+[class*="bg-rose-400"] {
+  background-color: #fef2f2;
+}
+
+[class*="border-indigo-400"],
+[class*="border-cyan-400"],
+[class*="border-emerald-400"] {
+  border-color: #d4d4d8;
+}
+
+[class*="border-amber-400"],
+[class*="border-rose-400"] {
+  border-color: #fca5a5;
+}
+
+[class*="hover:text-white"]:hover,
+[class*="hover:text-slate-200"]:hover {
+  color: #18181b;
+}
+
+[class*="hover:text-slate-300"]:hover {
+  color: #27272a;
+}
+
+[class*="hover:bg-white/5"]:hover {
+  background-color: #f4f4f5;
+}
+
+[class*="hover:border-white/"]:hover {
+  border-color: #d4d4d8;
+}
+
+[class*="hover:bg-amber-400"]:hover,
+[class*="hover:bg-rose-400"]:hover {
+  background-color: #fee2e2;
+}
+
+[class*="hover:bg-cyan-400"]:hover,
+[class*="hover:bg-emerald-400"]:hover,
+[class*="hover:bg-indigo-400"]:hover {
+  background-color: #f4f4f5;
+}
+
+[class*="hover:border-indigo-400"]:hover,
+[class*="hover:border-cyan-400"]:hover,
+[class*="hover:border-emerald-400"]:hover {
+  border-color: #a1a1aa;
+}
+
+[class*="hover:border-amber-400"]:hover,
+[class*="hover:border-rose-400"]:hover {
+  border-color: #f87171;
+}
+
+.bg-indigo-500 {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.hover\:bg-indigo-400:hover {
+  background-color: #ef4444;
+}
+
+.brand-mark {
+  background-image: linear-gradient(135deg, #ef4444, #991b1b);
+  color: #ffffff;
+}
+
+.hero-gradient,
+.panel-gradient {
+  background-image: linear-gradient(
+    135deg,
+    #ffffff,
+    #f4f4f5 55%,
+    #fafafa
+  );
+}
+
+thead {
+  background-color: #f4f4f5;
+}

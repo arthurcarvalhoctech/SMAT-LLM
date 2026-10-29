@@ -334,6 +334,22 @@ SMAT/output-test-dest/scenarios/<input_stem>_<timestamp>/
 - O snapshot é gravado antes de Laya e da detecção dinâmica, então existe mesmo
   que um dos fluxos falhe.
 
+### 4.8 Viewer de cenários
+
+O serviço `viewer` no `docker-compose.yml` sobe uma aplicação Next.js +
+Tailwind CSS que lê `SMAT/output-test-dest` em modo somente leitura. Ela lista
+as execuções, abre cada cenário com abas `base`/`left`/`right`/`merge`, mostra
+as classificações e logs do Laya, os relatórios JSON e um navegador de arquivos
+de todo o diretório de saída.
+
+```bash
+docker compose up --build -d viewer
+# http://localhost:3000
+```
+
+A porta pode ser alterada com `VIEWER_PORT`. O serviço `smat` continua sendo
+executado separadamente.
+
 ## 5. Modelo de dados resumido
 
 ```text
