@@ -51,13 +51,14 @@ def _default_log_dir() -> str:
     return os.path.join(os.path.dirname(get_base_output_path()), "reports", "laya")
 
 
-CLASSIFICATION_INTERFERENCE = "interference"
-CLASSIFICATION_NO_INTERFERENCE = "no_interference"
+CLASSIFICATION_POSSIBLE_INTERFERENCE = "possible_interference"
+CLASSIFICATION_NO_SIGNAL = "no_signal"
 CLASSIFICATION_ERROR = "error"
 
 CLASSIFICATION_NOTE = (
-    "Laya hypothesis (triage). No triggered criterion does not prove the absence "
-    "of interference; execution-based detection remains the reference."
+    "Laya triage only. possible_interference is a hypothesis, not a confirmed "
+    "conflict. no_signal does not prove the absence of interference. "
+    "Execution-based detection remains the reference."
 )
 
 
@@ -126,8 +127,8 @@ class LayaAssessment:
         if self.error:
             return CLASSIFICATION_ERROR
         if self.triggered_criteria:
-            return CLASSIFICATION_INTERFERENCE
-        return CLASSIFICATION_NO_INTERFERENCE
+            return CLASSIFICATION_POSSIBLE_INTERFERENCE
+        return CLASSIFICATION_NO_SIGNAL
 
     def classification_dict(self, run_id: str) -> Dict[str, Any]:
         return {
