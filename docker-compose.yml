@@ -12,6 +12,8 @@ services:
     environment:
       # Dataset root. The input JSON resolves ${PATH_DATASET}/... with it.
       - PATH_DATASET=${PATH_DATASET:?Define PATH_DATASET in the .env file}
+      # Lets scripts/*.py import the nimrod package.
+      - PYTHONPATH=/app/SMAT
       # Provider selection (DeepSeek, OpenAI-compatible, Gemini or Ollama).
       - LLM_PROVIDER=${LLM_PROVIDER:-}
       - LLM_MODEL=${LLM_MODEL:-}
@@ -54,6 +56,9 @@ services:
       # mergedataset checkout, mounted at the same path it has on the host
       # (PATH_DATASET), so ${PATH_DATASET}/... works inside the container too.
       - ${PATH_DATASET:?Define PATH_DATASET in the .env file}:${PATH_DATASET:?Define PATH_DATASET in the .env file}:ro
+      # Local Laya checkpoints (e.g. the fine-tuned model), read-only. Point
+      # SMAT_LAYA_MODEL at /laya_smat/<checkpoint dir> to use one.
+      - ${LAYA_SMAT_DIR:-./.laya_smat}:/laya_smat:ro
       # Persist Hugging Face weights downloaded by Laya between runs.
       - smat-hf-cache:/home/appuser/.cache/huggingface
       # Mount the ASTER dataset read-only. Uncomment and adjust the host path.

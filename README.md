@@ -254,10 +254,6 @@ O `docker-compose.yml` repassa todas essas variáveis ao container. Em execuçõ
 locais, o `.env` é carregado automaticamente. Detalhes do fluxo, dos três
 critérios e do formato do log estão em
 [`docs/fluxo-laya.md`](docs/fluxo-laya.md).
-Para usar um checkpoint local (por exemplo o modelo ajustado) no Docker, veja
-`docker-compose.laya-local.yml`. Os experimentos com o dataset sintético
-(`dataset-sintetico/`) estão em
-[`docs/experimentos-laya-sintetico.md`](docs/experimentos-laya-sintetico.md).
 
 ## 3. Datasets
 
