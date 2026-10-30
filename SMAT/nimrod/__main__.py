@@ -115,7 +115,27 @@ def get_output_generators(config: Dict[str, str]) -> List[OutputGenerator]:
 
 
 def resolve_input_path(config: Dict[str, str]) -> str:
-    return os.environ.get("SMAT_INPUT_PATH") or config.get('input_path', "")
+    env_path = os.environ.get("SMAT_INPUT_PATH")
+    configured_path = config.get('input_path', "")
+    if not env_path:
+        return configured_path
+    if os.path.isfile(env_path):
+        return env_path
+    if configured_path:
+        # The repository is mounted at /app in Docker, so a host path such as
+        # /home/user/SMAT-LLM/input-x.json is available as /app/input-x.json.
+        container_candidate = os.path.join(
+            os.path.dirname(configured_path), os.path.basename(env_path)
+        )
+        if os.path.isfile(container_candidate):
+            return container_candidate
+        logging.warning(
+            "SMAT_INPUT_PATH=%s does not exist; falling back to input_path=%s.",
+            env_path,
+            configured_path,
+        )
+        return configured_path
+    return env_path
 
 
 def parse_scenarios_from_input(config: Dict[str, str]) -> List[MergeScenarioUnderAnalysis]:

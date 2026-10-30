@@ -1,4 +1,5 @@
 import os
+import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
@@ -128,15 +129,59 @@ class LayaFlowBuilderTest(unittest.TestCase):
 
 class InputPathResolutionTest(unittest.TestCase):
     def test_env_override_takes_precedence(self):
+        with tempfile.NamedTemporaryFile(
+            "w", suffix=".json", delete=False
+        ) as handle:
+            handle.write("[]")
+            env_path = handle.name
+        try:
+            with patch.dict(
+                os.environ, {"SMAT_INPUT_PATH": env_path}, clear=True
+            ):
+                self.assertEqual(
+                    smat_main.resolve_input_path(
+                        {"input_path": "/tmp/config-input.json"}
+                    ),
+                    env_path,
+                )
+        finally:
+            os.unlink(env_path)
+
+    def test_missing_env_path_falls_back_to_config(self):
         with patch.dict(
-            os.environ, {"SMAT_INPUT_PATH": "/tmp/env-input.json"}, clear=True
+            os.environ,
+            {"SMAT_INPUT_PATH": "/tmp/missing-smat-env-input.json"},
+            clear=True,
         ):
             self.assertEqual(
                 smat_main.resolve_input_path(
-                    {"input_path": "/tmp/config-input.json"}
+                    {"input_path": "/app/input-smat-mergedataset.json"}
                 ),
-                "/tmp/env-input.json",
+                "/app/input-smat-mergedataset.json",
             )
+
+    def test_missing_host_path_uses_container_sibling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            container_dir = os.path.join(tmp, "app")
+            os.makedirs(container_dir)
+            configured = os.path.join(container_dir, "input-old.json")
+            candidate = os.path.join(
+                container_dir, "input-synthetic.json"
+            )
+            with open(candidate, "w") as handle:
+                handle.write("[]")
+            host_path = os.path.join(
+                tmp, "host", "input-synthetic.json"
+            )
+            with patch.dict(
+                os.environ, {"SMAT_INPUT_PATH": host_path}, clear=True
+            ):
+                self.assertEqual(
+                    smat_main.resolve_input_path(
+                        {"input_path": configured}
+                    ),
+                    candidate,
+                )
 
     def test_uses_config_input_path_when_env_is_absent(self):
         with patch.dict(os.environ, {}, clear=True):
