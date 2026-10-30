@@ -1,0 +1,522 @@
+[
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n01_mapa_chaves_distintas"
+    },
+    "targets": {
+      "demo.TableTypes": [
+        {
+          "method": "init()",
+          "leftChangesSummary": "Left removes the entries for keys a and b from the map",
+          "rightChangesSummary": "Right adds the entry for key e to the map"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n01_mapa_chaves_distintas/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n01_mapa_chaves_distintas/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n01_mapa_chaves_distintas/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n01_mapa_chaves_distintas/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n02_texto_ordem_independente"
+    },
+    "targets": {
+      "demo.Text": [
+        {
+          "method": "cleanText()",
+          "leftChangesSummary": "Left adds a call to normalizeWhitespace after removeComments",
+          "rightChangesSummary": "Right adds a call to removeDuplicateWords before removeComments"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n02_texto_ordem_independente/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n02_texto_ordem_independente/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n02_texto_ordem_independente/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n02_texto_ordem_independente/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n03_mesma_mudanca_dos_dois_lados"
+    },
+    "targets": {
+      "demo.TaxCalculator": [
+        {
+          "method": "apply(int)",
+          "leftChangesSummary": "Left changes the default tax rate from 10 to 20",
+          "rightChangesSummary": "Right changes the default tax rate from 10 to 20"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n03_mesma_mudanca_dos_dois_lados/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n03_mesma_mudanca_dos_dois_lados/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n03_mesma_mudanca_dos_dois_lados/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n03_mesma_mudanca_dos_dois_lados/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n04_campos_independentes"
+    },
+    "targets": {
+      "demo.Cart": [
+        {
+          "method": "checkout(int,int)",
+          "leftChangesSummary": "Left applies a ten percent discount to the subtotal",
+          "rightChangesSummary": "Right makes the shipping free when the subtotal is above one hundred"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n04_campos_independentes/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n04_campos_independentes/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n04_campos_independentes/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n04_campos_independentes/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n05_mudanca_so_de_um_lado"
+    },
+    "targets": {
+      "demo.Counter": [
+        {
+          "method": "increment()",
+          "leftChangesSummary": "Left changes the increment step of value from one to two",
+          "rightChangesSummary": "Right adds a reset method that is not called by increment"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n05_mudanca_so_de_um_lado/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n05_mudanca_so_de_um_lado/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n05_mudanca_so_de_um_lado/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n05_mudanca_so_de_um_lado/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n06_refatoracao_e_comportamento"
+    },
+    "targets": {
+      "demo.Limiter": [
+        {
+          "method": "allowed(int)",
+          "leftChangesSummary": "Left rewrites the limit constant as a sum without changing its value",
+          "rightChangesSummary": "Right returns zero instead of a negative number of requests"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n06_refatoracao_e_comportamento/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n06_refatoracao_e_comportamento/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n06_refatoracao_e_comportamento/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n06_refatoracao_e_comportamento/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n07_validacao_em_entradas_distintas"
+    },
+    "targets": {
+      "demo.Validator": [
+        {
+          "method": "valid(java.lang.String)",
+          "leftChangesSummary": "Left adds a guard that returns false for a null name",
+          "rightChangesSummary": "Right trims the name before measuring its length, keeping null as null"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n07_validacao_em_entradas_distintas/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n07_validacao_em_entradas_distintas/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n07_validacao_em_entradas_distintas/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n07_validacao_em_entradas_distintas/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "n08_casos_novos_no_switch"
+    },
+    "targets": {
+      "demo.OrderLabel": [
+        {
+          "method": "label(java.lang.String)",
+          "leftChangesSummary": "Left adds a case for the CANCELLED status",
+          "rightChangesSummary": "Right adds a case for the SHIPPED status"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/n08_casos_novos_no_switch/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/n08_casos_novos_no_switch/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/n08_casos_novos_no_switch/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/n08_casos_novos_no_switch/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c2a_lista_acumulada"
+    },
+    "targets": {
+      "demo.Keywords": [
+        {
+          "method": "init()",
+          "leftChangesSummary": "Left adds a new value into a list",
+          "rightChangesSummary": "Right adds a different new value into the same list"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c2a_lista_acumulada/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c2a_lista_acumulada/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c2a_lista_acumulada/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c2a_lista_acumulada/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c2b_taxa_e_arredondamento"
+    },
+    "targets": {
+      "demo.Invoice": [
+        {
+          "method": "compute()",
+          "leftChangesSummary": "Left adds a flat fee of five to the total",
+          "rightChangesSummary": "Right rounds the total up to a multiple of ten"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c2b_taxa_e_arredondamento/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c2b_taxa_e_arredondamento/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c2b_taxa_e_arredondamento/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c2b_taxa_e_arredondamento/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c2c_texto_espacos_duplicados"
+    },
+    "targets": {
+      "demo.TextCleaner": [
+        {
+          "method": "cleanText()",
+          "leftChangesSummary": "Left adds a call to normalizeWhitespace before removeComments",
+          "rightChangesSummary": "Right adds a call to removeDuplicateWords after removeComments"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c2c_texto_espacos_duplicados/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c2c_texto_espacos_duplicados/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c2c_texto_espacos_duplicados/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c2c_texto_espacos_duplicados/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c2d_guarda_nula_antes_do_trim"
+    },
+    "targets": {
+      "demo.NameCheck": [
+        {
+          "method": "valid(java.lang.String)",
+          "leftChangesSummary": "Left adds a guard that returns false for a null name",
+          "rightChangesSummary": "Right trims the name before measuring its length"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c2d_guarda_nula_antes_do_trim/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c2d_guarda_nula_antes_do_trim/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c2d_guarda_nula_antes_do_trim/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c2d_guarda_nula_antes_do_trim/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c3a_xyz_apostila"
+    },
+    "targets": {
+      "demo.Flags": [
+        {
+          "method": "run()",
+          "leftChangesSummary": "Left changes the initial value of x from zero to one",
+          "rightChangesSummary": "Right changes the initial value of y from zero to one"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c3a_xyz_apostila/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c3a_xyz_apostila/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c3a_xyz_apostila/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c3a_xyz_apostila/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c3b_peso_total"
+    },
+    "targets": {
+      "demo.Parcel": [
+        {
+          "method": "check()",
+          "leftChangesSummary": "Left raises the weight of the first item from forty to sixty",
+          "rightChangesSummary": "Right raises the weight of the second item from forty to sixty"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c3b_peso_total/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c3b_peso_total/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c3b_peso_total/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c3b_peso_total/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c3c_capacidade"
+    },
+    "targets": {
+      "demo.Storage": [
+        {
+          "method": "check()",
+          "leftChangesSummary": "Left increases the used space from four to seven",
+          "rightChangesSummary": "Right sets an incoming load of three"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/c3c_capacidade/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/c3c_capacidade/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/c3c_capacidade/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/c3c_capacidade/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "d1_taxa_sobrescrita"
+    },
+    "targets": {
+      "demo.PriceTable": [
+        {
+          "method": "quote(int)",
+          "leftChangesSummary": "Left changes the initial rate from five to ten",
+          "rightChangesSummary": "Right assigns a new rate of twenty after the fee is set"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/d1_taxa_sobrescrita/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/d1_taxa_sobrescrita/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/d1_taxa_sobrescrita/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/d1_taxa_sobrescrita/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "d2_regra_de_preco"
+    },
+    "targets": {
+      "demo.PriceRule": [
+        {
+          "method": "price(int)",
+          "leftChangesSummary": "Left adds a surcharge of ten to the price before the vip discount",
+          "rightChangesSummary": "Right doubles the price after the vip discount"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/d2_regra_de_preco/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/d2_regra_de_preco/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/d2_regra_de_preco/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/d2_regra_de_preco/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "d3_titulo_formatado"
+    },
+    "targets": {
+      "demo.TitleFormatter": [
+        {
+          "method": "title(java.lang.String)",
+          "leftChangesSummary": "Left converts the title to upper case",
+          "rightChangesSummary": "Right appends a draft marker to the title"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/d3_titulo_formatado/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/d3_titulo_formatado/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/d3_titulo_formatado/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/d3_titulo_formatado/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "e1_taxa_e_capacidade"
+    },
+    "targets": {
+      "demo.Checkout": [
+        {
+          "method": "compute()",
+          "leftChangesSummary": "Left adds a flat fee of five to the total and raises the used space to seven",
+          "rightChangesSummary": "Right rounds the total up to a multiple of ten and sets an incoming load of three"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/e1_taxa_e_capacidade/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/e1_taxa_e_capacidade/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/e1_taxa_e_capacidade/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/e1_taxa_e_capacidade/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "sintetico",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "e2_custo_e_sobrepeso"
+    },
+    "targets": {
+      "demo.Shipment": [
+        {
+          "method": "plan(int)",
+          "leftChangesSummary": "Left adds a surcharge of ten to the cost and raises the first weight to sixty",
+          "rightChangesSummary": "Right doubles the cost after the vip discount and raises the second weight to sixty"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "/app/dataset-sintetico/cases/e2_custo_e_sobrepeso/original/base/base.jar",
+      "left": "/app/dataset-sintetico/cases/e2_custo_e_sobrepeso/original/left/left.jar",
+      "right": "/app/dataset-sintetico/cases/e2_custo_e_sobrepeso/original/right/right.jar",
+      "merge": "/app/dataset-sintetico/cases/e2_custo_e_sobrepeso/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  }
+]

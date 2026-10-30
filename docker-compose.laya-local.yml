@@ -1,0 +1,11 @@
+# Override opcional: monta uma pasta local com checkpoints do Laya (ex.: o modelo ajustado)
+# em /laya_smat, somente leitura. Os pesos não ficam no repositório.
+#
+#   export LAYA_SMAT_DIR=/caminho/para/laya_smat
+#   export SMAT_LAYA_MODEL=/laya_smat/laya_finetuned_smat_multilingual
+#   INSTALL_LAYA=true docker compose -f docker-compose.yml -f docker-compose.laya-local.yml build
+#   docker compose -f docker-compose.yml -f docker-compose.laya-local.yml run --rm smat bash
+services:
+  smat:
+    volumes:
+      - ${LAYA_SMAT_DIR:?Defina LAYA_SMAT_DIR com a pasta dos checkpoints}:/laya_smat:ro
