@@ -10,6 +10,23 @@ import {
 } from "@/lib/laya";
 import type { LayaScenarioSummary } from "@/lib/types";
 
+function uniqueValues<T>(values: Array<T | null | undefined>): T[] {
+  return Array.from(
+    new Set(values.filter((value): value is T => value != null)),
+  );
+}
+
+function ConfigItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+        {label}
+      </dt>
+      <dd className="mt-1 font-mono text-xs text-zinc-800">{value || "—"}</dd>
+    </div>
+  );
+}
+
 export function LlmScenarioBadges({
   summary,
 }: {
@@ -63,6 +80,37 @@ export function LlmScenarioPanel({
   }
 
   const criteria = new Set(summary.criteria);
+  const providers = uniqueValues(
+    summary.records.map((record) => record.provider),
+  ).filter((value): value is string => Boolean(value));
+  const models = uniqueValues(
+    summary.records.map((record) => record.primaryModel || record.model),
+  ).filter((value): value is string => Boolean(value));
+  const fallbacks = uniqueValues(
+    summary.records.map((record) => record.fallbackModel),
+  ).filter((value): value is string => Boolean(value));
+  const thresholds = uniqueValues(
+    summary.records.map((record) => record.threshold),
+  );
+  const maxOutputTokens = uniqueValues(
+    summary.records.flatMap((record) => {
+      const values: number[] =
+        record.maxOutputTokens != null ? [record.maxOutputTokens] : [];
+      for (const attempt of record.attempts ?? []) {
+        if (attempt.maxOutputTokens != null) {
+          values.push(attempt.maxOutputTokens);
+        }
+      }
+      return values;
+    }),
+  );
+  const jsonModes = uniqueValues(
+    summary.records.map((record) => record.jsonMode),
+  );
+  const retryFlags = uniqueValues(
+    summary.records.map((record) => record.retryOnLength),
+  );
+  const formatBool = (value: boolean) => (value ? "sim" : "não");
   const summaryText = summary.records.find((record) => record.summary)?.summary;
   const reasoning = summary.records.find(
     (record) => record.reasoning,
@@ -88,6 +136,54 @@ export function LlmScenarioPanel({
               runs: {summary.runIds.join(", ")}
             </span>
           ) : null}
+        </div>
+
+        <div className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+            Configuração da análise
+          </p>
+          <dl className="mt-2 grid gap-3 sm:grid-cols-3">
+            <ConfigItem label="Provedor" value={providers.join(", ")} />
+            <ConfigItem label="Modelo" value={models.join(", ")} />
+            <ConfigItem label="Fallback" value={fallbacks.join(", ")} />
+            <ConfigItem
+              label="Threshold"
+              value={
+                thresholds.length
+                  ? thresholds
+                      .map((value) => value.toFixed(2))
+                      .join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="max_output_tokens"
+              value={
+                maxOutputTokens.length
+                  ? maxOutputTokens.map(String).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="JSON mode"
+              value={
+                jsonModes.length
+                  ? jsonModes.map(formatBool).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="Retry length"
+              value={
+                retryFlags.length
+                  ? retryFlags.map(formatBool).join(", ")
+                  : "—"
+              }
+            />
+          </dl>
+          <p className="mt-2 text-[10px] text-zinc-500">
+            Valores registrados no fluxo LLM para esta execução.
+          </p>
         </div>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-3">

@@ -65,6 +65,15 @@ interface LayaCriterionJson {
   triggered?: boolean;
 }
 
+interface LayaAttemptJson {
+  attempt?: number;
+  model?: string;
+  max_output_tokens?: number;
+  maxOutputTokens?: number;
+  finish_reason?: string;
+  finishReason?: string;
+}
+
 interface LayaJson {
   run_id?: string;
   runId?: string;
@@ -97,6 +106,17 @@ interface LayaJson {
   summary?: string | null;
   reasoning?: string | null;
   provider?: string | null;
+  primary_model?: string | null;
+  primaryModel?: string | null;
+  fallback_model?: string | null;
+  fallbackModel?: string | null;
+  max_output_tokens?: number | null;
+  maxOutputTokens?: number | null;
+  json_mode?: boolean | null;
+  jsonMode?: boolean | null;
+  retry_on_length?: boolean | null;
+  retryOnLength?: boolean | null;
+  attempts?: LayaAttemptJson[] | null;
   error?: string | null;
   note?: string | null;
 }
@@ -460,6 +480,23 @@ function toLayaRecord(raw: LayaJson): LayaRecord {
     summary: raw.summary ?? undefined,
     reasoning: raw.reasoning ?? undefined,
     provider: raw.provider ?? undefined,
+    primaryModel:
+      raw.primary_model ?? raw.primaryModel ?? undefined,
+    fallbackModel:
+      raw.fallback_model ?? raw.fallbackModel ?? undefined,
+    maxOutputTokens:
+      raw.max_output_tokens ?? raw.maxOutputTokens ?? undefined,
+    jsonMode: raw.json_mode ?? raw.jsonMode ?? undefined,
+    retryOnLength:
+      raw.retry_on_length ?? raw.retryOnLength ?? undefined,
+    attempts: (raw.attempts ?? []).map((attempt) => ({
+      attempt: attempt.attempt,
+      model: attempt.model,
+      maxOutputTokens:
+        attempt.max_output_tokens ?? attempt.maxOutputTokens,
+      finishReason:
+        attempt.finish_reason ?? attempt.finishReason,
+    })),
     error: raw.error ?? null,
     note: raw.note ?? null,
   };
@@ -632,6 +669,58 @@ const LLM_REPORT_SOURCE: FlowReportSource = {
   logPrefix: "llm_interference",
 };
 
+interface LlmRuntimeConfig {
+  provider?: string;
+  model?: string;
+  fallback_model?: string;
+  max_output_tokens?: number;
+  json_mode?: boolean;
+  retry_on_length?: boolean;
+}
+
+async function readTextHead(
+  file: string,
+  maxBytes = 16384,
+): Promise<string> {
+  const handle = await fs.open(file, "r");
+  try {
+    const buffer = Buffer.alloc(maxBytes);
+    const { bytesRead } = await handle.read(buffer, 0, maxBytes, 0);
+    return buffer.subarray(0, bytesRead).toString("utf8");
+  } finally {
+    await handle.close();
+  }
+}
+
+async function loadLlmRuntimeConfigs(
+  root: string,
+): Promise<Map<string, LlmRuntimeConfig>> {
+  const configs = new Map<string, LlmRuntimeConfig>();
+  const prefix = "llm_interference_";
+  const entries = await listDir(root);
+
+  for (const entry of entries) {
+    if (
+      !entry.isFile() ||
+      !entry.name.startsWith(prefix) ||
+      !entry.name.endsWith(".log")
+    ) {
+      continue;
+    }
+    const runId = entry.name.slice(prefix.length, -".log".length);
+    try {
+      const head = await readTextHead(path.join(root, entry.name));
+      const match = head.match(/^provider_config=(\{.*\})$/m);
+      if (!match) continue;
+      configs.set(runId, JSON.parse(match[1]) as LlmRuntimeConfig);
+    } catch {
+      // Older or malformed logs are ignored; records still render.
+    }
+  }
+
+  return configs;
+}
+
 async function loadFlowRecords(
   source: FlowReportSource,
 ): Promise<LayaRecord[]> {
@@ -706,12 +795,46 @@ async function loadFlowRecords(
       summary: existing.summary ?? record.summary,
       reasoning: existing.reasoning ?? record.reasoning,
       provider: existing.provider ?? record.provider,
+      primaryModel: existing.primaryModel ?? record.primaryModel,
+      fallbackModel: existing.fallbackModel ?? record.fallbackModel,
+      maxOutputTokens:
+        existing.maxOutputTokens ?? record.maxOutputTokens,
+      jsonMode: existing.jsonMode ?? record.jsonMode,
+      retryOnLength:
+        existing.retryOnLength ?? record.retryOnLength,
+      attempts:
+        existing.attempts && existing.attempts.length > 0
+          ? existing.attempts
+          : record.attempts,
       error: existing.error ?? record.error,
       note: existing.note ?? record.note,
     });
   }
 
-  return Array.from(byAssessment.values());
+  const loaded = Array.from(byAssessment.values());
+  if (source.root !== LLM_REPORT_SOURCE.root) {
+    return loaded;
+  }
+
+  const runtimeConfigs = await loadLlmRuntimeConfigs(root);
+  return loaded.map((record) => {
+    const config = record.runId
+      ? runtimeConfigs.get(record.runId)
+      : undefined;
+    if (!config) return record;
+    return {
+      ...record,
+      provider: record.provider ?? config.provider,
+      primaryModel: record.primaryModel ?? config.model,
+      fallbackModel:
+        record.fallbackModel ?? config.fallback_model,
+      maxOutputTokens:
+        record.maxOutputTokens ?? config.max_output_tokens,
+      jsonMode: record.jsonMode ?? config.json_mode,
+      retryOnLength:
+        record.retryOnLength ?? config.retry_on_length,
+    };
+  });
 }
 
 async function loadAllLayaRecords(): Promise<LayaRecord[]> {

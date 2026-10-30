@@ -91,6 +91,11 @@ class LlmAssessment:
     state_digest: str
     source_paths: Dict[str, str]
     missing_branches: List[str]
+    primary_model: Optional[str] = None
+    fallback_model: Optional[str] = None
+    max_output_tokens: Optional[int] = None
+    json_mode: Optional[bool] = None
+    retry_on_length: Optional[bool] = None
     criteria: Dict[str, CriterionAssessment] = field(default_factory=dict)
     primary_criterion: Optional[str] = None
     affected_branch: Optional[str] = None
@@ -133,6 +138,11 @@ class LlmAssessment:
             "jar_type": self.jar_type,
             "provider": self.provider,
             "model": self.model,
+            "primary_model": self.primary_model,
+            "fallback_model": self.fallback_model,
+            "max_output_tokens": self.max_output_tokens,
+            "json_mode": self.json_mode,
+            "retry_on_length": self.retry_on_length,
             "threshold": self.threshold,
             "classification": self.classification,
             "triggered_criteria": self.triggered_criteria,
@@ -171,6 +181,11 @@ class LlmAssessment:
             "jar_type": self.jar_type,
             "provider": self.provider,
             "model": self.model,
+            "primary_model": self.primary_model,
+            "fallback_model": self.fallback_model,
+            "max_output_tokens": self.max_output_tokens,
+            "json_mode": self.json_mode,
+            "retry_on_length": self.retry_on_length,
             "threshold": self.threshold,
             "state_digest": self.state_digest,
             "source_paths": self.source_paths,
@@ -508,6 +523,11 @@ class LlmInterferenceFlow:
             state_digest=state.digest(),
             source_paths=state.source_paths(),
             missing_branches=state.missing_branches,
+            primary_model=self.config.model or str(result.get("model") or ""),
+            fallback_model=self.config.fallback_model,
+            max_output_tokens=self.config.max_output_tokens,
+            json_mode=self.config.json_mode,
+            retry_on_length=self.config.retry_on_length,
             criteria=criteria,
             primary_criterion=analysis.get("primary_criterion"),
             affected_branch=analysis.get("affected_branch"),
@@ -586,6 +606,26 @@ class LlmInterferenceFlow:
             state_digest=state.digest(),
             source_paths=state.source_paths(),
             missing_branches=state.missing_branches,
+            primary_model=str(
+                metadata.get("configured_model")
+                or self.config.model
+                or description.get("model")
+                or ""
+            ),
+            fallback_model=str(
+                metadata.get("fallback_model")
+                or self.config.fallback_model
+                or ""
+            ),
+            max_output_tokens=metadata.get("max_output_tokens")
+            if isinstance(metadata.get("max_output_tokens"), int)
+            else self.config.max_output_tokens,
+            json_mode=metadata.get("json_mode")
+            if isinstance(metadata.get("json_mode"), bool)
+            else self.config.json_mode,
+            retry_on_length=metadata.get("retry_on_length")
+            if isinstance(metadata.get("retry_on_length"), bool)
+            else self.config.retry_on_length,
             criteria=criteria,
             finish_reason=metadata.get("finish_reason"),
             attempts=metadata.get("attempts", [])

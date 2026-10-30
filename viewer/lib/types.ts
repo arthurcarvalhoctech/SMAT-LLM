@@ -101,6 +101,17 @@ export interface LayaRecord {
   summary?: string;
   reasoning?: string;
   provider?: string;
+  primaryModel?: string;
+  fallbackModel?: string;
+  maxOutputTokens?: number;
+  jsonMode?: boolean;
+  retryOnLength?: boolean;
+  attempts?: Array<{
+    attempt?: number;
+    model?: string;
+    maxOutputTokens?: number;
+    finishReason?: string;
+  }>;
   error?: string | null;
   note?: string | null;
 }
