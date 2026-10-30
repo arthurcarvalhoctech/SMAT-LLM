@@ -1,0 +1,746 @@
+[
+  {
+    "project": "elasticsearch",
+    "commit": "36884807b3cc9d660db4da062275c7fdbec8ba67",
+    "class": "org.elasticsearch.index.query.SimpleIndexQueryParserTests",
+    "method": "setup()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "59cb67c7bd0ab6311115b20954e013412b676b29",
+    "class": "org.elasticsearch.index.query.support.NestedInnerQueryParseSupport",
+    "method": "setPathLevel()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "f3d63095dbcc985e24162fbac4ee0d6914dc757d",
+    "class": "org.elasticsearch.index.analysis.synonyms.SynonymsAnalysisTest",
+    "method": "testSynonymsAnalysis()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "okhttp",
+    "commit": "35166168529bd27281685e56a0a122eff44460e9",
+    "class": "com.squareup.okhttp.OkHttpClient",
+    "method": "copyWithDefaults()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "antlr4",
+    "commit": "69ff2669eec265e25721dbc27cb00f6c381d0b41",
+    "class": "org.antlr.v4.codegen.target.Python2Target",
+    "method": "python2Keywords",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "antlr4",
+    "commit": "69ff2669eec265e25721dbc27cb00f6c381d0b41",
+    "class": "org.antlr.v4.codegen.target.Python3Target",
+    "method": "python3Keywords",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "cloud-slang",
+    "commit": "20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76",
+    "class": "io.cloudslang.lang.api.SlangImpl",
+    "method": "getAllEventTypes()",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "cloud-slang",
+    "commit": "20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76",
+    "class": "io.cloudslang.lang.api.SlangImplTest",
+    "method": "ALL_EVENTS_SIZE",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "storm",
+    "commit": "bd1f5c54752f67b484a83c26667331234234d3a3",
+    "class": "org.apache.storm.kafka.spout.KafkaSpout",
+    "method": "emitTupleIfNotEmitted(ConsumerRecord<K|V>)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "fitnesse",
+    "commit": "4d9ba9d221d879507440feb084fa7521b95111ec",
+    "class": "fitnesse.testsystems.slim.tables.SlimTableFactory",
+    "method": "contructor()",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "fitnesse",
+    "commit": "4d9ba9d221d879507440feb084fa7521b95111ec",
+    "class": "fitnesse.testsystems.slim.tables.SlimTableFactoryTest",
+    "method": "setUp()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "retrofit",
+    "commit": "71f622ce51031b152a0be6ad5facfb27a654bf5a",
+    "class": "retrofit.RequestBuilder",
+    "method": "build()",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "3d4f99516ba3177f7d88a1f600923138a8b77cc8",
+    "class": "org.elasticsearch.river.mongodb.Slurper",
+    "method": "assignCollections()",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "jsoup",
+    "commit": "a44e18aa3c1fcd25a68a5965f9490d8f7d026509",
+    "class": "org.jsoup.nodes.TextNode",
+    "method": "outerHtmlHead(StringBuilder| int| Document.OutputSettings)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "SimianArmy",
+    "commit": "345ad9513aafff397050d613fa87ad06ddffe99d",
+    "class": "com.netflix.simianarmy.basic.janitor.BasicJanitorMonkeyContext",
+    "method": "getInstanceJanitor()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "activiti",
+    "commit": "50d8e43eb5917c63abfbcdec1e68e510943f325a",
+    "class": "org.activiti.engine.impl.persistence.entity.DeploymentEntityManager",
+    "method": "deleteDeployment(String| boolean)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "druid",
+    "commit": "05168808c278c080c59c19e858d9471b316cd1f5",
+    "class": "com.metamx.druid.loading.S3SegmentPusher",
+    "method": "push(File| DataSegment)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "netty",
+    "commit": "193acdb36cd3da9bfc62dd69c4208dff3f0a2b1b",
+    "class": "org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder",
+    "method": "decode(ChannelHandlerContext| Channel| ChannelBuffer)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "OpenTripPlanner",
+    "commit": "4c506dce43775704919d084f0acfba86d251bf4a",
+    "class": "org.opentripplanner.routing.spt.MultiShortestPathTree",
+    "method": "dominates(State| State)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "webbit",
+    "commit": "74d2d2b87704d003acacb34e4ca8fb5f897b938f",
+    "class": "org.webbitserver.netty.WebSocketClient$HandshakeChannelHandler",
+    "method": "adjustPipelineToWebSocket(ChannelHandlerContext| MessageEvent| ChannelHandler| ChannelHandler)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "jsoup",
+    "commit": "3f7d2c71dbbbb289c684f339874eed8ac2747fa0",
+    "class": "org.jsoup.helper.HttpConnection",
+    "method": "execute(Connection.Request| Response)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "jsoup",
+    "commit": "a8b6982de98ff76ef254031d7152fff57f6bf941",
+    "class": "org.jsoup.helper.HttpConnection",
+    "method": "execute(Connection.Request| Response)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "resty-gwt",
+    "commit": "867b917c43c32acbdcac55767e7f04334006c866",
+    "class": "org.fusesource.restygwt.rebind.DirectRestServiceInterfaceClassCreator",
+    "method": "getMethodCallback(JMethod)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "storm",
+    "commit": "ad2be678831b3b060229fd936e3908110162b7ac",
+    "class": "org.apache.storm.kafka.spout.KafkaSpoutConfig",
+    "method": "toString()",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "jOOQ",
+    "commit": "d96120f327107feb1ebb15e7c090dc38eeff72ca",
+    "class": "org.jooq.impl.DSL",
+    "method": "coalesce(Field<T>| T)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "atmosphere",
+    "commit": "ffc0c6e274094c6423e29d1c45bab1593b8fac7d",
+    "class": "org.atmosphere.cpr.AtmosphereConfig",
+    "method": "constructor()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "swagger-maven-plugin",
+    "commit": "e825a7fdc6ef688f1253b93d2cb236e710acfc56",
+    "class": "com.github.kongchen.swagger.docgen.reader.AbstractReader",
+    "method": "hasValidAnnotations(List<Annotation>)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "spring-boot",
+    "commit": "ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c",
+    "class": "org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory",
+    "method": "createDeploymentManager(ServletContextInitializer)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "af20dc6cc45c032573413c401f9f73aa75371744",
+    "class": "org.springframework.boot.loader.archive.ExplodedArchive",
+    "method": "getUrl()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "af20dc6cc45c032573413c401f9f73aa75371744",
+    "class": "org.springframework.boot.loader.archive.ExplodedArchiveTests",
+    "method": "getUrl()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "titan",
+    "commit": "387c16ea05ef9fa312f37139228d2bbf61455ff4",
+    "class": "com.thinkaurelius.titan.graphdb.database.serialize.SerializerInitialization",
+    "method": "initialize(Serializer)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "jsoup",
+    "commit": "fee4762322f85a1109edd75ccb67f38cf5008c80",
+    "class": "org.jsoup.helper.HttpConnection",
+    "method": "createConnection(Connection.Request)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "retrofit",
+    "commit": "2b6c719c6645f8e48dca6d0047c752069d321bc4",
+    "class": "retrofit.RestAdapter",
+    "method": "logAndReplaceResponse(String| Response| long)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "retrofit",
+    "commit": "2b6c719c6645f8e48dca6d0047c752069d321bc4",
+    "class": "retrofit.RestAdapter",
+    "method": "logAndReplaceRequest(Request)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "activiti",
+    "commit": "bf46684ba62f5883673ea8fb0a14aecfe0aedea2",
+    "class": "org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior",
+    "method": "execute(ActivityExecution)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "okhttp",
+    "commit": "1151c9853ccc3c9c3211c613b9b845b925f8c6a6",
+    "class": "com.squareup.okhttp.internal.bytes.GzipSource",
+    "method": "consumeHeader(Deadline)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "HikariCP",
+    "commit": "1bca94af9ec625f21d1b58ff10efb5be71ab87a6",
+    "class": "com.zaxxer.hikari.HikariConfig",
+    "method": "validate()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "quickml",
+    "commit": "bae968d9a85c0501ba8842a6f88e7fc2c6b78693",
+    "class": "quickdt.experiments.OutOfTimeCrossValidatorRunner",
+    "method": "getRandomForestBuilder(int| int)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "pushy",
+    "commit": "58901c846e4f0874977c5aabbc34bcb4de3670e0",
+    "class": "com.relayrides.pushy.apns.PushManager",
+    "method": "handleConnectionClosure(ApnsConnection<T>)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "java-faker",
+    "commit": "ca42fcfaf45cae1754c58e02e1d5d2a58ec03561",
+    "class": "com.github.javafaker.Faker",
+    "method": "constructor()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "swagger-core",
+    "commit": "e7fea7c4889dbdd6a4e0b2d059c8aa0f126ab1c2",
+    "class": "io.swagger.jaxrs2.OperationParser",
+    "method": "getSchemaFromAnnotation(io.swagger.oas.annotations.media.Schema)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "cucumber-jvm",
+    "commit": "4505c156b6267c1b760deec570ddbfe047b42aa9",
+    "class": "cuke4duke.internal.java.JavaLanguage",
+    "method": "load(String)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "dropwizard",
+    "commit": "ddd15a681bf42360337844412cae4aba1556eb88",
+    "class": "io.dropwizard.setup.Bootstrap.Bootstrap",
+    "method": "Bootstrap(Application<T>)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "hector",
+    "commit": "0588608e7a2bdf974c985ff546207104f672bf6c",
+    "class": "me.prettyprint.cassandra.connection.client.HSaslThriftClient",
+    "method": "open()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "hector",
+    "commit": "213f7887ea70eabdf0705cf8454de29af89e8c38",
+    "class": "me.prettyprint.cassandra.connection.HConnectionManager",
+    "method": "operateWithFailover(Operation<?>)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "jenkins",
+    "commit": "48b2b951dfb3438999ceda330093cac82b857ce6",
+    "class": "jenkins.slaves.DefaultJnlpSlaveReceiver",
+    "method": "handle(String| JnlpSlaveHandshake)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "logback",
+    "commit": "542843fd04a793fb9e0eea0c84d199e66d7c15af",
+    "class": "ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicyBase",
+    "method": "start()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "orientdb",
+    "commit": "a5ce3bcc0a1d196745c575ad6602019f7a6b86f8",
+    "class": "com.orientechnologies.orient.core.Orient",
+    "method": "startup()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "RxJava",
+    "commit": "a40a4130edcdadc2340da5787ca30353018173f2",
+    "class": "rx.internal.operators.OperatorMulticast",
+    "method": "connect(Action1<?superSubscription>)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "SimianArmy",
+    "commit": "c39c19bc6b9231601f6bc7358e638a99adf37e0d",
+    "class": "com.netflix.simianarmy.basic.BasicSimianArmyContext",
+    "method": "BasicSimianArmyContext(String)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "alluxio",
+    "commit": "dafe76c90024a915224264b4862b33f40cb8478c",
+    "class": "tachyon.hadoop.HdfsFileInputStream",
+    "method": "HdfsFileInputStream(TachyonFS| int| Path| Configuration| int)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "voldemort",
+    "commit": "b30fdfebe30c9b6e37b9fbc3fec0ff74cd19f997",
+    "class": "voldemort.VoldemortClientShell",
+    "method": "VoldemortClientShell(ClientConfig| String| BufferedReader| PrintStream| PrintStream)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "voldemort",
+    "commit": "4cc1c145819030c8e2baffe4c92383de14b8d880",
+    "class": "voldemort.server.VoldemortConfig",
+    "method": "VoldemortConfig(Props)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "6b6ce8e851c6613213c4508c3f277a80649e0c7b",
+    "class": "org.elasticsearch.river.mongodb.MongoDBRiverDefinition",
+    "method": "parseSettings(String| String| RiverSettings| ScriptService)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "6b6ce8e851c6613213c4508c3f277a80649e0c7b",
+    "class": "org.elasticsearch.river.mongodb.MongoDBRiverDefinition.parseSettings",
+    "method": "parseSettings(String| String| RiverSettings| ScriptService)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "6b6ce8e851c6613213c4508c3f277a80649e0c7b",
+    "class": "org.elasticsearch.river.mongodb.Indexer",
+    "method": "processBlockingQueue(QueueEntry)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "6b6ce8e851c6613213c4508c3f277a80649e0c7b",
+    "class": "org.elasticsearch.river.mongodb.Indexer",
+    "method": "applyAdvancedTransformation(QueueEntry| String)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "6b6ce8e851c6613213c4508c3f277a80649e0c7b",
+    "class": "org.elasticsearch.river.mongodb.Slurper",
+    "method": "run()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch-river-mongodb",
+    "commit": "6b6ce8e851c6613213c4508c3f277a80649e0c7b",
+    "class": "org.elasticsearch.river.mongodb.Slurper",
+    "method": "addToStream(Operation| Timestamp<?>| DBObject| String)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "0404db65e3497452886173957729c8e82cfd4a03",
+    "class": "org.elasticsearch.test.ESSingleNodeTestCase",
+    "method": "newNode()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "3764b3ff800c94293aba0bb0fa18c7df80a764f7",
+    "class": "org.elasticsearch.rest.action.cat.RestShardsAction",
+    "method": "getTableWithHeader(RestRequest)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "3764b3ff800c94293aba0bb0fa18c7df80a764f7",
+    "class": "org.elasticsearch.rest.action.cat.RestIndicesAction",
+    "method": "getTableWithHeader(RestRequest)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "3764b3ff800c94293aba0bb0fa18c7df80a764f7",
+    "class": "org.elasticsearch.rest.action.cat.RestNodesAction",
+    "method": "getTableWithHeader(RestRequest)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "libgdx",
+    "commit": "da27e2dae56be0a159e82231e5c3a5b83b099063",
+    "class": "com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application",
+    "method": "newWindow(ApplicationListener| Lwjgl3WindowConfiguration)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "libgdx",
+    "commit": "da27e2dae56be0a159e82231e5c3a5b83b099063",
+    "class": "com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration",
+    "method": "copy(Lwjgl3ApplicationConfiguration)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "RxJava",
+    "commit": "1c47b0cb26e6d971eefa42ebb3479099236b0125",
+    "class": "rx.concurrency.TestScheduler",
+    "method": "triggerActions(long)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "hector",
+    "commit": "a33a46506656a39d1b0f7780973905665d3b6145",
+    "class": "me.prettyprint.cassandra.connection.client.HKerberosThriftClient",
+    "method": "open()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "hector",
+    "commit": "a33a46506656a39d1b0f7780973905665d3b6145",
+    "class": "me.prettyprint.cassandra.connection.client.HThriftClient",
+    "method": "open()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "titan",
+    "commit": "04edd7f0e7eab2e8255a497922e34dc707d84c19",
+    "class": "com.thinkaurelius.titan.graphdb.transaction.StandardTitanTx",
+    "method": "StandardTitanTx(StandardTitanGraph| TransactionConfiguration| BackendTransaction)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "MPAndroidChart",
+    "commit": "af114d180da6ec5633d32c701ff5467f7629fcf3",
+    "class": "com.xxmassdeveloper.mpchartexample.fragments.SimpleFragment",
+    "method": "generateScatterData(int| float| int)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "MPAndroidChart",
+    "commit": "9297923f09460d0484cd713b0abbeaea9b888ec0",
+    "class": "com.xxmassdeveloper.mpchartexample.LineChartActivity1",
+    "method": "onCreate(Bundle)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "MPAndroidChart",
+    "commit": "9297923f09460d0484cd713b0abbeaea9b888ec0",
+    "class": "com.xxmassdeveloper.mpchartexample.StackedBarActivityNegative",
+    "method": "onCreate(Bundle)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "MPAndroidChart",
+    "commit": "9297923f09460d0484cd713b0abbeaea9b888ec0",
+    "class": "com.xxmassdeveloper.mpchartexample.RadarChartActivitry",
+    "method": "onCreate(Bundle)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "MPAndroidChart",
+    "commit": "9297923f09460d0484cd713b0abbeaea9b888ec0",
+    "class": "com.xxmassdeveloper.mpchartexample.LineChartActivity2",
+    "method": "onCreate(Bundle)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "MPAndroidChart",
+    "commit": "9531ba69895cd64fce48038ffd8df2543eeea1d2",
+    "class": "com.github.mikephil.charting.renderer.PieChartRenderer",
+    "method": "drawData(Canvas)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "d896886973660785aac45275ddb110c1a6babc57",
+    "class": "org.elasticsearch.action.DocWriteResponse",
+    "method": "writeTo(StreamOutput)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "d896886973660785aac45275ddb110c1a6babc57",
+    "class": "org.elasticsearch.action.DocWriteResponse",
+    "method": "readFrom(StreamInput)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "elasticsearch",
+    "commit": "d896886973660785aac45275ddb110c1a6babc57",
+    "class": "org.elasticsearch.action.DocWriteResponse",
+    "method": "toXContent(XContentBuilder| Params)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "fdd3f12ee0f92ac18844c08bf71df39feebb6673",
+    "class": "org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer",
+    "method": "logAutoConfigurationReport(boolean)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "6664ce19d6f2388ebd6cf54763f54fdddd226b9a",
+    "class": "org.springframework.boot.jta.atomikos.AtomikosProperties",
+    "method": "asProperties()",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "2d4e68a9777601bfb8309c94d8b74bc21be80ad1",
+    "class": "org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory",
+    "method": "customizeConnector(Connector)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "958a0a45f164601d01cb706c19f22ed3e25eff56",
+    "class": "org.springframework.boot.autoconfigure.mongo.MongoProperties",
+    "method": "builder(MongoClientOptions)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "3444ebbc05b99a164474c14d6a6784f749514428",
+    "class": "org.springframework.boot.context.web.SpringBootServletInitializer",
+    "method": "createRootApplicationContext(ServletContext)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "074771ec125dd407af0282b92960e9e9e3377e84",
+    "class": "org.springframework.boot.context.web.SpringBootServletInitializer",
+    "method": "createRootApplicationContext(ServletContext)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "spring-boot",
+    "commit": "c93ea54ea3e08eaa2a17640d5d2b3e60264c1a9c",
+    "class": "org.springframework.boot.autoconfigure.cache.RedisCacheConfiguration",
+    "method": "cacheManager(RedisTemplate<Object|Object>)",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "quickml",
+    "commit": "0d29fd9917e6e53993ea96798b84e945d17aa41e",
+    "class": "quickdt.experiments.OutOfTimeCrossValidatorRunner",
+    "method": "",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "vavr",
+    "commit": "204635d9156b498079c2f34b821dca7ca1711ef6",
+    "class": "javaslang.control.Validation",
+    "method": "",
+    "label": "No",
+    "interference": false
+  },
+  {
+    "project": "vavr",
+    "commit": "204635d9156b498079c2f34b821dca7ca1711ef6",
+    "class": "javaslang.collection.HashSet",
+    "method": "of(T)",
+    "label": "-",
+    "interference": null
+  },
+  {
+    "project": "vavr",
+    "commit": "204635d9156b498079c2f34b821dca7ca1711ef6",
+    "class": "javaslang.collection.LinkedHashSet",
+    "method": "of(T)",
+    "label": "-",
+    "interference": null
+  },
+  {
+    "project": "vavr",
+    "commit": "204635d9156b498079c2f34b821dca7ca1711ef6",
+    "class": "javaslang.collection.CharSeq",
+    "method": "of(char)",
+    "label": "-",
+    "interference": null
+  },
+  {
+    "project": "vavr",
+    "commit": "204635d9156b498079c2f34b821dca7ca1711ef6",
+    "class": "javaslang.collection.Iterator",
+    "method": "of(T)",
+    "label": "-",
+    "interference": null
+  },
+  {
+    "project": "crawler4j",
+    "commit": "6fdb8f27b53c5d69b552341a459d0e1fa610f68d",
+    "class": "edu.uci.ics.crawler4j.parser.Parser",
+    "method": "parse(Page| String)",
+    "label": "Yes",
+    "interference": true
+  },
+  {
+    "project": "moshi",
+    "commit": "afb82cb3e890d075e1786cb900ec18a87fc24758",
+    "class": "com.squareup.moshi.ClassJsonAdapter",
+    "method": "create(Type| Set<Annotations>| com.square.moshi.Moshi)",
+    "label": "Yes",
+    "interference": true
+  }
+]

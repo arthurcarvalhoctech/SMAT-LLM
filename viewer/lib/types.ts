@@ -97,13 +97,19 @@ export interface LayaRecord {
   affectedBranch?: string | null;
   confidence?: string | null;
   probabilities: Record<string, number>;
+  evidence?: Record<string, string>;
+  summary?: string;
+  reasoning?: string;
+  provider?: string;
   error?: string | null;
   note?: string | null;
 }
 
 export type LayaScenarioStatus =
   | "interference"
+  | "possible_interference"
   | "no_interference"
+  | "no_signal"
   | "error"
   | "no_data";
 

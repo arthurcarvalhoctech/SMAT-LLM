@@ -1,0 +1,123 @@
+{
+  "source": "mergedataset/semantic-conflicts/sample-semantic-conflicts.csv, coluna 'Locally Observable Interference'",
+  "note": "Gabarito parcial: 11 dos 13 metodos tem rotulo (AtomikosPropertiesTests nao aparece no CSV). 'disputed' marca as 4 classes em que o CSV diz No e o relatorio executado (semantic_conflicts.json) marca conflito; a correspondencia com o relatorio e so por projeto e classe.",
+  "methods": [
+    {
+      "project": "antlr4",
+      "commit": "69ff2669eec265e25721dbc27cb00f6c381d0b41",
+      "class": "org.antlr.v4.codegen.target.Python2Target",
+      "method": "python2Keywords",
+      "label": "Yes",
+      "interference": true,
+      "disputed": false
+    },
+    {
+      "project": "antlr4",
+      "commit": "69ff2669eec265e25721dbc27cb00f6c381d0b41",
+      "class": "org.antlr.v4.codegen.target.Python3Target",
+      "method": "python3Keywords",
+      "label": "Yes",
+      "interference": true,
+      "disputed": false
+    },
+    {
+      "project": "cloud-slang",
+      "commit": "20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76",
+      "class": "io.cloudslang.lang.api.SlangImpl",
+      "method": "getAllEventTypes()",
+      "label": "Yes",
+      "interference": true,
+      "disputed": false
+    },
+    {
+      "project": "spring-boot",
+      "commit": "2d4e68a9777601bfb8309c94d8b74bc21be80ad1",
+      "class": "org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory",
+      "method": "customizeConnector(org.apache.catalina.connector.Connector)",
+      "label": "No",
+      "interference": false,
+      "disputed": false
+    },
+    {
+      "project": "spring-boot",
+      "commit": "958a0a45f164601d01cb706c19f22ed3e25eff56",
+      "class": "org.springframework.boot.autoconfigure.mongo.MongoProperties",
+      "method": "builder(com.mongodb.MongoClientOptions)",
+      "label": "No",
+      "interference": false,
+      "disputed": false
+    },
+    {
+      "project": "spring-boot",
+      "commit": "3444ebbc05b99a164474c14d6a6784f749514428",
+      "class": "org.springframework.boot.context.web.SpringBootServletInitializer",
+      "method": "createRootApplicationContext(javax.servlet.ServletContext)",
+      "label": "No",
+      "interference": false,
+      "disputed": false
+    },
+    {
+      "project": "spring-boot",
+      "commit": "6664ce19d6f2388ebd6cf54763f54fdddd226b9a",
+      "class": "org.springframework.boot.jta.atomikos.AtomikosProperties",
+      "method": "asProperties()",
+      "label": "No",
+      "interference": false,
+      "disputed": true
+    },
+    {
+      "project": "spring-boot",
+      "commit": "6664ce19d6f2388ebd6cf54763f54fdddd226b9a",
+      "class": "org.springframework.boot.jta.atomikos.AtomikosPropertiesTests",
+      "method": "testProperties()",
+      "label": "-",
+      "interference": null,
+      "disputed": true
+    },
+    {
+      "project": "spring-boot",
+      "commit": "6664ce19d6f2388ebd6cf54763f54fdddd226b9a",
+      "class": "org.springframework.boot.jta.atomikos.AtomikosPropertiesTests",
+      "method": "testDefaultProperties()",
+      "label": "-",
+      "interference": null,
+      "disputed": true
+    },
+    {
+      "project": "spring-boot",
+      "commit": "af20dc6cc45c032573413c401f9f73aa75371744",
+      "class": "org.springframework.boot.loader.archive.ExplodedArchive",
+      "method": "getUrl()",
+      "label": "No",
+      "interference": false,
+      "disputed": true
+    },
+    {
+      "project": "spring-boot",
+      "commit": "af20dc6cc45c032573413c401f9f73aa75371744",
+      "class": "org.springframework.boot.loader.archive.ExplodedArchiveTests",
+      "method": "getUrl()",
+      "label": "No",
+      "interference": false,
+      "disputed": true
+    },
+    {
+      "project": "spring-boot",
+      "commit": "ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c",
+      "class": "org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory",
+      "method": "createDeploymentManager(ServletContextInitializer)",
+      "label": "No",
+      "interference": false,
+      "disputed": false
+    },
+    {
+      "project": "spring-boot",
+      "commit": "fdd3f12ee0f92ac18844c08bf71df39feebb6673",
+      "class": "org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer",
+      "method": "logAutoConfigurationReport(boolean)",
+      "label": "No",
+      "interference": false,
+      "disputed": false
+    }
+  ]
+}

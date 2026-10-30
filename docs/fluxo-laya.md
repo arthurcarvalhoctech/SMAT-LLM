@@ -118,6 +118,10 @@ Para cada classe e método-alvo, o fluxo monta um estado compacto:
 | `SMAT_LAYA_MAX_LEN` | `512` | Limite de tokens do estado; o modelo pode truncar. |
 | `SMAT_LAYA_LOG_DIR` | `.../reports/laya` | Diretório dos logs. |
 
+O diretório precisa ficar sob `SMAT/output-test-dest` para que o viewer o leia.
+No Docker, use `/app/SMAT/output-test-dest/reports/laya`. Sem a variável, o
+default é `<cwd>/output-test-dest/reports/laya` (com `cwd` em `SMAT`).
+
 O fluxo dinâmico continua controlado por
 `SMAT_DYNAMIC_INTERFERENCE_DETECTION` (padrão `true`). As duas flags são
 independentes:

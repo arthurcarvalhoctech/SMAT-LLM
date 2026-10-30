@@ -203,7 +203,7 @@ Formato:
 
 ### 2.4 Flags dos fluxos de detecção de interferências
 
-O SMAT tem dois fluxos independentes:
+O SMAT tem três fluxos independentes:
 
 1. **Dinâmico baseado em testes** (ligado por padrão): gera testes a partir de
    `left`/`right`, executa em `base`/`left`/`right`/`merge` e aplica os
@@ -211,6 +211,9 @@ O SMAT tem dois fluxos independentes:
 2. **Pré-análise com Laya** (desligado por padrão): usa o modelo de decisão
    Laya para levantar hipóteses sobre os três critérios de estado do artigo
    antes da detecção dinâmica. Ele **não substitui** a detecção por execução.
+3. **Pré-análise com LLM** (desligado por padrão): envia o estado das quatro
+   versões ao provedor LLM configurado e pede uma avaliação estruturada dos
+   mesmos três critérios. Também é apenas uma hipótese de triagem.
 
 | Variável | Padrão | Efeito |
 |---|---|---|
@@ -220,8 +223,29 @@ O SMAT tem dois fluxos independentes:
 | `SMAT_LAYA_THRESHOLD` | `0.5` | Probabilidade mínima para marcar um critério como acionado. |
 | `SMAT_LAYA_MAX_LEN` | `512` | Limite de tokens do estado enviado ao Laya. |
 | `SMAT_LAYA_LOG_DIR` | `.../reports/laya` | Diretório dos logs `.log` e `.jsonl`. |
+| `SMAT_LLM_INTERFERENCE_DETECTION` | `false` | Liga/desliga a pré-análise com LLM. |
+| `SMAT_LLM_INTERFERENCE_THRESHOLD` | `0.5` | Probabilidade mínima para marcar um critério do LLM como acionado. |
+| `SMAT_LLM_INTERFERENCE_MAX_INPUT_CHARS` | `24000` | Limite de caracteres do estado enviado ao LLM. |
+| `SMAT_LLM_INTERFERENCE_MODEL` | `LLM_MODEL` | Modelo específico do fluxo. `deepseek-flash` preserva a acurácia observada; `deepseek-chat` é o fallback. |
+| `SMAT_LLM_INTERFERENCE_FALLBACK_MODEL` | — | Modelo usado no retry quando `finish_reason=length`. |
+| `SMAT_LLM_INTERFERENCE_MAX_OUTPUT_TOKENS` | `8192` | Orçamento de saída do fluxo. |
+| `SMAT_LLM_INTERFERENCE_JSON_MODE` | `true` | Ativa `response_format=json_object` em provedores OpenAI-compatible; o `.env` atual usa `false` para preservar a acurácia. |
+| `SMAT_LLM_INTERFERENCE_RETRY_ON_LENGTH` | `true` | Repete uma vez quando o provedor atinge `finish_reason=length`. |
+| `SMAT_LLM_INTERFERENCE_LOG_DIR` | `.../reports/llm_interference` | Diretório dos logs, JSONL e classificações do LLM. |
 
-Combinações possíveis:
+O diretório precisa ficar sob `SMAT/output-test-dest` para o viewer encontrá-lo.
+No Docker, use `/app/SMAT/output-test-dest/reports/laya` e
+`/app/SMAT/output-test-dest/reports/llm_interference`. Se as variáveis não forem
+definidas, os defaults são `<cwd>/output-test-dest/reports/{laya,llm_interference}`
+(com `cwd` em `SMAT`).
+
+O fluxo LLM usa o mesmo provedor configurado para o gerador de testes:
+`LLM_PROVIDER`, `LLM_MODEL`, `LLM_BASE_URL` e a API key correspondente
+(`DEEPSEEK_API_KEY`, `OPENAI_API_KEY`, etc.). Ele é independente dos fluxos
+Laya e dinâmico.
+
+Combinações possíveis (o fluxo LLM é independente e pode ser combinado com
+qualquer uma delas):
 
 | Dinâmico | Laya | Resultado |
 |---|---|---|
@@ -229,6 +253,9 @@ Combinações possíveis:
 | `false` | `true` | Apenas a pré-análise Laya. |
 | `true` | `true` | Laya primeiro, depois a detecção dinâmica. |
 | `false` | `false` | Nenhum fluxo; o SMAT informa que nenhum está ativo. |
+
+Com `SMAT_LLM_INTERFERENCE_DETECTION=true`, o fluxo LLM roda entre Laya e a
+detecção dinâmica.
 
 Quando o fluxo dinâmico é desabilitado, o console exibe:
 
@@ -252,10 +279,19 @@ SMAT/output-test-dest/reports/laya/laya_interference_<run_id>.log
 SMAT/output-test-dest/reports/laya/laya_interference_<run_id>.jsonl
 ```
 
+O fluxo LLM grava em:
+
+```text
+SMAT/output-test-dest/reports/llm_interference/llm_interference_<run_id>.log
+SMAT/output-test-dest/reports/llm_interference/llm_interference_<run_id>.jsonl
+SMAT/output-test-dest/reports/llm_interference/classification/run_<run_id>/*.json
+```
+
 O `docker-compose.yml` repassa todas essas variáveis ao container. Em execuções
-locais, o `.env` é carregado automaticamente. Detalhes do fluxo, dos três
+locais, o `.env` é carregado automaticamente. Detalhes do fluxo Laya, dos três
 critérios e do formato do log estão em
-[`docs/fluxo-laya.md`](docs/fluxo-laya.md).
+[`docs/fluxo-laya.md`](docs/fluxo-laya.md); o fluxo LLM está em
+[`docs/fluxo-llm.md`](docs/fluxo-llm.md).
 
 ## 3. Datasets
 
@@ -531,6 +567,7 @@ O container monta `./SMAT/output-test-dest` em
 - execuções (`scenarios/<dataset>_<timestamp>`);
 - cenários com abas `base`, `left`, `right` e `merge`;
 - classificações e logs do Laya;
+- classificações e logs do fluxo LLM (coluna e painel por cenário);
 - relatórios JSON em `reports/`;
 - navegador de arquivos de todo o `output-test-dest`.
 

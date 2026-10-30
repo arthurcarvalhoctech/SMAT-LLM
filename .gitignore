@@ -5,4 +5,6 @@ __pycache__/
 .pytest_cache/
 SMAT/output-test-dest/
 runs/
+.laya_smat/
 output-test-dest
+**/*.orig

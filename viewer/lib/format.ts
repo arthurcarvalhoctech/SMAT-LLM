@@ -40,9 +40,12 @@ export function classificationTone(
 ): "rose" | "emerald" | "amber" | "slate" {
   switch (classification) {
     case "interference":
+    case "possible_interference":
       return "rose";
     case "no_interference":
       return "emerald";
+    case "no_signal":
+      return "slate";
     case "error":
       return "amber";
     default:
@@ -54,8 +57,12 @@ export function classificationLabel(classification?: string | null): string {
   switch (classification) {
     case "interference":
       return "Interferência";
+    case "possible_interference":
+      return "Possível interferência";
     case "no_interference":
       return "Sem interferência";
+    case "no_signal":
+      return "Sem sinal";
     case "error":
       return "Erro";
     default:

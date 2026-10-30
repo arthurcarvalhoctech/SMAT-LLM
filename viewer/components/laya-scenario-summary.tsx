@@ -10,6 +10,25 @@ import {
 } from "@/lib/laya";
 import type { LayaScenarioSummary } from "@/lib/types";
 
+function uniqueValues<T>(values: Array<T | null | undefined>): T[] {
+  return Array.from(
+    new Set(values.filter((value): value is T => value != null)),
+  );
+}
+
+function ConfigItem({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+        {label}
+      </dt>
+      <dd className="mt-1 font-mono text-xs text-zinc-800">
+        {value || "—"}
+      </dd>
+    </div>
+  );
+}
+
 export function LayaScenarioBadges({
   summary,
 }: {
@@ -57,6 +76,13 @@ export function LayaScenarioPanel({
   }
 
   const criteria = new Set(summary.criteria);
+  const models = uniqueValues(summary.records.map((record) => record.model));
+  const thresholds = uniqueValues(
+    summary.records.map((record) => record.threshold),
+  );
+  const maxLens = uniqueValues(
+    summary.records.map((record) => record.maxLen),
+  );
 
   return (
     <div className="space-y-4">
@@ -78,6 +104,37 @@ export function LayaScenarioPanel({
               runs: {summary.runIds.join(", ")}
             </span>
           ) : null}
+        </div>
+
+        <div className="mt-4 rounded-xl border border-zinc-200 bg-zinc-50 p-3">
+          <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-500">
+            Configuração da análise
+          </p>
+          <dl className="mt-2 grid gap-3 sm:grid-cols-3">
+            <ConfigItem
+              label="Modelo"
+              value={models.length ? models.join(", ") : "—"}
+            />
+            <ConfigItem
+              label="Threshold"
+              value={
+                thresholds.length
+                  ? thresholds.map((value) => value.toFixed(2)).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="max_len"
+              value={
+                maxLens.length
+                  ? maxLens.map((value) => String(value)).join(", ")
+                  : "—"
+              }
+            />
+          </dl>
+          <p className="mt-2 text-[10px] text-zinc-500">
+            Valores registrados no fluxo Laya para esta execução.
+          </p>
         </div>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-3">

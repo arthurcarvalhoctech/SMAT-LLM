@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LayaScenarioBadges } from "@/components/laya-scenario-summary";
+import { LlmScenarioBadges } from "@/components/llm-scenario-summary";
 import { MobileLabel } from "@/components/mobile-label";
 import { Badge } from "@/components/ui";
 import { normalizeTargets } from "@/lib/targets";
@@ -10,19 +11,22 @@ export function ScenarioList({
   executionId,
   scenarios,
   layaSummaries,
+  llmSummaries,
 }: {
   executionId: string;
   scenarios: ScenarioSummary[];
   layaSummaries?: Record<string, LayaScenarioSummary>;
+  llmSummaries?: Record<string, LayaScenarioSummary>;
 }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
-      <div className="hidden grid-cols-[0.5fr_1.2fr_1fr_0.7fr_1.2fr_auto_auto] gap-4 border-b border-zinc-200 bg-zinc-100 px-4 py-3 text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-600 sm:grid">
+      <div className="hidden grid-cols-[0.5fr_1.1fr_0.9fr_0.6fr_1.1fr_1.1fr_auto_auto] gap-4 border-b border-zinc-200 bg-zinc-100 px-4 py-3 text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-600 sm:grid">
         <span>Cenário</span>
         <span>Projeto</span>
         <span>Targets</span>
         <span>Tipo</span>
         <span>Laya</span>
+        <span>LLM</span>
         <span>Status</span>
         <span className="sr-only">Abrir</span>
       </div>
@@ -39,7 +43,7 @@ export function ScenarioList({
             <Link
               key={scenario.folder}
               href={`/executions/${encodeURIComponent(executionId)}/${encodeURIComponent(scenario.folder)}`}
-              className="grid gap-2 px-4 py-4 transition hover:bg-zinc-50 sm:grid-cols-[0.5fr_1.2fr_1fr_0.7fr_1.2fr_auto_auto] sm:items-center sm:gap-4"
+              className="grid gap-2 px-4 py-4 transition hover:bg-zinc-50 sm:grid-cols-[0.5fr_1.1fr_0.9fr_0.6fr_1.1fr_1.1fr_auto_auto] sm:items-center sm:gap-4"
             >
               <div>
                 <MobileLabel>Cenário</MobileLabel>
@@ -76,6 +80,13 @@ export function ScenarioList({
                 <MobileLabel>Laya</MobileLabel>
                 <LayaScenarioBadges
                   summary={layaSummaries?.[scenario.folder]}
+                />
+              </div>
+
+              <div>
+                <MobileLabel>LLM</MobileLabel>
+                <LlmScenarioBadges
+                  summary={llmSummaries?.[scenario.folder]}
                 />
               </div>
 

@@ -62,9 +62,18 @@ class LlmApi(ABC):
                 )
                 sleep(wait_seconds)
 
-        raise RuntimeError(
+        final_error = RuntimeError(
             f"{description} failed after {self.MAX_ATTEMPTS} attempts: {last_error}"
-        ) from last_error
+        )
+        for attribute in (
+            "finish_reason",
+            "reasoning_content",
+            "usage",
+            "raw_data",
+        ):
+            if hasattr(last_error, attribute):
+                setattr(final_error, attribute, getattr(last_error, attribute))
+        raise final_error from last_error
 
     @abstractmethod
     def generate_output(self, messages: List[Dict[str, str]]) -> Dict[str, Any]:
@@ -189,10 +198,14 @@ class OpenAICompatibleApi(LlmApi):
         }
         if self.seed is not None:
             payload["seed"] = self.seed
+        response_format = getattr(self, "response_format", None)
+        if response_format:
+            payload["response_format"] = response_format
         return payload
 
     def generate_output(self, messages: List[Dict[str, str]]) -> Dict[str, Any]:
         payload = self._payload(messages)
+        call_metadata: Dict[str, Any] = {}
 
         def call() -> str:
             response = requests.post(
@@ -208,7 +221,8 @@ class OpenAICompatibleApi(LlmApi):
 
             data = response.json()
             choice = data["choices"][0]
-            content = choice.get("message", {}).get("content")
+            message = choice.get("message", {}) or {}
+            content = message.get("content")
             if isinstance(content, list):
                 content = "".join(
                     part.get("text", "")
@@ -217,12 +231,33 @@ class OpenAICompatibleApi(LlmApi):
                 )
             if content is None:
                 content = choice.get("text", "")
+
+            finish_reason = choice.get("finish_reason")
+            reasoning_content = message.get("reasoning_content")
+            usage = data.get("usage", {})
+            call_metadata.update(
+                {
+                    "finish_reason": finish_reason,
+                    "reasoning_content": reasoning_content,
+                    "usage": usage,
+                }
+            )
+
             if not content:
-                raise RuntimeError(f"Empty response from provider: {data}")
+                error = RuntimeError(f"Empty response from provider: {data}")
+                error.finish_reason = finish_reason
+                error.reasoning_content = reasoning_content
+                error.usage = usage
+                error.raw_data = data
+                raise error
             return content
 
         content, duration = self._with_retry(call, "OpenAI-compatible request")
-        return {"response": content, "total_duration": duration}
+        return {
+            "response": content,
+            "total_duration": duration,
+            **call_metadata,
+        }
 
 
 class OllamaApi(LlmApi):

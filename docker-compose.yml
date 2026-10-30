@@ -13,6 +13,8 @@ services:
     environment:
       # Dataset root. The input JSON resolves ${PATH_DATASET}/... with it.
       - PATH_DATASET=${PATH_DATASET:?Define PATH_DATASET in the .env file}
+      # Lets scripts/*.py import the nimrod package.
+      - PYTHONPATH=/app/SMAT
       # Provider selection (DeepSeek, OpenAI-compatible, Gemini or Ollama).
       - LLM_PROVIDER=${LLM_PROVIDER:-}
       - LLM_MODEL=${LLM_MODEL:-}
@@ -34,6 +36,19 @@ services:
       - SMAT_LAYA_THRESHOLD=${SMAT_LAYA_THRESHOLD:-0.5}
       - SMAT_LAYA_MAX_LEN=${SMAT_LAYA_MAX_LEN:-512}
       - SMAT_LAYA_LOG_DIR=${SMAT_LAYA_LOG_DIR:-}
+      # LLM-based interference pre-analysis flow (optional; true/false).
+      - SMAT_LLM_INTERFERENCE_DETECTION=${SMAT_LLM_INTERFERENCE_DETECTION:-false}
+      - SMAT_LLM_INTERFERENCE_THRESHOLD=${SMAT_LLM_INTERFERENCE_THRESHOLD:-0.5}
+      - SMAT_LLM_INTERFERENCE_MAX_INPUT_CHARS=${SMAT_LLM_INTERFERENCE_MAX_INPUT_CHARS:-24000}
+      - SMAT_LLM_INTERFERENCE_MODEL=${SMAT_LLM_INTERFERENCE_MODEL:-}
+      - SMAT_LLM_INTERFERENCE_FALLBACK_MODEL=${SMAT_LLM_INTERFERENCE_FALLBACK_MODEL:-}
+      - SMAT_LLM_INTERFERENCE_MAX_OUTPUT_TOKENS=${SMAT_LLM_INTERFERENCE_MAX_OUTPUT_TOKENS:-8192}
+      - SMAT_LLM_INTERFERENCE_JSON_MODE=${SMAT_LLM_INTERFERENCE_JSON_MODE:-true}
+      - SMAT_LLM_INTERFERENCE_RETRY_ON_LENGTH=${SMAT_LLM_INTERFERENCE_RETRY_ON_LENGTH:-true}
+      - SMAT_LLM_INTERFERENCE_LOG_DIR=${SMAT_LLM_INTERFERENCE_LOG_DIR:-}
+      # true: the LLM test generator keeps only the class fields used by the
+      # method or touched by the change (see context_filter.py).
+      - SMAT_CONTEXT_FILTER=${SMAT_CONTEXT_FILTER:-false}
       # Hugging Face cache/download settings for Laya.
       - HF_HOME=${HF_HOME:-/home/appuser/.cache/huggingface}
       - HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-0}
@@ -58,6 +73,11 @@ services:
       # mergedataset checkout, mounted at the same path it has on the host
       # (PATH_DATASET), so ${PATH_DATASET}/... works inside the container too.
       - ${PATH_DATASET:?Define PATH_DATASET in the .env file}:${PATH_DATASET:?Define PATH_DATASET in the .env file}:ro
+      # Local Laya checkpoints (e.g. the fine-tuned model), read-only. Point
+      # SMAT_LAYA_MODEL at /laya_smat/<checkpoint dir> to use one.
+      - ${LAYA_SMAT_DIR:-./.laya_smat}:/laya_smat:ro
+      # Persist Hugging Face weights downloaded by Laya between runs.
+      - smat-hf-cache:/home/appuser/.cache/huggingface
       # Persist Hugging Face weights on the host, which has more free space
       # than the Docker root filesystem. Adjust HF_CACHE_DIR in .env if needed.
       - ${HF_CACHE_DIR:-/home/arthur/.cache/huggingface}:/home/appuser/.cache/huggingface
@@ -81,3 +101,6 @@ services:
       # The viewer only reads the SMAT artifacts.
       - ./SMAT/output-test-dest:/data/output-test-dest:ro
     restart: unless-stopped
+
+volumes:
+  smat-hf-cache:

@@ -1,0 +1,1342 @@
+[
+ {
+  "set": "sintetico",
+  "id": "n01_mapa_chaves_distintas",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1009
+  },
+  "v1/base": {
+   "T1": 0.9915
+  },
+  "v2/ajustado": {
+   "T1": 0.1037
+  },
+  "v2/base": {
+   "T1": 0.9834
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.1622,
+   "criterion_2_parent_change_loss": 0.1437,
+   "criterion_3_merge_new_effect": 0.1918
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.792,
+   "criterion_2_parent_change_loss": 0.9753,
+   "criterion_3_merge_new_effect": 0.9304
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1016
+  },
+  "v1pt/base": {
+   "T1": 0.9913
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1664,
+   "criterion_2_parent_change_loss": 0.1416,
+   "criterion_3_merge_new_effect": 0.1813
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.8882,
+   "criterion_2_parent_change_loss": 0.9839,
+   "criterion_3_merge_new_effect": 0.9741
+  },
+  "state_v1": "Método: TableTypes.init()\nCorpo da base (B):\ntypes.put(\"a\", \"A\"); types.put(\"b\", \"B\"); types.put(\"c\", \"C\"); types.put(\"d\", \"D\");\nCorpo de Left (L):\ntypes.put(\"c\", \"C\"); types.put(\"d\", \"D\");\nCorpo de Right (R):\ntypes.put(\"a\", \"A\"); types.put(\"b\", \"B\"); types.put(\"c\", \"C\"); types.put(\"d\", \"D\"); types.put(\"e\", \"E\");\nResumo de Left: Left removes the entries for keys a and b from the map\nResumo de Right: Right adds the entry for key e to the map\nAtributos: types: Map<String,String>\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n02_texto_ordem_independente",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1212
+  },
+  "v1/base": {
+   "T1": 0.9938
+  },
+  "v2/ajustado": {
+   "T1": 0.1273
+  },
+  "v2/base": {
+   "T1": 0.9974
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8226,
+   "criterion_2_parent_change_loss": 0.8867,
+   "criterion_3_merge_new_effect": 0.8924
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8504,
+   "criterion_2_parent_change_loss": 0.9857,
+   "criterion_3_merge_new_effect": 0.914
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1195
+  },
+  "v1pt/base": {
+   "T1": 0.9973
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.2474,
+   "criterion_2_parent_change_loss": 0.2194,
+   "criterion_3_merge_new_effect": 0.704
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9524,
+   "criterion_2_parent_change_loss": 0.9885,
+   "criterion_3_merge_new_effect": 0.9868
+  },
+  "state_v1": "Método: Text.cleanText()\nCorpo da base (B):\nremoveComments();\nCorpo de Left (L):\nremoveComments(); normalizeWhitespace();\nCorpo de Right (R):\nremoveDuplicateWords(); removeComments();\nResumo de Left: Left adds a call to normalizeWhitespace after removeComments\nResumo de Right: Right adds a call to removeDuplicateWords before removeComments\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n03_mesma_mudanca_dos_dois_lados",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1347
+  },
+  "v1/base": {
+   "T1": 0.9861
+  },
+  "v2/ajustado": {
+   "T1": 0.127
+  },
+  "v2/base": {
+   "T1": 0.9972
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.7241,
+   "criterion_2_parent_change_loss": 0.8736,
+   "criterion_3_merge_new_effect": 0.887
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8805,
+   "criterion_2_parent_change_loss": 0.9881,
+   "criterion_3_merge_new_effect": 0.9772
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1151
+  },
+  "v1pt/base": {
+   "T1": 0.9962
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.7265,
+   "criterion_2_parent_change_loss": 0.8785,
+   "criterion_3_merge_new_effect": 0.8889
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9281,
+   "criterion_2_parent_change_loss": 0.9869,
+   "criterion_3_merge_new_effect": 0.986
+  },
+  "state_v1": "Método: TaxCalculator.apply(int)\nCorpo da base (B):\nrate = 10; tax = gross * rate / 100; net = gross - tax;\nCorpo de Left (L):\nrate = 20; tax = gross * rate / 100; net = gross - tax;\nCorpo de Right (R):\nrate = 20; tax = gross * rate / 100; net = gross - tax;\nResumo de Left: Left changes the default tax rate from 10 to 20\nResumo de Right: Right changes the default tax rate from 10 to 20\nAtributos: rate: int, tax: int, net: int\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n04_campos_independentes",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1152
+  },
+  "v1/base": {
+   "T1": 0.7736
+  },
+  "v2/ajustado": {
+   "T1": 0.1218
+  },
+  "v2/base": {
+   "T1": 0.939
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.6402,
+   "criterion_2_parent_change_loss": 0.8547,
+   "criterion_3_merge_new_effect": 0.8804
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9223,
+   "criterion_2_parent_change_loss": 0.9931,
+   "criterion_3_merge_new_effect": 0.9769
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1176
+  },
+  "v1pt/base": {
+   "T1": 0.9999
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.6152,
+   "criterion_2_parent_change_loss": 0.8452,
+   "criterion_3_merge_new_effect": 0.8815
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.8669,
+   "criterion_2_parent_change_loss": 0.9847,
+   "criterion_3_merge_new_effect": 0.9695
+  },
+  "state_v1": "Método: Cart.checkout(int,int)\nCorpo da base (B):\nsubtotal = items * price; calls++; shipping = 10;\nCorpo de Left (L):\nsubtotal = items * price * 9 / 10; calls++; shipping = 10;\nCorpo de Right (R):\nsubtotal = items * price; calls++; shipping = subtotal > 100 ? 0 : 10;\nResumo de Left: Left applies a ten percent discount to the subtotal\nResumo de Right: Right makes the shipping free when the subtotal is above one hundred\nAtributos: subtotal: int, calls: int, shipping: int\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n05_mudanca_so_de_um_lado",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1025
+  },
+  "v1/base": {
+   "T1": 0.9959
+  },
+  "v2/ajustado": {
+   "T1": 0.1049
+  },
+  "v2/base": {
+   "T1": 0.9938
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.168,
+   "criterion_2_parent_change_loss": 0.1478,
+   "criterion_3_merge_new_effect": 0.2693
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9203,
+   "criterion_2_parent_change_loss": 0.9926,
+   "criterion_3_merge_new_effect": 0.9917
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1029
+  },
+  "v1pt/base": {
+   "T1": 0.989
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1644,
+   "criterion_2_parent_change_loss": 0.1393,
+   "criterion_3_merge_new_effect": 0.1883
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9097,
+   "criterion_2_parent_change_loss": 0.9842,
+   "criterion_3_merge_new_effect": 0.9767
+  },
+  "state_v1": "Método: Counter.increment()\nCorpo da base (B):\nvalue = value + 1; steps = steps + 1;\nCorpo de Left (L):\nvalue = value + 2; steps = steps + 1;\nCorpo de Right (R):\nvalue = value + 1; steps = steps + 1;\nResumo de Left: Left changes the increment step of value from one to two\nResumo de Right: Right adds a reset method that is not called by increment\nAtributos: value: int, steps: int\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n06_refatoracao_e_comportamento",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.8392
+  },
+  "v1/base": {
+   "T1": 0.995
+  },
+  "v2/ajustado": {
+   "T1": 0.7641
+  },
+  "v2/base": {
+   "T1": 0.995
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8213,
+   "criterion_2_parent_change_loss": 0.8768,
+   "criterion_3_merge_new_effect": 0.8826
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8984,
+   "criterion_2_parent_change_loss": 0.9936,
+   "criterion_3_merge_new_effect": 0.9953
+  },
+  "v1pt/ajustado": {
+   "T1": 0.8548
+  },
+  "v1pt/base": {
+   "T1": 0.9963
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.8315,
+   "criterion_2_parent_change_loss": 0.8727,
+   "criterion_3_merge_new_effect": 0.8858
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.8915,
+   "criterion_2_parent_change_loss": 0.988,
+   "criterion_3_merge_new_effect": 0.9894
+  },
+  "state_v1": "Método: Limiter.allowed(int)\nCorpo da base (B):\nint limit = 10; if (requests > limit) { return limit; } return requests;\nCorpo de Left (L):\nint limit = 5 + 5; if (requests > limit) { return limit; } return requests;\nCorpo de Right (R):\nint limit = 10; if (requests > limit) { return limit; } return requests > 0 ? requests : 0;\nResumo de Left: Left rewrites the limit constant as a sum without changing its value\nResumo de Right: Right returns zero instead of a negative number of requests\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n07_validacao_em_entradas_distintas",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.191
+  },
+  "v1/base": {
+   "T1": 0.9968
+  },
+  "v2/ajustado": {
+   "T1": 0.1341
+  },
+  "v2/base": {
+   "T1": 0.9951
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.7912,
+   "criterion_2_parent_change_loss": 0.8778,
+   "criterion_3_merge_new_effect": 0.8873
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.808,
+   "criterion_2_parent_change_loss": 0.9774,
+   "criterion_3_merge_new_effect": 0.9751
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1502
+  },
+  "v1pt/base": {
+   "T1": 0.9984
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.7981,
+   "criterion_2_parent_change_loss": 0.8801,
+   "criterion_3_merge_new_effect": 0.89
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9745,
+   "criterion_2_parent_change_loss": 0.9907,
+   "criterion_3_merge_new_effect": 0.9943
+  },
+  "state_v1": "Método: Validator.valid(java.lang.String)\nCorpo da base (B):\nString s = name; int min = 2; boolean present = true; int n = s.length(); return present && n >= min;\nCorpo de Left (L):\nString s = name; int min = 2; if (s == null) { return false; } boolean present = true; int n = s.length(); return present && n >= min;\nCorpo de Right (R):\nString s = name == null ? null : name.trim(); int min = 2; boolean present = true; int n = s.length(); return present && n >= min;\nResumo de Left: Left adds a guard that returns false for a null name\nResumo de Right: Right trims the name before measuring its length, keeping null as null\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "n08_casos_novos_no_switch",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.6462
+  },
+  "v1/base": {
+   "T1": 0.9999
+  },
+  "v2/ajustado": {
+   "T1": 0.8787
+  },
+  "v2/base": {
+   "T1": 0.9998
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8549,
+   "criterion_2_parent_change_loss": 0.8897,
+   "criterion_3_merge_new_effect": 0.8899
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9872,
+   "criterion_2_parent_change_loss": 0.9969,
+   "criterion_3_merge_new_effect": 0.9979
+  },
+  "v1pt/ajustado": {
+   "T1": 0.4395
+  },
+  "v1pt/base": {
+   "T1": 1.0
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.8455,
+   "criterion_2_parent_change_loss": 0.8925,
+   "criterion_3_merge_new_effect": 0.8942
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9904,
+   "criterion_2_parent_change_loss": 0.997,
+   "criterion_3_merge_new_effect": 0.9979
+  },
+  "state_v1": "Método: OrderLabel.label(java.lang.String)\nCorpo da base (B):\nswitch (status) { case \"NEW\": return \"Novo\"; case \"PAID\": return \"Pago\"; default: return \"Desconhecido\"; }\nCorpo de Left (L):\nswitch (status) { case \"NEW\": return \"Novo\"; case \"CANCELLED\": return \"Cancelado\"; case \"PAID\": return \"Pago\"; default: return \"Desconhecido\"; }\nCorpo de Right (R):\nswitch (status) { case \"NEW\": return \"Novo\"; case \"PAID\": return \"Pago\"; case \"SHIPPED\": return \"Enviado\"; default: return \"Desconhecido\"; }\nResumo de Left: Left adds a case for the CANCELLED status\nResumo de Right: Right adds a case for the SHIPPED status\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c2a_lista_acumulada",
+  "label": "Yes",
+  "criteria": [
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1031
+  },
+  "v1/base": {
+   "T1": 0.9863
+  },
+  "v2/ajustado": {
+   "T1": 0.1032
+  },
+  "v2/base": {
+   "T1": 0.9999
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.159,
+   "criterion_2_parent_change_loss": 0.1354,
+   "criterion_3_merge_new_effect": 0.1658
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9451,
+   "criterion_2_parent_change_loss": 0.9887,
+   "criterion_3_merge_new_effect": 0.9928
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1028
+  },
+  "v1pt/base": {
+   "T1": 0.9975
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1513,
+   "criterion_2_parent_change_loss": 0.1337,
+   "criterion_3_merge_new_effect": 0.1612
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9126,
+   "criterion_2_parent_change_loss": 0.9891,
+   "criterion_3_merge_new_effect": 0.9844
+  },
+  "state_v1": "Método: Keywords.init()\nCorpo da base (B):\nwords.add(\"if\"); words.add(\"else\"); words.add(\"switch\");\nCorpo de Left (L):\nwords.add(\"if\"); words.add(\"while\"); words.add(\"else\"); words.add(\"switch\");\nCorpo de Right (R):\nwords.add(\"if\"); words.add(\"else\"); words.add(\"switch\"); words.add(\"for\");\nResumo de Left: Left adds a new value into a list\nResumo de Right: Right adds a different new value into the same list\nAtributos: words: List<String>\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c2b_taxa_e_arredondamento",
+  "label": "Yes",
+  "criteria": [
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1041
+  },
+  "v1/base": {
+   "T1": 0.1312
+  },
+  "v2/ajustado": {
+   "T1": 0.1062
+  },
+  "v2/base": {
+   "T1": 0.2307
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.1879,
+   "criterion_2_parent_change_loss": 0.1583,
+   "criterion_3_merge_new_effect": 0.2171
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.5652,
+   "criterion_2_parent_change_loss": 0.9257,
+   "criterion_3_merge_new_effect": 0.8407
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1024
+  },
+  "v1pt/base": {
+   "T1": 0.6159
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1686,
+   "criterion_2_parent_change_loss": 0.147,
+   "criterion_3_merge_new_effect": 0.3184
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.7013,
+   "criterion_2_parent_change_loss": 0.9857,
+   "criterion_3_merge_new_effect": 0.9389
+  },
+  "state_v1": "Método: Invoice.compute()\nCorpo da base (B):\namount = 40; total = amount; total = round(total);\nCorpo de Left (L):\namount = 40; total = amount + 5; total = round(total);\nCorpo de Right (R):\namount = 40; total = amount; total = round(total);\nResumo de Left: Left adds a flat fee of five to the total\nResumo de Right: Right rounds the total up to a multiple of ten\nAtributos: amount: int, total: int\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c2c_texto_espacos_duplicados",
+  "label": "Yes",
+  "criteria": [
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.2547
+  },
+  "v1/base": {
+   "T1": 0.9803
+  },
+  "v2/ajustado": {
+   "T1": 0.7243
+  },
+  "v2/base": {
+   "T1": 0.9964
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8419,
+   "criterion_2_parent_change_loss": 0.8872,
+   "criterion_3_merge_new_effect": 0.8924
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8681,
+   "criterion_2_parent_change_loss": 0.9839,
+   "criterion_3_merge_new_effect": 0.9264
+  },
+  "v1pt/ajustado": {
+   "T1": 0.113
+  },
+  "v1pt/base": {
+   "T1": 0.9971
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.2047,
+   "criterion_2_parent_change_loss": 0.4417,
+   "criterion_3_merge_new_effect": 0.6387
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9378,
+   "criterion_2_parent_change_loss": 0.9691,
+   "criterion_3_merge_new_effect": 0.952
+  },
+  "state_v1": "Método: TextCleaner.cleanText()\nCorpo da base (B):\nremoveComments();\nCorpo de Left (L):\nnormalizeWhitespace(); removeComments();\nCorpo de Right (R):\nremoveComments(); removeDuplicateWords();\nResumo de Left: Left adds a call to normalizeWhitespace before removeComments\nResumo de Right: Right adds a call to removeDuplicateWords after removeComments\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c2d_guarda_nula_antes_do_trim",
+  "label": "Yes",
+  "criteria": [
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1486
+  },
+  "v1/base": {
+   "T1": 0.9932
+  },
+  "v2/ajustado": {
+   "T1": 0.1324
+  },
+  "v2/base": {
+   "T1": 0.9884
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.6881,
+   "criterion_2_parent_change_loss": 0.8796,
+   "criterion_3_merge_new_effect": 0.8864
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8491,
+   "criterion_2_parent_change_loss": 0.9705,
+   "criterion_3_merge_new_effect": 0.9745
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1606
+  },
+  "v1pt/base": {
+   "T1": 0.9972
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.7843,
+   "criterion_2_parent_change_loss": 0.8789,
+   "criterion_3_merge_new_effect": 0.8918
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.962,
+   "criterion_2_parent_change_loss": 0.9893,
+   "criterion_3_merge_new_effect": 0.9939
+  },
+  "state_v1": "Método: NameCheck.valid(java.lang.String)\nCorpo da base (B):\nString s = name; int min = 2; boolean present = true; int n = s.length(); return present && n >= min;\nCorpo de Left (L):\nString s = name; int min = 2; if (s == null) { return false; } boolean present = true; int n = s.length(); return present && n >= min;\nCorpo de Right (R):\nString s = name.trim(); int min = 2; boolean present = true; int n = s.length(); return present && n >= min;\nResumo de Left: Left adds a guard that returns false for a null name\nResumo de Right: Right trims the name before measuring its length\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c3a_xyz_apostila",
+  "label": "Yes",
+  "criteria": [
+   "C3"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1046
+  },
+  "v1/base": {
+   "T1": 0.9825
+  },
+  "v2/ajustado": {
+   "T1": 0.1072
+  },
+  "v2/base": {
+   "T1": 0.9703
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.1737,
+   "criterion_2_parent_change_loss": 0.1511,
+   "criterion_3_merge_new_effect": 0.2057
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8318,
+   "criterion_2_parent_change_loss": 0.9647,
+   "criterion_3_merge_new_effect": 0.9414
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1081
+  },
+  "v1pt/base": {
+   "T1": 0.9746
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1671,
+   "criterion_2_parent_change_loss": 0.1483,
+   "criterion_3_merge_new_effect": 0.2034
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.8407,
+   "criterion_2_parent_change_loss": 0.9725,
+   "criterion_3_merge_new_effect": 0.9251
+  },
+  "state_v1": "Método: Flags.run()\nCorpo da base (B):\nx = 0; y = 0; if (x + y > 1) { z = 1; } else { z = 0; }\nCorpo de Left (L):\nx = 1; y = 0; if (x + y > 1) { z = 1; } else { z = 0; }\nCorpo de Right (R):\nx = 0; y = 1; if (x + y > 1) { z = 1; } else { z = 0; }\nResumo de Left: Left changes the initial value of x from zero to one\nResumo de Right: Right changes the initial value of y from zero to one\nAtributos: x: int, z: int, y: int\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c3b_peso_total",
+  "label": "Yes",
+  "criteria": [
+   "C3"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1039
+  },
+  "v1/base": {
+   "T1": 0.8557
+  },
+  "v2/ajustado": {
+   "T1": 0.1063
+  },
+  "v2/base": {
+   "T1": 0.9997
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.1757,
+   "criterion_2_parent_change_loss": 0.1416,
+   "criterion_3_merge_new_effect": 0.2586
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8247,
+   "criterion_2_parent_change_loss": 0.9151,
+   "criterion_3_merge_new_effect": 0.9273
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1033
+  },
+  "v1pt/base": {
+   "T1": 1.0
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1863,
+   "criterion_2_parent_change_loss": 0.1478,
+   "criterion_3_merge_new_effect": 0.2962
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9065,
+   "criterion_2_parent_change_loss": 0.97,
+   "criterion_3_merge_new_effect": 0.968
+  },
+  "state_v1": "Método: Parcel.check()\nCorpo da base (B):\na = 40; b = 40; big = a + b > 100;\nCorpo de Left (L):\na = 60; b = 40; big = a + b > 100;\nCorpo de Right (R):\na = 40; b = 60; big = a + b > 100;\nResumo de Left: Left raises the weight of the first item from forty to sixty\nResumo de Right: Right raises the weight of the second item from forty to sixty\nAtributos: a: int, b: int, big: boolean\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "c3c_capacidade",
+  "label": "Yes",
+  "criteria": [
+   "C3"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1008
+  },
+  "v1/base": {
+   "T1": 0.947
+  },
+  "v2/ajustado": {
+   "T1": 0.0996
+  },
+  "v2/base": {
+   "T1": 0.9159
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.1534,
+   "criterion_2_parent_change_loss": 0.1419,
+   "criterion_3_merge_new_effect": 0.2212
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8791,
+   "criterion_2_parent_change_loss": 0.9124,
+   "criterion_3_merge_new_effect": 0.8706
+  },
+  "v1pt/ajustado": {
+   "T1": 0.0993
+  },
+  "v1pt/base": {
+   "T1": 0.9915
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1584,
+   "criterion_2_parent_change_loss": 0.1467,
+   "criterion_3_merge_new_effect": 0.2562
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.8824,
+   "criterion_2_parent_change_loss": 0.9323,
+   "criterion_3_merge_new_effect": 0.8989
+  },
+  "state_v1": "Método: Storage.check()\nCorpo da base (B):\nused = 4; capacity = 9; incoming = 0; hasRoom = used + incoming <= capacity;\nCorpo de Left (L):\nused = 7; capacity = 9; incoming = 0; hasRoom = used + incoming <= capacity;\nCorpo de Right (R):\nused = 4; capacity = 9; incoming = 3; hasRoom = used + incoming <= capacity;\nResumo de Left: Left increases the used space from four to seven\nResumo de Right: Right sets an incoming load of three\nAtributos: used: int, capacity: int, incoming: int, hasRoom: boolean\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "d1_taxa_sobrescrita",
+  "label": "Yes",
+  "criteria": [
+   "C1",
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1138
+  },
+  "v1/base": {
+   "T1": 0.9974
+  },
+  "v2/ajustado": {
+   "T1": 0.1114
+  },
+  "v2/base": {
+   "T1": 0.894
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.2989,
+   "criterion_2_parent_change_loss": 0.4137,
+   "criterion_3_merge_new_effect": 0.8092
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.7965,
+   "criterion_2_parent_change_loss": 0.9914,
+   "criterion_3_merge_new_effect": 0.981
+  },
+  "v1pt/ajustado": {
+   "T1": 0.119
+  },
+  "v1pt/base": {
+   "T1": 0.9774
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.2566,
+   "criterion_2_parent_change_loss": 0.7037,
+   "criterion_3_merge_new_effect": 0.8567
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.8219,
+   "criterion_2_parent_change_loss": 0.9896,
+   "criterion_3_merge_new_effect": 0.9439
+  },
+  "state_v1": "Método: PriceTable.quote(int)\nCorpo da base (B):\nint rate = 5; int fee = 1; total = qty * rate + fee;\nCorpo de Left (L):\nint rate = 10; int fee = 1; total = qty * rate + fee;\nCorpo de Right (R):\nint rate = 5; int fee = 1; rate = 20; total = qty * rate + fee;\nResumo de Left: Left changes the initial rate from five to ten\nResumo de Right: Right assigns a new rate of twenty after the fee is set\nAtributos: total: int\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "d2_regra_de_preco",
+  "label": "Yes",
+  "criteria": [
+   "C1",
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.114
+  },
+  "v1/base": {
+   "T1": 1.0
+  },
+  "v2/ajustado": {
+   "T1": 0.118
+  },
+  "v2/base": {
+   "T1": 1.0
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.7527,
+   "criterion_2_parent_change_loss": 0.8833,
+   "criterion_3_merge_new_effect": 0.882
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9532,
+   "criterion_2_parent_change_loss": 0.9976,
+   "criterion_3_merge_new_effect": 0.9978
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1076
+  },
+  "v1pt/base": {
+   "T1": 1.0
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.3673,
+   "criterion_2_parent_change_loss": 0.8433,
+   "criterion_3_merge_new_effect": 0.8807
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9769,
+   "criterion_2_parent_change_loss": 0.9966,
+   "criterion_3_merge_new_effect": 0.9978
+  },
+  "state_v1": "Método: PriceRule.price(int)\nCorpo da base (B):\nint p = base; boolean vip = base > 50; if (vip) { p = p - 5; } return p;\nCorpo de Left (L):\nint p = base; p = p + 10; boolean vip = base > 50; if (vip) { p = p - 5; } return p;\nCorpo de Right (R):\nint p = base; boolean vip = base > 50; if (vip) { p = p - 5; } p = p * 2; return p;\nResumo de Left: Left adds a surcharge of ten to the price before the vip discount\nResumo de Right: Right doubles the price after the vip discount\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "d3_titulo_formatado",
+  "label": "Yes",
+  "criteria": [
+   "C1",
+   "C2"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1922
+  },
+  "v1/base": {
+   "T1": 0.983
+  },
+  "v2/ajustado": {
+   "T1": 0.8703
+  },
+  "v2/base": {
+   "T1": 0.99
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.6509,
+   "criterion_2_parent_change_loss": 0.8737,
+   "criterion_3_merge_new_effect": 0.8808
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.938,
+   "criterion_2_parent_change_loss": 0.9897,
+   "criterion_3_merge_new_effect": 0.988
+  },
+  "v1pt/ajustado": {
+   "T1": 0.2711
+  },
+  "v1pt/base": {
+   "T1": 0.9998
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.4826,
+   "criterion_2_parent_change_loss": 0.8723,
+   "criterion_3_merge_new_effect": 0.8838
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9735,
+   "criterion_2_parent_change_loss": 0.9957,
+   "criterion_3_merge_new_effect": 0.997
+  },
+  "state_v1": "Método: TitleFormatter.title(java.lang.String)\nCorpo da base (B):\nString t = name; int n = t.length(); return t;\nCorpo de Left (L):\nString t = name; t = t.toUpperCase(); int n = t.length(); return t;\nCorpo de Right (R):\nString t = name; int n = t.length(); t = t + \" (draft)\"; return t;\nResumo de Left: Left converts the title to upper case\nResumo de Right: Right appends a draft marker to the title\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "e1_taxa_e_capacidade",
+  "label": "Yes",
+  "criteria": [
+   "C2",
+   "C3"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1015
+  },
+  "v1/base": {
+   "T1": 0.8793
+  },
+  "v2/ajustado": {
+   "T1": 0.104
+  },
+  "v2/base": {
+   "T1": 0.8505
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.1676,
+   "criterion_2_parent_change_loss": 0.1537,
+   "criterion_3_merge_new_effect": 0.1865
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.7856,
+   "criterion_2_parent_change_loss": 0.9264,
+   "criterion_3_merge_new_effect": 0.8905
+  },
+  "v1pt/ajustado": {
+   "T1": 0.0996
+  },
+  "v1pt/base": {
+   "T1": 0.8101
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.1695,
+   "criterion_2_parent_change_loss": 0.1532,
+   "criterion_3_merge_new_effect": 0.1853
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.7916,
+   "criterion_2_parent_change_loss": 0.8263,
+   "criterion_3_merge_new_effect": 0.8323
+  },
+  "state_v1": "Método: Checkout.compute()\nCorpo da base (B):\namount = 40; used = 4; cap = 9; incoming = 0; total = amount; hasRoom = used + incoming <= cap; total = round(total);\nCorpo de Left (L):\namount = 40; used = 7; cap = 9; incoming = 0; total = amount + 5; hasRoom = used + incoming <= cap; total = round(total);\nCorpo de Right (R):\namount = 40; used = 4; cap = 9; incoming = 3; total = amount; hasRoom = used + incoming <= cap; total = round(total);\nResumo de Left: Left adds a flat fee of five to the total and raises the used space to seven\nResumo de Right: Right rounds the total up to a multiple of ten and sets an incoming load of three\nAtributos: amount: int, used: int, cap: int, incoming: int, total: int, hasRoom: boolean\nConstrutores: padrão"
+ },
+ {
+  "set": "sintetico",
+  "id": "e2_custo_e_sobrepeso",
+  "label": "Yes",
+  "criteria": [
+   "C1",
+   "C2",
+   "C3"
+  ],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1117
+  },
+  "v1/base": {
+   "T1": 1.0
+  },
+  "v2/ajustado": {
+   "T1": 0.1102
+  },
+  "v2/base": {
+   "T1": 1.0
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.4187,
+   "criterion_2_parent_change_loss": 0.7165,
+   "criterion_3_merge_new_effect": 0.8565
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9666,
+   "criterion_2_parent_change_loss": 0.9968,
+   "criterion_3_merge_new_effect": 0.9995
+  },
+  "v1pt/ajustado": {
+   "T1": 0.1144
+  },
+  "v1pt/base": {
+   "T1": 1.0
+  },
+  "v3pt/ajustado": {
+   "criterion_1_global_divergence": 0.3348,
+   "criterion_2_parent_change_loss": 0.8011,
+   "criterion_3_merge_new_effect": 0.848
+  },
+  "v3pt/base": {
+   "criterion_1_global_divergence": 0.9795,
+   "criterion_2_parent_change_loss": 0.9966,
+   "criterion_3_merge_new_effect": 0.9982
+  },
+  "state_v1": "Método: Shipment.plan(int)\nCorpo da base (B):\nweight = 40; extra = 40; int p = base; boolean vip = base > 50; if (vip) { p = p - 5; } cost = p; oversize = weight + extra > 100;\nCorpo de Left (L):\nweight = 60; extra = 40; int p = base; p = p + 10; boolean vip = base > 50; if (vip) { p = p - 5; } cost = p; oversize = weight + extra > 100;\nCorpo de Right (R):\nweight = 40; extra = 60; int p = base; boolean vip = base > 50; if (vip) { p = p - 5; } p = p * 2; cost = p; oversize = weight + extra > 100;\nResumo de Left: Left adds a surcharge of ten to the cost and raises the first weight to sixty\nResumo de Right: Right doubles the cost after the vip discount and raises the second weight to sixty\nAtributos: weight: int, extra: int, cost: int, oversize: boolean\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "69ff266/Python2Target.python2Keywords",
+  "label": "Yes",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.4919
+  },
+  "v1/base": {
+   "T1": 0.9911
+  },
+  "v2/ajustado": {
+   "T1": 0.5096
+  },
+  "v2/base": {
+   "T1": 0.9831
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.7657,
+   "criterion_2_parent_change_loss": 0.8412,
+   "criterion_3_merge_new_effect": 0.8508
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9494,
+   "criterion_2_parent_change_loss": 0.9818,
+   "criterion_3_merge_new_effect": 0.9821
+  },
+  "state_v1": "Método: Python2Target.python2Keywords\nCorpo da base (B):\n{ \"abs\", \"all\", \"any\", \"apply\", \"as\", \"bin\", \"bool\", \"buffer\", \"bytearray\", \"callable\", \"chr\", \"classmethod\", \"coerce\", \"compile\", \"complex\", \"delattr\", \"dict\", \"dir\", \"divmod\", \"enumerate\", \"eval\", \"execfile\", \"file\", \"filter\", \"float\", \"format\", \"frozenset\", \"getattr\", \"globals\", \"hasattr\", \"hash\", \"help\", \"hex\", \"id\", \"input\", \"int\", \"intern\", \"isinstance\", \"issubclass\", \"iter\", \"len\", \"list\", \"locals\", \"map\", \"max\", \"min\", \"next\", \"memoryview\", \"object\", \"oct\", \"open\", \"ord\", \"pow\", \"print\", \"property\", \"range\", \"raw_input\", \"reduce\", \"reload\", \"repr\", \"reversed\", \"round\", \"set\", \"setattr\", \"slice\", \"sorted\", \"staticmethod\", \"str\", \"sum\", \"super\", \"tuple\", \"type\", \"unichr\", \"unicode\", \"vars\", \"with\", \"xrange\", \"zip\", \"__import__\", \"True\", \"False\", \"None\" }\nCorpo de Left (L):\n{ \"abs\", \"all\", \"any\", \"apply\", \"as\", \"bin\", \"bool\", \"buffer\", \"bytearray\", \"callable\", \"chr\", \"classmethod\", \"coerce\", \"compile\", \"complex\", \"delattr\", \"dict\", \"dir\", \"divmod\", \"enumerate\", \"eval\", \"execfile\", \"file\", \"filter\", \"float\", \"format\", \"frozenset\", \"getattr\", \"globals\", \"hasattr\", \"hash\", \"help\", \"hex\", \"id\", \"input\", \"int\", \"intern\", \"isinstance\", \"issubclass\", \"iter\", \"len\", \"list\", \"locals\", \"map\", \"max\", \"min\", \"next\", \"memoryview\", \"object\", \"oct\", \"open\", \"ord\", \"pow\", \"print\", \"property\", \"range\", \"raw_input\", \"reduce\", \"reload\", \"repr\", \"return\", \"reversed\", \"round\", \"set\", \"setattr\", \"slice\", \"sorted\", \"staticmethod\", \"str\", \"sum\", \"super\", \"tuple\", \"type\", \"unichr\", \"unicode\", \"vars\", \"with\", \"xrange\", \"zip\", \"__import__\", \"True\", \"False\", \"None\" }\nCorpo de Right (R):\n{ \"abs\", \"all\", \"any\", \"apply\", \"as\", \"bin\", \"bool\", \"buffer\", \"bytearray\", \"callable\", \"chr\", \"classmethod\", \"coerce\", \"compile\", \"complex\", \"del\", \"delattr\", \"dict\", \"dir\", \"divmod\", \"enumerate\", \"eval\", \"execfile\", \"file\", \"filter\", \"float\", \"format\", \"frozenset\", \"getattr\", \"globals\", \"hasattr\", \"hash\", \"help\", \"hex\", \"id\", \"input\", \"int\", \"intern\", \"isinstance\", \"issubclass\", \"iter\", \"len\", \"list\", \"locals\", \"map\", \"max\", \"min\", \"next\", \"memoryview\", \"object\", \"oct\", \"open\", \"ord\", \"pow\", \"print\", \"property\", \"range\", \"raw_input\", \"reduce\", \"reload\", \"repr\", \"reversed\", \"round\", \"set\", \"setattr\", \"slice\", \"sorted\", \"staticmethod\", \"str\", \"sum\", \"super\", \"tuple\", \"type\", \"unichr\", \"unicode\", \"vars\", \"with\", \"xrange\", \"zip\", \"__import__\", \"True\", \"False\", \"None\" }\nResumo de Left: Left changes the list of values of an array of Strings during its initialization (adition of a new value)\nResumo de Right: Right changes the list of values of an array of Strings during its initialization (adition of a new value)\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "69ff266/Python3Target.python3Keywords",
+  "label": "Yes",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.5465
+  },
+  "v1/base": {
+   "T1": 0.9903
+  },
+  "v2/ajustado": {
+   "T1": 0.6885
+  },
+  "v2/base": {
+   "T1": 0.9821
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8004,
+   "criterion_2_parent_change_loss": 0.8446,
+   "criterion_3_merge_new_effect": 0.8777
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9569,
+   "criterion_2_parent_change_loss": 0.9825,
+   "criterion_3_merge_new_effect": 0.9789
+  },
+  "state_v1": "Método: Python3Target.python3Keywords\nCorpo da base (B):\n{ \"abs\", \"all\", \"any\", \"apply\", \"as\", \"bin\", \"bool\", \"buffer\", \"bytearray\", \"callable\", \"chr\", \"classmethod\", \"coerce\", \"compile\", \"complex\", \"delattr\", \"dict\", \"dir\", \"divmod\", \"enumerate\", \"eval\", \"execfile\", \"file\", \"filter\", \"float\", \"format\", \"frozenset\", \"getattr\", \"globals\", \"hasattr\", \"hash\", \"help\", \"hex\", \"id\", \"input\", \"int\", \"intern\", \"isinstance\", \"issubclass\", \"iter\", \"len\", \"list\", \"locals\", \"map\", \"max\", \"min\", \"next\", \"memoryview\", \"object\", \"oct\", \"open\", \"ord\", \"pow\", \"print\", \"property\", \"range\", \"raw_input\", \"reduce\", \"reload\", \"repr\", \"reversed\", \"round\", \"set\", \"setattr\", \"slice\", \"sorted\", \"staticmethod\", \"str\", \"sum\", \"super\", \"tuple\", \"type\", \"unichr\", \"unicode\", \"vars\", \"with\", \"zip\", \"__import__\", \"True\", \"False\", \"None\" }\nCorpo de Left (L):\n{ \"abs\", \"all\", \"any\", \"apply\", \"as\", \"bin\", \"bool\", \"buffer\", \"bytearray\", \"callable\", \"chr\", \"classmethod\", \"coerce\", \"compile\", \"complex\", \"delattr\", \"dict\", \"dir\", \"divmod\", \"enumerate\", \"eval\", \"execfile\", \"file\", \"filter\", \"float\", \"format\", \"frozenset\", \"getattr\", \"globals\", \"hasattr\", \"hash\", \"help\", \"hex\", \"id\", \"input\", \"int\", \"intern\", \"isinstance\", \"issubclass\", \"iter\", \"len\", \"list\", \"locals\", \"map\", \"max\", \"min\", \"next\", \"memoryview\", \"object\", \"oct\", \"open\", \"ord\", \"pow\", \"print\", \"property\", \"range\", \"raw_input\", \"reduce\", \"reload\", \"repr\", \"return\", \"reversed\", \"round\", \"set\", \"setattr\", \"slice\", \"sorted\", \"staticmethod\", \"str\", \"sum\", \"super\", \"tuple\", \"type\", \"unichr\", \"unicode\", \"vars\", \"with\", \"zip\", \"__import__\", \"True\", \"False\", \"None\" }\nCorpo de Right (R):\n{ \"abs\", \"all\", \"any\", \"apply\", \"as\", \"bin\", \"bool\", \"buffer\", \"bytearray\", \"callable\", \"chr\", \"classmethod\", \"coerce\", \"compile\", \"complex\", \"del\", \"delattr\", \"dict\", \"dir\", \"divmod\", \"enumerate\", \"eval\", \"execfile\", \"file\", \"filter\", \"float\", \"format\", \"frozenset\", \"getattr\", \"globals\", \"hasattr\", \"hash\", \"help\", \"hex\", \"id\", \"input\", \"int\", \"intern\", \"isinstance\", \"issubclass\", \"iter\", \"len\", \"list\", \"locals\", \"map\", \"max\", \"min\", \"next\", \"memoryview\", \"object\", \"oct\", \"open\", \"ord\", \"pow\", \"print\", \"property\", \"range\", \"raw_input\", \"reduce\", \"reload\", \"repr\", \"reversed\", \"round\", \"set\", \"setattr\", \"slice\", \"sorted\", \"staticmethod\", \"str\", \"sum\", \"super\", \"tuple\", \"type\", \"unichr\", \"unicode\", \"vars\", \"with\", \"zip\", \"__import__\", \"True\", \"False\", \"None\" }\nResumo de Left: Left changes the list of values of an array of Strings during its initialization (adition of a new value)\nResumo de Right: Right changes the list of values of an array of Strings during its initialization (adition of a new value)\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "20bac30/SlangImpl.getAllEventTypes()",
+  "label": "Yes",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.8621
+  },
+  "v1/base": {
+   "T1": 0.9871
+  },
+  "v2/ajustado": {
+   "T1": 0.843
+  },
+  "v2/base": {
+   "T1": 0.9927
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8593,
+   "criterion_2_parent_change_loss": 0.8922,
+   "criterion_3_merge_new_effect": 0.8945
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9704,
+   "criterion_2_parent_change_loss": 0.994,
+   "criterion_3_merge_new_effect": 0.9966
+  },
+  "state_v1": "Método: SlangImpl.getAllEventTypes()\nCorpo da base (B):\nSet<String> eventTypes = new HashSet<>(); eventTypes.add(EventConstants.SCORE_FINISHED_EVENT); eventTypes.add(EventConstants.SCORE_BRANCH_FAILURE_EVENT); eventTypes.add(EventConstants.SCORE_FINISHED_BRANCH_EVENT); eventTypes.add(EventConstants.SCORE_NO_WORKER_FAILURE_EVENT); eventTypes.add(EventConstants.SCORE_PAUSED_EVENT); eventTypes.add(EventConstants.SCORE_ERROR_EVENT); eventTypes.add(EventConstants.SCORE_FAILURE_EVENT); eventTypes.add(ScoreLangConstants.SLANG_EXECUTION_EXCEPTION); eventTypes.add(ScoreLangConstants.EVENT_ACTION_START); eventTypes.add(ScoreLangConstants.EVENT_ACTION_END); eventTypes.add(ScoreLangConstants.EVENT_ACTION_ERROR); eventTypes.add(ScoreLangConstants.EVENT_INPUT_START); eventTypes.add(ScoreLangConstants.EVENT_INPUT_END); eventTypes.add(ScoreLangConstants.EVENT_OUTPUT_START); eventTypes.add(ScoreLangConstants.EVENT_OUTPUT_END); eventTypes.add(ScoreLangConstants.EVENT_BRANCH_START); eventTypes.add(ScoreLangConstants.EVENT_BRANCH_END); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_EXPRESSION_START); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_EXPRESSION_END); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_OUTPUT_START); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_OUTPUT_END); eventTypes.add(ScoreLangConstants.EVENT_EXECUTION_FINISHED); return eventTypes;\nCorpo de Left (L):\nSet<String> eventTypes = new HashSet<>(); eventTypes.add(EventConstants.SCORE_FINISHED_EVENT); eventTypes.add(EventConstants.SCORE_BRANCH_FAILURE_EVENT); eventTypes.add(EventConstants.SCORE_FINISHED_BRANCH_EVENT); eventTypes.add(EventConstants.SCORE_NO_WORKER_FAILURE_EVENT); eventTypes.add(EventConstants.SCORE_PAUSED_EVENT); eventTypes.add(EventConstants.SCORE_ERROR_EVENT); eventTypes.add(EventConstants.SCORE_FAILURE_EVENT); eventTypes.add(ScoreLangConstants.SLANG_EXECUTION_EXCEPTION); eventTypes.add(ScoreLangConstants.EVENT_ACTION_START); eventTypes.add(ScoreLangConstants.EVENT_ACTION_END); eventTypes.add(ScoreLangConstants.EVENT_ACTION_ERROR); eventTypes.add(ScoreLangConstants.EVENT_TASK_START); eventTypes.add(ScoreLangConstants.EVENT_INPUT_START); eventTypes.add(ScoreLangConstants.EVENT_INPUT_END); eventTypes.add(ScoreLangConstants.EVENT_OUTPUT_START); eventTypes.add(ScoreLangConstants.EVENT_OUTPUT_END); eventTypes.add(ScoreLangConstants.EVENT_BRANCH_START); eventTypes.add(ScoreLangConstants.EVENT_BRANCH_END); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_EXPRESSION_START); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_EXPRESSION_END); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_OUTPUT_START); eventTypes.add(ScoreLangConstants.EVENT_ASYNC_LOOP_OUTPUT_END); eventTypes.add(ScoreLangConstants.EVENT_EXECUTION_FINISHED); return eventTypes;\nCorpo de Right (R):\nSet<String> eventTypes = new HashSet<>(); eventTypes.add(EventConstants.SCORE_FINISHED_EVENT); eventTypes.add(EventConstants.SCORE_BRANCH_FAILURE_EVENT); eventTypes.add(EventConstants.SCORE_FINISHED_BRANCH_EVENT); eventTypes.add(EventConstants.SCORE_NO_WORKER_FAILURE_EVENT); eventTypes.add(EventConstants.SCORE_PAUSED_EVENT); eventTypes.add(EventConstants.SCORE_ERROR_EVENT); eventTypes.add(EventConstants.SCORE_FAILURE_EVENT); eventTypes.add(ScoreLangConstants.SLANG_EXECUTION_EXCEPTION); eventTypes.add(ScoreLangConstants.EVENT_ACTION_START); eventTypes.add(ScoreLangConstants.EVENT_ACTION_END); eventTypes.add(ScoreLangConstants.EVENT_ACTION_ERROR); eventTypes.add(ScoreLangConstants.EVENT_INPUT_START); eventTypes.add(ScoreLangConstants.EVENT_INPUT_END); eventTypes.add(ScoreLangConstants.EVENT_OUTPUT_START); eventTypes.add(ScoreLangConstants.EVENT_OUTPUT_END); eventTypes.add(ScoreLangConstants.EVENT_BRANCH_START); eventTypes.add(ScoreLangConstants.EVENT_BRANCH_END); eventTypes.add(ScoreLangConstants.EVENT_SPLIT_BRANCHES); eventTypes.add(ScoreLangConstants.EVENT_JOIN_BRANCHES_START); eventTypes.add(ScoreLangConstants.EVENT_JOIN_BRANCHES_END); eventTypes.add(ScoreLangConstants.EVENT_EXECUTION_FINISHED); return eventTypes;\nResumo de Left: Left adds new values into a list\nResumo de Right: Right adds new values into a list\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "2d4e68a/TomcatEmbeddedServletContainerFactory.customizeConnector(org.apache.catalina.connector.Connector)",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.843
+  },
+  "v1/base": {
+   "T1": 0.9023
+  },
+  "v2/ajustado": {
+   "T1": 0.8522
+  },
+  "v2/base": {
+   "T1": 0.9276
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.7832,
+   "criterion_2_parent_change_loss": 0.778,
+   "criterion_3_merge_new_effect": 0.8347
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.684,
+   "criterion_2_parent_change_loss": 0.6804,
+   "criterion_3_merge_new_effect": 0.7747
+  },
+  "state_v1": "Método: TomcatEmbeddedServletContainerFactory.customizeConnector(org.apache.catalina.connector.Connector)\nCorpo da base (B):\nint port = (getPort() >= 0 ? getPort() : 0); connector.setPort(port); if (connector.getProtocolHandler() instanceof AbstractProtocol) { if (getAddress() != null) { ((AbstractProtocol) connector.getProtocolHandler()) .setAddress(getAddress()); } } if (getUriEncoding() != null) { connector.setURIEncoding(getUriEncoding()); } connector.setProperty(\"bindOnInit\", \"false\"); for (TomcatConnectorCustomizer customizer : this.tomcatConnectorCustomizers) { customizer.customize(connector); }\nCorpo de Left (L):\nint port = (getPort() >= 0 ? getPort() : 0); connector.setPort(port); if (connector.getProtocolHandler() instanceof AbstractProtocol) { if (getAddress() != null) { ((AbstractProtocol) connector.getProtocolHandler()) .setAddress(getAddress()); } } if (getUriEncoding() != null) { connector.setURIEncoding(getUriEncoding()); } connector.setProperty(\"bindOnInit\", \"false\"); if (getSsl() != null) { Assert.state( connector.getProtocolHandler() instanceof AbstractHttp11JsseProtocol, \"To use SSL, the connector's protocol handler must be an \" + \"AbstractHttp11JsseProtocol subclass\"); configureSsl((AbstractHttp11JsseProtocol) connector.getProtocolHandler(), getSsl()); connector.setScheme(\"https\"); connector.setSecure(true); } for (TomcatConnectorCustomizer customizer : this.tomcatConnectorCustomizers) { customizer.customize(connector); }\nCorpo de Right (R):\nint port = (getPort() >= 0 ? getPort() : 0); connector.setPort(port); if (connector.getProtocolHandler() instanceof AbstractProtocol) { if (getAddress() != null) { ((AbstractProtocol<?>) connector.getProtocolHandler()) .setAddress(getAddress()); } } if (getUriEncoding() != null) { connector.setURIEncoding(getUriEncoding()); } connector.setProperty(\"bindOnInit\", \"false\"); for (TomcatConnectorCustomizer customizer : this.tomcatConnectorCustomizers) { customizer.customize(connector); }\nResumo de Left: Added an if condition that has an asset in its body. One method call to configureSsl and two set method calls to connector\nResumo de Right: Added a wildcard to the generic of the AbstractProtocol class which is used as a casting\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "958a0a4/MongoProperties.builder(com.mongodb.MongoClientOptions)",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.8009
+  },
+  "v1/base": {
+   "T1": 0.9775
+  },
+  "v2/ajustado": {
+   "T1": 0.8064
+  },
+  "v2/base": {
+   "T1": 0.9861
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8046,
+   "criterion_2_parent_change_loss": 0.8504,
+   "criterion_3_merge_new_effect": 0.8676
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9235,
+   "criterion_2_parent_change_loss": 0.954,
+   "criterion_3_merge_new_effect": 0.9707
+  },
+  "state_v1": "Método: MongoProperties.builder(com.mongodb.MongoClientOptions)\nCorpo da base (B):\nBuilder builder = MongoClientOptions.builder(); if (options != null) { builder.alwaysUseMBeans(options.isAlwaysUseMBeans()); builder.connectionsPerHost(options.getConnectionsPerHost()); builder.connectTimeout(options.getConnectTimeout()); builder.cursorFinalizerEnabled(options.isCursorFinalizerEnabled()); builder.dbDecoderFactory(options.getDbDecoderFactory()); builder.dbEncoderFactory(options.getDbEncoderFactory()); builder.description(options.getDescription()); builder.maxWaitTime(options.getMaxWaitTime()); builder.readPreference(options.getReadPreference()); builder.socketFactory(options.getSocketFactory()); builder.socketKeepAlive(options.isSocketKeepAlive()); builder.socketTimeout(options.getSocketTimeout()); builder.threadsAllowedToBlockForConnectionMultiplier( options.getThreadsAllowedToBlockForConnectionMultiplier()); builder.writeConcern(options.getWriteConcern()); } return builder;\nCorpo de Left (L):\nBuilder builder = MongoClientOptions.builder(); if (options != null) { builder.alwaysUseMBeans(options.isAlwaysUseMBeans()); builder.connectionsPerHost(options.getConnectionsPerHost()); builder.connectTimeout(options.getConnectTimeout()); builder.cursorFinalizerEnabled(options.isCursorFinalizerEnabled()); builder.dbDecoderFactory(options.getDbDecoderFactory()); builder.dbEncoderFactory(options.getDbEncoderFactory()); builder.description(options.getDescription()); builder.maxWaitTime(options.getMaxWaitTime()); builder.readPreference(options.getReadPreference()); builder.sslEnabled(options.isSslEnabled()); builder.socketFactory(options.getSocketFactory()); builder.socketKeepAlive(options.isSocketKeepAlive()); builder.socketTimeout(options.getSocketTimeout()); builder.threadsAllowedToBlockForConnectionMultiplier( options.getThreadsAllowedToBlockForConnectionMultiplier()); builder.writeConcern(options.getWriteConcern()); } return builder;\nCorpo de Right (R):\nBuilder builder = MongoClientOptions.builder(); if (options != null) { builder.alwaysUseMBeans(options.isAlwaysUseMBeans()); builder.connectionsPerHost(options.getConnectionsPerHost()); builder.connectTimeout(options.getConnectTimeout()); builder.cursorFinalizerEnabled(options.isCursorFinalizerEnabled()); builder.dbDecoderFactory(options.getDbDecoderFactory()); builder.dbEncoderFactory(options.getDbEncoderFactory()); builder.description(options.getDescription()); builder.heartbeatConnectTimeout(options.getHeartbeatConnectTimeout()); builder.heartbeatFrequency(options.getHeartbeatFrequency()); builder.heartbeatSocketTimeout(options.getHeartbeatSocketTimeout()); builder.localThreshold(options.getLocalThreshold()); builder.minConnectionsPerHost(options.getMinConnectionsPerHost()); builder.minHeartbeatFrequency(options.getMinHeartbeatFrequency()); builder.maxConnectionIdleTime(options.getMaxConnectionIdleTime()); builder.maxConnectionLifeTime(options.getMaxConnectionLifeTime()); builder.maxWaitTime(options.getMaxWaitTime()); builder.readPreference(options.getReadPreference()); builder.requiredReplicaSetName(options.getRequiredReplicaSetName()); builder.socketFactory(options.getSocketFactory()); builder.socketKeepAlive(options.isSocketKeepAlive()); builder.socketTimeout(options.getSocketTimeout()); builder.threadsAllowedToBlockForConnectionMultiplier( options.getThreadsAllowedToBlockForConnectionMultiplier()); builder.writeConcern(options.getWriteConcern()); } return builder;\nResumo de Left: Left changes one attribute of an object using a set method\nResumo de Right: Right changes nine attributes of an object using a set method\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "3444ebb/SpringBootServletInitializer.createRootApplicationContext(javax.servlet.ServletContext)",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.7807
+  },
+  "v1/base": {
+   "T1": 0.9684
+  },
+  "v2/ajustado": {
+   "T1": 0.81
+  },
+  "v2/base": {
+   "T1": 0.9829
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.7652,
+   "criterion_2_parent_change_loss": 0.8211,
+   "criterion_3_merge_new_effect": 0.8258
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8246,
+   "criterion_2_parent_change_loss": 0.8519,
+   "criterion_3_merge_new_effect": 0.9048
+  },
+  "state_v1": "Método: SpringBootServletInitializer.createRootApplicationContext(javax.servlet.ServletContext)\nCorpo da base (B):\nSpringApplicationBuilder builder = new SpringApplicationBuilder(); builder.main(getClass()); ApplicationContext parent = getExistingRootWebApplicationContext(servletContext); if (parent != null) { this.logger.info(\"Root context already created (using as parent).\"); servletContext.setAttribute( WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, null); builder.initializers(new ParentContextApplicationContextInitializer(parent)); } builder.initializers(new ServletContextApplicationContextInitializer( servletContext)); builder.contextClass(AnnotationConfigEmbeddedWebApplicationContext.class); builder = configure(builder); SpringApplication application = builder.build(); if (application.getSources().isEmpty() && AnnotationUtils.findAnnotation(getClass(), Configuration.class) != null) { application.getSources().add(getClass()); } Assert.state(application.getSources().size() > 0, \"No SpringApplication sources have been defined. Either override the \" + \"configure method or add an @Configuration annotation\"); application.getSources().add(ErrorPageFilter.class); return run(application);\nCorpo de Left (L):\nSpringApplicationBuilder builder = createSpringApplicationBuilder(); builder.main(getClass()); ApplicationContext parent = getExistingRootWebApplicationContext(servletContext); if (parent != null) { this.logger.info(\"Root context already created (using as parent).\"); servletContext.setAttribute( WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, null); builder.initializers(new ParentContextApplicationContextInitializer(parent)); } builder.initializers(new ServletContextApplicationContextInitializer( servletContext)); builder.contextClass(AnnotationConfigEmbeddedWebApplicationContext.class); builder = configure(builder); SpringApplication application = builder.build(); if (application.getSources().isEmpty() && AnnotationUtils.findAnnotation(getClass(), Configuration.class) != null) { application.getSources().add(getClass()); } Assert.state(application.getSources().size() > 0, \"No SpringApplication sources have been defined. Either override the \" + \"configure method or add an @Configuration annotation\"); application.getSources().add(ErrorPageFilter.class); return run(application);\nCorpo de Right (R):\nSpringApplicationBuilder builder = new SpringApplicationBuilder(); builder.main(getClass()); ApplicationContext parent = getExistingRootWebApplicationContext(servletContext); if (parent != null) { this.logger.info(\"Root context already created (using as parent).\"); servletContext.setAttribute( WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, null); builder.initializers(new ParentContextApplicationContextInitializer(parent)); } builder.initializers(new ServletContextApplicationContextInitializer( servletContext)); builder.contextClass(AnnotationConfigEmbeddedWebApplicationContext.class); builder = configure(builder); SpringApplication application = builder.build(); if (application.getSources().isEmpty() && AnnotationUtils.findAnnotation(getClass(), Configuration.class) != null) { application.getSources().add(getClass()); } Assert.state(application.getSources().size() > 0, \"No SpringApplication sources have been defined. Either override the \" + \"configure method or add an @Configuration annotation\"); if (this.registerErrorPageFilter) { application.getSources().add(ErrorPageFilter.class); } return run(application);\nResumo de Left: Modified a class's instance declaration, instead of using new Class(), called a method that does this.\nResumo de Right: Inserted a conditional (if) for an attribute that has not been changed from the left, checking if an attribute of the class is true or false.\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "6664ce1/AtomikosProperties.asProperties()",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.8233
+  },
+  "v1/base": {
+   "T1": 0.9379
+  },
+  "v2/ajustado": {
+   "T1": 0.8521
+  },
+  "v2/base": {
+   "T1": 0.9652
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8263,
+   "criterion_2_parent_change_loss": 0.8522,
+   "criterion_3_merge_new_effect": 0.8669
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9333,
+   "criterion_2_parent_change_loss": 0.9563,
+   "criterion_3_merge_new_effect": 0.9593
+  },
+  "state_v1": "Método: AtomikosProperties.asProperties()\nCorpo da base (B):\nProperties properties = new Properties(); set(properties, \"service\", getService()); set(properties, \"max_timeout\", getMaxTimeout()); set(properties, \"default_jta_timeout\", getDefaultJtaTimeout()); set(properties, \"max_actives\", getMaxActives()); set(properties, \"enable_logging\", isEnableLogging()); set(properties, \"tm_unique_name\", getTransactionManagerUniqueName()); set(properties, \"serial_jta_transactions\", isSerialJtaTransactions()); set(properties, \"force_shutdown_on_vm_exit\", isForceShutdownOnVmExit()); set(properties, \"log_base_name\", getLogBaseName()); set(properties, \"log_base_dir\", getLogBaseDir()); set(properties, \"checkpoint_interval\", getCheckpointInterval()); set(properties, \"console_log_level\", getConsoleLogLevel()); set(properties, \"output_dir\", getOutputDir()); set(properties, \"console_file_name\", getConsoleFileName()); set(properties, \"console_file_count\", getConsoleFileCount()); set(properties, \"console_file_limit\", getConsoleFileLimit()); set(properties, \"threaded_2pc\", isThreadedTwoPhaseCommit()); return properties;\nCorpo de Left (L):\nProperties properties = new Properties(); set(properties, \"service\", getService()); set(properties, \"max_timeout\", getMaxTimeout()); set(properties, \"default_jta_timeout\", getDefaultJtaTimeout()); set(properties, \"max_actives\", getMaxActives()); set(properties, \"enable_logging\", isEnableLogging()); set(properties, \"tm_unique_name\", getTransactionManagerUniqueName()); set(properties, \"serial_jta_transactions\", isSerialJtaTransactions()); set(properties, \"allow_subtransactions\", isAllowSubTransactions()); set(properties, \"force_shutdown_on_vm_exit\", isForceShutdownOnVmExit()); set(properties, \"log_base_name\", getLogBaseName()); set(properties, \"log_base_dir\", getLogBaseDir()); set(properties, \"checkpoint_interval\", getCheckpointInterval()); set(properties, \"console_log_level\", getConsoleLogLevel()); set(properties, \"output_dir\", getOutputDir()); set(properties, \"console_file_name\", getConsoleFileName()); set(properties, \"console_file_count\", getConsoleFileCount()); set(properties, \"console_file_limit\", getConsoleFileLimit()); set(properties, \"threaded_2pc\", isThreadedTwoPhaseCommit()); Recovery recovery = getRecovery(); set(properties, \"forget_orphaned_log_entries_delay\", recovery.getForgetOrphanedLogEntriesDelay()); set(properties, \"recovery_delay\", recovery.getDelay()); set(properties, \"oltp_max_retries\", recovery.getMaxRetries()); set(properties, \"oltp_retry_interval\", recovery.getRetryInterval()); return properties;\nCorpo de Right (R):\nProperties properties = new Properties(); set(properties, \"service\", getService()); set(properties, \"max_timeout\", getMaxTimeout()); set(properties, \"default_jta_timeout\", getDefaultJtaTimeout()); set(properties, \"max_actives\", getMaxActives()); set(properties, \"enable_logging\", isEnableLogging()); set(properties, \"tm_unique_name\", getTransactionManagerUniqueName()); set(properties, \"serial_jta_transactions\", isSerialJtaTransactions()); set(properties, \"force_shutdown_on_vm_exit\", isForceShutdownOnVmExit()); set(properties, \"log_base_name\", getLogBaseName()); set(properties, \"log_base_dir\", getLogBaseDir()); set(properties, \"checkpoint_interval\", getCheckpointInterval()); set(properties, \"threaded_2pc\", isThreadedTwoPhaseCommit()); return properties;\nResumo de Left: Left adds calls for method set, which adds values on the object properties.\nResumo de Right: Right removes calls for method set, which added values on the object properties.\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "6664ce1/AtomikosPropertiesTests.testProperties()",
+  "label": "-",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.7606
+  },
+  "v1/base": {
+   "T1": 0.9853
+  },
+  "v2/ajustado": {
+   "T1": 0.6655
+  },
+  "v2/base": {
+   "T1": 0.718
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.814,
+   "criterion_2_parent_change_loss": 0.8648,
+   "criterion_3_merge_new_effect": 0.8758
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9223,
+   "criterion_2_parent_change_loss": 0.9764,
+   "criterion_3_merge_new_effect": 0.9717
+  },
+  "state_v1": "Método: AtomikosPropertiesTests.testProperties()\nCorpo da base (B):\nthis.properties.setService(\"service\"); this.properties.setMaxTimeout(1L); this.properties.setDefaultJtaTimeout(2L); this.properties.setMaxActives(3); this.properties.setEnableLogging(true); this.properties.setTransactionManagerUniqueName(\"uniqueName\"); this.properties.setSerialJtaTransactions(true); this.properties.setForceShutdownOnVmExit(true); this.properties.setLogBaseName(\"logBaseName\"); this.properties.setLogBaseDir(\"logBaseDir\"); this.properties.setCheckpointInterval(4); this.properties.setConsoleLogLevel(AtomikosLoggingLevel.WARN); this.properties.setOutputDir(\"outputDir\"); this.properties.setConsoleFileName(\"consoleFileName\"); this.properties.setConsoleFileCount(5); this.properties.setConsoleFileLimit(6); this.properties.setThreadedTwoPhaseCommit(true); assertThat(this.properties.asProperties().size()).isEqualTo(17); assertProperty(\"com.atomikos.icatch.service\", \"service\"); assertProperty(\"com.atomikos.icatch.max_timeout\", \"1\"); assertProperty(\"com.atomikos.icatch.default_jta_timeout\", \"2\"); assertProperty(\"com.atomikos.icatch.max_actives\", \"3\"); assertProperty(\"com.atomikos.icatch.enable_logging\", \"true\"); assertProperty(\"com.atomikos.icatch.tm_unique_name\", \"uniqueName\"); assertProperty(\"com.atomikos.icatch.serial_jta_transactions\", \"true\"); assertProperty(\"com.atomikos.icatch.force_shutdown_on_vm_exit\", \"true\"); assertProperty(\"com.atomikos.icatch.log_base_name\", \"logBaseName\"); assertProperty(\"com.atomikos.icatch.log_base_dir\", \"logBaseDir\"); assertProperty(\"com.atomikos.icatch.checkpoint_interval\", \"4\"); assertProperty(\"com.atomikos.icatch.console_log_level\", \"WARN\"); assertProperty(\"com.atomikos.icatch.output_dir\", \"outputDir\"); assertProperty(\"com.atomikos.icatch.console_file_name\", \"consoleFileName\"); assertProperty(\"com.atomikos.icatch.console_file_count\", \"5\"); assertProperty(\"com.atomikos.icatch.console_file_limit\", \"6\"); assertProperty(\"com.atomikos.icatch.threaded_2pc\", \"true\");\nCorpo de Left (L):\nthis.properties.setService(\"service\"); this.properties.setMaxTimeout(1L); this.properties.setDefaultJtaTimeout(2L); this.properties.setMaxActives(3); this.properties.setEnableLogging(true); this.properties.setTransactionManagerUniqueName(\"uniqueName\"); this.properties.setSerialJtaTransactions(true); this.properties.setAllowSubTransactions(false); this.properties.setForceShutdownOnVmExit(true); this.properties.setLogBaseName(\"logBaseName\"); this.properties.setLogBaseDir(\"logBaseDir\"); this.properties.setCheckpointInterval(4); this.properties.setConsoleLogLevel(AtomikosLoggingLevel.WARN); this.properties.setOutputDir(\"outputDir\"); this.properties.setConsoleFileName(\"consoleFileName\"); this.properties.setConsoleFileCount(5); this.properties.setConsoleFileLimit(6); this.properties.setThreadedTwoPhaseCommit(true); this.properties.getRecovery().setForgetOrphanedLogEntriesDelay(2000); this.properties.getRecovery().setDelay(3000); this.properties.getRecovery().setMaxRetries(10); this.properties.getRecovery().setRetryInterval(4000); assertThat(this.properties.asProperties().size()).isEqualTo(22); assertProperty(\"com.atomikos.icatch.service\", \"service\"); assertProperty(\"com.atomikos.icatch.max_timeout\", \"1\"); assertProperty(\"com.atomikos.icatch.default_jta_timeout\", \"2\"); assertProperty(\"com.atomikos.icatch.max_actives\", \"3\"); assertProperty(\"com.atomikos.icatch.enable_logging\", \"true\"); assertProperty(\"com.atomikos.icatch.tm_unique_name\", \"uniqueName\"); assertProperty(\"com.atomikos.icatch.serial_jta_transactions\", \"true\"); assertProperty(\"com.atomikos.icatch.allow_subtransactions\", \"false\"); assertProperty(\"com.atomikos.icatch.force_shutdown_on_vm_exit\", \"true\"); assertProperty(\"com.atomikos.icatch.log_base_name\", \"logBaseName\"); assertProperty(\"com.atomikos.icatch.log_base_dir\", \"logBaseDir\"); assertProperty(\"com.atomikos.icatch.checkpoint_interval\", \"4\"); assertProperty(\"com.atomikos.icatch.console_log_level\", \"WARN\"); assertProperty(\"com.atomikos.icatch.output_dir\", \"outputDir\"); assertProperty(\"com.atomikos.icatch.console_file_name\", \"consoleFileName\"); assertProperty(\"com.atomikos.icatch.console_file_count\", \"5\"); assertProperty(\"com.atomikos.icatch.console_file_limit\", \"6\"); assertProperty(\"com.atomikos.icatch.threaded_2pc\", \"true\"); assertProperty(\"com.atomikos.icatch.forget_orphaned_log_entries_delay\", \"2000\"); assertProperty(\"com.atomikos.icatch.recovery_delay\", \"3000\"); assertProperty(\"com.atomikos.icatch.oltp_max_retries\", \"10\"); assertProperty(\"com.atomikos.icatch.oltp_retry_interval\", \"4000\");\nCorpo de Right (R):\nthis.properties.setService(\"service\"); this.properties.setMaxTimeout(1L); this.properties.setDefaultJtaTimeout(2L); this.properties.setMaxActives(3); this.properties.setEnableLogging(true); this.properties.setTransactionManagerUniqueName(\"uniqueName\"); this.properties.setSerialJtaTransactions(true); this.properties.setForceShutdownOnVmExit(true); this.properties.setLogBaseName(\"logBaseName\"); this.properties.setLogBaseDir(\"logBaseDir\"); this.properties.setCheckpointInterval(4); this.properties.setThreadedTwoPhaseCommit(true); assertThat(this.properties.asProperties().size()).isEqualTo(12); assertProperty(\"com.atomikos.icatch.service\", \"service\"); assertProperty(\"com.atomikos.icatch.max_timeout\", \"1\"); assertProperty(\"com.atomikos.icatch.default_jta_timeout\", \"2\"); assertProperty(\"com.atomikos.icatch.max_actives\", \"3\"); assertProperty(\"com.atomikos.icatch.enable_logging\", \"true\"); assertProperty(\"com.atomikos.icatch.tm_unique_name\", \"uniqueName\"); assertProperty(\"com.atomikos.icatch.serial_jta_transactions\", \"true\"); assertProperty(\"com.atomikos.icatch.force_shutdown_on_vm_exit\", \"true\"); assertProperty(\"com.atomikos.icatch.log_base_name\", \"logBaseName\"); assertProperty(\"com.atomikos.icatch.log_base_dir\", \"logBaseDir\"); assertProperty(\"com.atomikos.icatch.checkpoint_interval\", \"4\"); assertProperty(\"com.atomikos.icatch.threaded_2pc\", \"true\");\nResumo de Left: Left sets five new properties of the object properties (field), and consequently updates the expected value of first assertion.\nResumo de Right: Right removes five properties of the object properties (field), and consequently updates the expected value of first assertion.\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "6664ce1/AtomikosPropertiesTests.testDefaultProperties()",
+  "label": "-",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.7212
+  },
+  "v1/base": {
+   "T1": 0.976
+  },
+  "v2/ajustado": {
+   "T1": 0.7826
+  },
+  "v2/base": {
+   "T1": 0.6616
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.792,
+   "criterion_2_parent_change_loss": 0.8764,
+   "criterion_3_merge_new_effect": 0.8728
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8847,
+   "criterion_2_parent_change_loss": 0.9663,
+   "criterion_3_merge_new_effect": 0.9787
+  },
+  "state_v1": "Método: AtomikosPropertiesTests.testDefaultProperties()\nCorpo da base (B):\nProperties defaultSettings = loadDefaultSettings(); Properties properties = this.properties.asProperties(); assertThat(properties).contains(defaultOf(defaultSettings, \"com.atomikos.icatch.max_timeout\", \"com.atomikos.icatch.default_jta_timeout\", \"com.atomikos.icatch.max_actives\", \"com.atomikos.icatch.enable_logging\", \"com.atomikos.icatch.serial_jta_transactions\", \"com.atomikos.icatch.force_shutdown_on_vm_exit\", \"com.atomikos.icatch.log_base_name\", \"com.atomikos.icatch.checkpoint_interval\", \"com.atomikos.icatch.threaded_2pc\")); assertThat(properties).contains( entry(\"com.atomikos.icatch.console_log_level\", \"WARN\"), entry(\"com.atomikos.icatch.console_file_name\", \"tm.out\"), entry(\"com.atomikos.icatch.console_file_count\", \"1\"), entry(\"com.atomikos.icatch.console_file_limit\", \"-1\")); assertThat(properties).hasSize(13);\nCorpo de Left (L):\nProperties defaultSettings = loadDefaultSettings(); Properties properties = this.properties.asProperties(); assertThat(properties).contains(defaultOf(defaultSettings, \"com.atomikos.icatch.max_timeout\", \"com.atomikos.icatch.default_jta_timeout\", \"com.atomikos.icatch.max_actives\", \"com.atomikos.icatch.enable_logging\", \"com.atomikos.icatch.serial_jta_transactions\", \"com.atomikos.icatch.allow_subtransactions\", \"com.atomikos.icatch.force_shutdown_on_vm_exit\", \"com.atomikos.icatch.log_base_name\", \"com.atomikos.icatch.checkpoint_interval\", \"com.atomikos.icatch.threaded_2pc\", \"com.atomikos.icatch.forget_orphaned_log_entries_delay\", \"com.atomikos.icatch.oltp_max_retries\", \"com.atomikos.icatch.oltp_retry_interval\")); assertThat(properties).contains( entry(\"com.atomikos.icatch.recovery_delay\", defaultSettings.get( \"com.atomikos.icatch.default_jta_timeout\")), entry(\"com.atomikos.icatch.console_log_level\", \"WARN\"), entry(\"com.atomikos.icatch.console_file_name\", \"tm.out\"), entry(\"com.atomikos.icatch.console_file_count\", \"1\"), entry(\"com.atomikos.icatch.console_file_limit\", \"-1\")); assertThat(properties).hasSize(18);\nCorpo de Right (R):\nProperties defaultSettings = loadDefaultSettings(); Properties properties = this.properties.asProperties(); assertThat(properties).contains(defaultOf(defaultSettings, \"com.atomikos.icatch.max_timeout\", \"com.atomikos.icatch.default_jta_timeout\", \"com.atomikos.icatch.max_actives\", \"com.atomikos.icatch.enable_logging\", \"com.atomikos.icatch.serial_jta_transactions\", \"com.atomikos.icatch.force_shutdown_on_vm_exit\", \"com.atomikos.icatch.log_base_name\", \"com.atomikos.icatch.checkpoint_interval\", \"com.atomikos.icatch.threaded_2pc\")); assertThat(properties).hasSize(9);\nResumo de Left: Added some attributes for a test, changing the quantity of the parameters and the key.length() attribute.\nResumo de Right: Removed some attributes for a test, changing the quantity of the parameters and the key.length() attribute.\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "af20dc6/ExplodedArchive.getUrl()",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.1149
+  },
+  "v1/base": {
+   "T1": 0.9708
+  },
+  "v2/ajustado": {
+   "T1": 0.127
+  },
+  "v2/base": {
+   "T1": 0.9824
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.2884,
+   "criterion_2_parent_change_loss": 0.4056,
+   "criterion_3_merge_new_effect": 0.6163
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8806,
+   "criterion_2_parent_change_loss": 0.9483,
+   "criterion_3_merge_new_effect": 0.9647
+  },
+  "state_v1": "Método: ExplodedArchive.getUrl()\nCorpo da base (B):\nFilteredURLStreamHandler handler = this.filtered ? new FilteredURLStreamHandler() : null; return new URL(\"file\", \"\", -1, this.root.toURI().getPath(), handler);\nCorpo de Left (L):\nreturn new URL(\"file\", \"\", -1, this.root.toURI().getPath());\nCorpo de Right (R):\nFilteredURLStreamHandler handler = this.filtered ? new FilteredURLStreamHandler() : null; return new URL(\"file\", \"\", -1, this.root.toURI().toURL().getPath(), handler);\nResumo de Left: Left removes one parameter (handler) for the new URL object, that is returned by the method.\nResumo de Right: Right updates one parameter used to create the URL object that is returned by the method, by calling toURL()\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "af20dc6/ExplodedArchiveTests.getUrl()",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.214
+  },
+  "v1/base": {
+   "T1": 0.9978
+  },
+  "v2/ajustado": {
+   "T1": 0.1718
+  },
+  "v2/base": {
+   "T1": 0.9976
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.8418,
+   "criterion_2_parent_change_loss": 0.8767,
+   "criterion_3_merge_new_effect": 0.8817
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.9416,
+   "criterion_2_parent_change_loss": 0.9941,
+   "criterion_3_merge_new_effect": 0.9949
+  },
+  "state_v1": "Método: ExplodedArchiveTests.getUrl()\nCorpo da base (B):\nURL url = this.archive.getUrl(); assertThat(new File(URLDecoder.decode(url.getFile(), \"UTF-8\")), equalTo(this.rootFolder));\nCorpo de Left (L):\nURL url = this.archive.getUrl(); assertThat(new File(URLDecoder.decode(url.getFile(), \"UTF-8\"))) .isEqualTo(this.rootFolder);\nCorpo de Right (R):\nassertThat(this.archive.getUrl(), equalTo(this.rootFolder.toURI().toURL()));\nResumo de Left: Equals to the base class\nResumo de Right: Changed a test assert\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "ea8107b/UndertowEmbeddedServletContainerFactory.createDeploymentManager(ServletContextInitializer)",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.8666
+  },
+  "v1/base": {
+   "T1": 0.9797
+  },
+  "v2/ajustado": {
+   "T1": 0.8702
+  },
+  "v2/base": {
+   "T1": 0.9815
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.826,
+   "criterion_2_parent_change_loss": 0.8536,
+   "criterion_3_merge_new_effect": 0.8638
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.909,
+   "criterion_2_parent_change_loss": 0.9349,
+   "criterion_3_merge_new_effect": 0.954
+  },
+  "state_v1": "Método: UndertowEmbeddedServletContainerFactory.createDeploymentManager(ServletContextInitializer)\nCorpo da base (B):\nDeploymentInfo deployment = Servlets.deployment(); registerServletContainerInitializerToDriveServletContextInitializers(deployment, initializers); deployment.setClassLoader(getServletClassLoader()); deployment.setContextPath(getContextPath()); deployment.setDeploymentName(\"spring-boot\"); if (isRegisterDefaultServlet()) { deployment.addServlet(Servlets.servlet(\"default\", DefaultServlet.class)); } configureErrorPages(deployment); deployment.setServletStackTraces(ServletStackTraces.NONE); deployment.setResourceManager(getDocumentRootResourceManager()); configureMimeMappings(deployment); for (UndertowDeploymentInfoCustomizer customizer : this.deploymentInfoCustomizers) { customizer.customize(deployment); } DeploymentManager manager = Servlets.defaultContainer().addDeployment(deployment); manager.deploy(); SessionManager sessionManager = manager.getDeployment().getSessionManager(); int sessionTimeout = (getSessionTimeout() > 0 ? getSessionTimeout() : -1); sessionManager.setDefaultSessionTimeout(sessionTimeout); return manager;\nCorpo de Left (L):\nDeploymentInfo deployment = Servlets.deployment(); registerServletContainerInitializerToDriveServletContextInitializers(deployment, initializers); deployment.setClassLoader(getServletClassLoader()); deployment.setContextPath(getContextPath()); deployment.setDisplayName(getDisplayName()); deployment.setDeploymentName(\"spring-boot\"); if (isRegisterDefaultServlet()) { deployment.addServlet(Servlets.servlet(\"default\", DefaultServlet.class)); } configureErrorPages(deployment); deployment.setServletStackTraces(ServletStackTraces.NONE); deployment.setResourceManager(getDocumentRootResourceManager()); configureMimeMappings(deployment); for (UndertowDeploymentInfoCustomizer customizer : this.deploymentInfoCustomizers) { customizer.customize(deployment); } if (isAccessLogEnabled()) { configureAccessLog(deployment); } if (isPersistSession()) { File dir = getValidSessionStoreDir(); deployment.setSessionPersistenceManager(new FileSessionPersistence(dir)); } DeploymentManager manager = Servlets.defaultContainer().addDeployment(deployment); manager.deploy(); SessionManager sessionManager = manager.getDeployment().getSessionManager(); int sessionTimeout = (getSessionTimeout() > 0 ? getSessionTimeout() : -1); sessionManager.setDefaultSessionTimeout(sessionTimeout); return manager;\nCorpo de Right (R):\nDeploymentInfo deployment = Servlets.deployment(); registerServletContainerInitializerToDriveServletContextInitializers(deployment, initializers); deployment.setClassLoader(getServletClassLoader()); deployment.setContextPath(getContextPath()); deployment.setDeploymentName(\"spring-boot\"); if (isRegisterDefaultServlet()) { deployment.addServlet(Servlets.servlet(\"default\", DefaultServlet.class)); } configureErrorPages(deployment); deployment.setServletStackTraces(ServletStackTraces.NONE); deployment.setResourceManager(getDocumentRootResourceManager()); configureMimeMappings(deployment); for (UndertowDeploymentInfoCustomizer customizer : this.deploymentInfoCustomizers) { customizer.customize(deployment); } DeploymentManager manager = Servlets.newContainer().addDeployment(deployment); manager.deploy(); SessionManager sessionManager = manager.getDeployment().getSessionManager(); int sessionTimeout = (getSessionTimeout() > 0 ? getSessionTimeout() : -1); sessionManager.setDefaultSessionTimeout(sessionTimeout); return manager;\nResumo de Left: Left sets one attribute of object deployment, which is used to create the returned method object manager.\nResumo de Right: Right modifies the way the returned manager object is created; before, it was done by calling the method defaultContainer from Servlets, and now it’s done by calling the method newContainer.\nAtributos: nenhum\nConstrutores: padrão"
+ },
+ {
+  "set": "mergedataset",
+  "id": "fdd3f12/AutoConfigurationReportLoggingInitializer.logAutoConfigurationReport(boolean)",
+  "label": "No",
+  "criteria": [],
+  "empty_body": [],
+  "v1/ajustado": {
+   "T1": 0.4231
+  },
+  "v1/base": {
+   "T1": 0.9878
+  },
+  "v2/ajustado": {
+   "T1": 0.3088
+  },
+  "v2/base": {
+   "T1": 0.9887
+  },
+  "v3/ajustado": {
+   "criterion_1_global_divergence": 0.725,
+   "criterion_2_parent_change_loss": 0.8533,
+   "criterion_3_merge_new_effect": 0.8777
+  },
+  "v3/base": {
+   "criterion_1_global_divergence": 0.8241,
+   "criterion_2_parent_change_loss": 0.9517,
+   "criterion_3_merge_new_effect": 0.9644
+  },
+  "state_v1": "Método: AutoConfigurationReportLoggingInitializer.logAutoConfigurationReport(boolean)\nCorpo da base (B):\nlogAutoConfigurationReport(!this.applicationContext.isActive());\nCorpo de Left (L):\nlogAutoConfigurationReport(!this.applicationContext.isActive());\nCorpo de Right (R):\nlogAutoConfigurationReport(!this.applicationContext.isActive());\nResumo de Left: Change the string sent as a parameter to the logger.debug method\nResumo de Right: Change the string sent as a parameter to the logger.info method\nAtributos: nenhum\nConstrutores: padrão"
+ }
+]

@@ -93,6 +93,10 @@ interface LayaJson {
   confidence_score?: number | null;
   probabilities?: Record<string, number | null>;
   criteria?: Record<string, LayaCriterionJson>;
+  evidence?: Record<string, string> | null;
+  summary?: string | null;
+  reasoning?: string | null;
+  provider?: string | null;
   error?: string | null;
   note?: string | null;
 }
@@ -452,6 +456,10 @@ function toLayaRecord(raw: LayaJson): LayaRecord {
       raw.affected_branch ?? raw.affectedBranch ?? null,
     confidence,
     probabilities,
+    evidence: raw.evidence ?? undefined,
+    summary: raw.summary ?? undefined,
+    reasoning: raw.reasoning ?? undefined,
+    provider: raw.provider ?? undefined,
     error: raw.error ?? null,
     note: raw.note ?? null,
   };
@@ -475,7 +483,9 @@ async function buildLayaSummary(
       id.replace(/^run_/, ""),
     fileCount,
     interference: records.filter(
-      (record) => record.classification === "interference",
+      (record) =>
+        record.classification === "interference" ||
+        record.classification === "possible_interference",
     ).length,
     noInterference: records.filter(
       (record) => record.classification === "no_interference",
@@ -582,13 +592,16 @@ export async function listLayaLogs(): Promise<LayaLogFile[]> {
   return files.sort((a, b) => b.modified.localeCompare(a.modified));
 }
 
-async function readJsonl(file: string): Promise<LayaJson[]> {
+async function readJsonl(
+  file: string,
+  logPrefix: string,
+): Promise<LayaJson[]> {
   try {
     const text = await fs.readFile(file, "utf8");
-    const runId = path
-      .basename(file)
-      .replace(/^laya_interference_/, "")
-      .replace(/\.jsonl$/, "");
+    const baseName = path.basename(file).replace(/\.jsonl$/, "");
+    const runId = baseName.startsWith(`${logPrefix}_`)
+      ? baseName.slice(logPrefix.length + 1)
+      : baseName;
 
     return text.split(/\r?\n/).flatMap((line) => {
       if (!line.trim()) return [];
@@ -604,8 +617,25 @@ async function readJsonl(file: string): Promise<LayaJson[]> {
   }
 }
 
-async function loadAllLayaRecords(): Promise<LayaRecord[]> {
-  const root = path.join(getOutputRoot(), "reports", "laya");
+interface FlowReportSource {
+  root: string;
+  logPrefix: string;
+}
+
+const LAYA_REPORT_SOURCE: FlowReportSource = {
+  root: "laya",
+  logPrefix: "laya_interference",
+};
+
+const LLM_REPORT_SOURCE: FlowReportSource = {
+  root: "llm_interference",
+  logPrefix: "llm_interference",
+};
+
+async function loadFlowRecords(
+  source: FlowReportSource,
+): Promise<LayaRecord[]> {
+  const root = path.join(getOutputRoot(), "reports", source.root);
   const records: LayaRecord[] = [];
   const classificationRoot = path.join(root, "classification");
 
@@ -631,25 +661,65 @@ async function loadAllLayaRecords(): Promise<LayaRecord[]> {
   );
 
   for (const logFile of logFiles) {
-    const parsed = await readJsonl(path.join(root, logFile.name));
+    const parsed = await readJsonl(
+      path.join(root, logFile.name),
+      source.logPrefix,
+    );
     for (const raw of parsed) records.push(toLayaRecord(raw));
   }
 
-  const seen = new Set<string>();
-  return records.filter((record) => {
+  const byAssessment = new Map<string, LayaRecord>();
+
+  for (const record of records) {
     const key = [
       record.runId ?? "",
-      record.timestamp ?? "",
       record.project ?? "",
       record.className ?? "",
       record.method ?? "",
       record.methodSignature ?? "",
     ].join("|");
 
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+    const existing = byAssessment.get(key);
+    if (!existing) {
+      byAssessment.set(key, record);
+      continue;
+    }
+
+    byAssessment.set(key, {
+      ...existing,
+      ...record,
+      classification: existing.classification ?? record.classification,
+      triggeredCriteria:
+        existing.triggeredCriteria.length > 0
+          ? existing.triggeredCriteria
+          : record.triggeredCriteria,
+      primaryCriterion:
+        existing.primaryCriterion ?? record.primaryCriterion,
+      affectedBranch:
+        existing.affectedBranch ?? record.affectedBranch,
+      confidence: existing.confidence ?? record.confidence,
+      probabilities: {
+        ...record.probabilities,
+        ...existing.probabilities,
+      },
+      evidence: existing.evidence ?? record.evidence,
+      summary: existing.summary ?? record.summary,
+      reasoning: existing.reasoning ?? record.reasoning,
+      provider: existing.provider ?? record.provider,
+      error: existing.error ?? record.error,
+      note: existing.note ?? record.note,
+    });
+  }
+
+  return Array.from(byAssessment.values());
+}
+
+async function loadAllLayaRecords(): Promise<LayaRecord[]> {
+  return loadFlowRecords(LAYA_REPORT_SOURCE);
+}
+
+async function loadAllLlmRecords(): Promise<LayaRecord[]> {
+  return loadFlowRecords(LLM_REPORT_SOURCE);
 }
 
 function simpleClassName(value?: string | null): string {
@@ -701,8 +771,14 @@ function summarizeLayaRecords(
   const interference = records.some(
     (record) => record.classification === "interference",
   );
+  const possibleInterference = records.some(
+    (record) => record.classification === "possible_interference",
+  );
   const noInterference = records.some(
     (record) => record.classification === "no_interference",
+  );
+  const noSignal = records.some(
+    (record) => record.classification === "no_signal",
   );
   const errorRecords = records.filter(
     (record) => record.classification === "error" || record.error,
@@ -738,11 +814,15 @@ function summarizeLayaRecords(
   return {
     status: interference
       ? "interference"
-      : noInterference
-        ? "no_interference"
-        : errorRecords.length > 0
-          ? "error"
-          : "no_data",
+      : possibleInterference
+        ? "possible_interference"
+        : noInterference
+          ? "no_interference"
+          : errorRecords.length > 0
+            ? "error"
+            : noSignal
+              ? "no_signal"
+              : "no_data",
     criteria: Array.from(criteriaSet),
     primaryCriteria: Array.from(primarySet),
     records,
@@ -753,10 +833,89 @@ function summarizeLayaRecords(
   };
 }
 
-export async function getLayaSummariesForScenarios(
+function parseRunIdTimestamp(runId?: string | null): number | null {
+  if (!runId) return null;
+  const match = runId.match(/(\d{8})_(\d{6})_(\d{6})$/);
+  if (!match) return null;
+
+  const [, date, time, micros] = match;
+  const year = Number(date.slice(0, 4));
+  const month = Number(date.slice(4, 6));
+  const day = Number(date.slice(6, 8));
+  const hour = Number(time.slice(0, 2));
+  const minute = Number(time.slice(2, 4));
+  const second = Number(time.slice(4, 6));
+
+  return new Date(
+    year,
+    month - 1,
+    day,
+    hour,
+    minute,
+    second,
+    Number(micros) / 1000,
+  ).getTime();
+}
+
+function recordTimestamp(record: LayaRecord): number | null {
+  const fromRunId = parseRunIdTimestamp(record.runId);
+  if (fromRunId != null) return fromRunId;
+  if (!record.timestamp) return null;
+
+  const parsed = Date.parse(record.timestamp);
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+interface ExecutionRunWindow {
+  start: number;
+  end: number | null;
+}
+
+async function getExecutionRunWindow(
+  runId: string,
+): Promise<ExecutionRunWindow | null> {
+  const start = parseRunIdTimestamp(runId);
+  if (start == null) return null;
+
+  const scenariosRoot = path.join(getOutputRoot(), "scenarios");
+  const entries = await listDir(scenariosRoot);
+  const timestamps = entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => parseRunIdTimestamp(entry.name))
+    .filter((value): value is number => value != null)
+    .sort((a, b) => a - b);
+
+  return {
+    start,
+    end: timestamps.find((timestamp) => timestamp > start) ?? null,
+  };
+}
+
+function isInExecutionWindow(
+  record: LayaRecord,
+  window: ExecutionRunWindow,
+): boolean {
+  const timestamp = recordTimestamp(record);
+  if (timestamp == null) return false;
+  return (
+    timestamp >= window.start &&
+    (window.end == null || timestamp < window.end)
+  );
+}
+
+type FlowRecordLoader = () => Promise<LayaRecord[]>;
+
+async function getFlowSummariesForScenarios(
   scenarios: ScenarioSummary[],
+  runId: string,
+  loadRecords: FlowRecordLoader,
 ): Promise<Record<string, LayaScenarioSummary>> {
-  const records = await loadAllLayaRecords();
+  const window = await getExecutionRunWindow(runId);
+  const records = window
+    ? (await loadRecords()).filter((record) =>
+        isInExecutionWindow(record, window),
+      )
+    : [];
   const summaries: Record<string, LayaScenarioSummary> = {};
 
   for (const scenario of scenarios) {
@@ -769,12 +928,63 @@ export async function getLayaSummariesForScenarios(
   return summaries;
 }
 
-export async function getLayaSummaryForScenario(
+async function getFlowSummaryForScenario(
   scenario: ScenarioSummary,
+  runId: string,
+  loadRecords: FlowRecordLoader,
 ): Promise<LayaScenarioSummary> {
-  const records = await loadAllLayaRecords();
+  const window = await getExecutionRunWindow(runId);
+  if (!window) return summarizeLayaRecords([]);
+
+  const records = (await loadRecords()).filter((record) =>
+    isInExecutionWindow(record, window),
+  );
   return summarizeLayaRecords(
     records.filter((record) => matchesScenario(record, scenario)),
+  );
+}
+
+export async function getLayaSummariesForScenarios(
+  scenarios: ScenarioSummary[],
+  runId: string,
+): Promise<Record<string, LayaScenarioSummary>> {
+  return getFlowSummariesForScenarios(
+    scenarios,
+    runId,
+    loadAllLayaRecords,
+  );
+}
+
+export async function getLlmSummariesForScenarios(
+  scenarios: ScenarioSummary[],
+  runId: string,
+): Promise<Record<string, LayaScenarioSummary>> {
+  return getFlowSummariesForScenarios(
+    scenarios,
+    runId,
+    loadAllLlmRecords,
+  );
+}
+
+export async function getLayaSummaryForScenario(
+  scenario: ScenarioSummary,
+  runId: string,
+): Promise<LayaScenarioSummary> {
+  return getFlowSummaryForScenario(
+    scenario,
+    runId,
+    loadAllLayaRecords,
+  );
+}
+
+export async function getLlmSummaryForScenario(
+  scenario: ScenarioSummary,
+  runId: string,
+): Promise<LayaScenarioSummary> {
+  return getFlowSummaryForScenario(
+    scenario,
+    runId,
+    loadAllLlmRecords,
   );
 }
 

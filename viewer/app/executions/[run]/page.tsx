@@ -14,6 +14,7 @@ import { formatDate, formatNumber } from "@/lib/format";
 import {
   getExecution,
   getLayaSummariesForScenarios,
+  getLlmSummariesForScenarios,
 } from "@/lib/smat-data";
 
 export const dynamic = "force-dynamic";
@@ -32,9 +33,11 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
     (total, scenario) => total + scenario.missingSources.length,
     0,
   );
-  const layaSummaries = await getLayaSummariesForScenarios(
-    execution.scenarios,
-  );
+  const executionRunId = execution.summary.runId || execution.summary.id;
+  const [layaSummaries, llmSummaries] = await Promise.all([
+    getLayaSummariesForScenarios(execution.scenarios, executionRunId),
+    getLlmSummariesForScenarios(execution.scenarios, executionRunId),
+  ]);
 
   return (
     <div className="space-y-8">
@@ -122,6 +125,7 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
             executionId={execution.summary.id}
             scenarios={execution.scenarios}
             layaSummaries={layaSummaries}
+            llmSummaries={llmSummaries}
           />
         ) : (
           <EmptyState

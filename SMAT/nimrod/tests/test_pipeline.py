@@ -14,6 +14,30 @@ def make_scenario(run_analysis=True):
 
 
 class PipelineOrchestrationTest(unittest.TestCase):
+    def test_laya_llm_and_dynamic_run_in_order(self):
+        call_order = []
+        laya_flow = Mock()
+        laya_flow.run_for_scenario.side_effect = lambda scenario: call_order.append(
+            "laya"
+        )
+        llm_flow = Mock()
+        llm_flow.run_for_scenario.side_effect = lambda scenario: call_order.append(
+            "llm"
+        )
+        dynamic_flow = Mock()
+        dynamic_flow.run_tool_for_semmantic_conflict_detection.side_effect = (
+            lambda scenario: call_order.append("dynamic")
+        )
+
+        run_scenarios(
+            [make_scenario()],
+            laya_flow=laya_flow,
+            llm_flow=llm_flow,
+            dynamic_flow=dynamic_flow,
+        )
+
+        self.assertEqual(call_order, ["laya", "llm", "dynamic"])
+
     def test_laya_runs_before_dynamic_detection(self):
         call_order = []
         laya_flow = Mock()
@@ -32,6 +56,14 @@ class PipelineOrchestrationTest(unittest.TestCase):
         )
 
         self.assertEqual(call_order, ["laya", "dynamic"])
+
+    def test_can_run_only_llm(self):
+        llm_flow = Mock()
+        scenario = make_scenario()
+
+        run_scenarios([scenario], llm_flow=llm_flow)
+
+        llm_flow.run_for_scenario.assert_called_once_with(scenario)
 
     def test_can_run_only_laya(self):
         laya_flow = Mock()
@@ -81,6 +113,15 @@ class LayaFlowBuilderTest(unittest.TestCase):
 
         self.assertTrue(
             flow.log_dir.endswith(os.path.join("reports", "laya")),
+            flow.log_dir,
+        )
+
+    def test_build_llm_flow_uses_reports_llm_interference_directory(self):
+        with patch.dict(os.environ, {}, clear=True):
+            flow = smat_main._build_llm_flow()
+
+        self.assertTrue(
+            flow.log_dir.endswith(os.path.join("reports", "llm_interference")),
             flow.log_dir,
         )
 

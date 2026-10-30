@@ -1,0 +1,678 @@
+[
+  {
+    "project": "sintetico",
+    "commit": "n01_mapa_chaves_distintas",
+    "class": "demo.TableTypes",
+    "method": "init()",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "get(a)": "A",
+        "get(b)": "B",
+        "get(c)": "C",
+        "get(d)": "D",
+        "get(e)": "null"
+      },
+      "left": {
+        "get(a)": "null",
+        "get(b)": "null",
+        "get(c)": "C",
+        "get(d)": "D",
+        "get(e)": "null"
+      },
+      "right": {
+        "get(a)": "A",
+        "get(b)": "B",
+        "get(c)": "C",
+        "get(d)": "D",
+        "get(e)": "E"
+      },
+      "merge": {
+        "get(a)": "null",
+        "get(b)": "null",
+        "get(c)": "C",
+        "get(d)": "D",
+        "get(e)": "E"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n02_texto_ordem_independente",
+    "class": "demo.Text",
+    "method": "cleanText()",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "hasDoubleSpace": "true",
+        "hasDuplicateWord": "true"
+      },
+      "left": {
+        "hasDoubleSpace": "false",
+        "hasDuplicateWord": "true"
+      },
+      "right": {
+        "hasDoubleSpace": "true",
+        "hasDuplicateWord": "false"
+      },
+      "merge": {
+        "hasDoubleSpace": "false",
+        "hasDuplicateWord": "false"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n03_mesma_mudanca_dos_dois_lados",
+    "class": "demo.TaxCalculator",
+    "method": "apply(int)",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "tax": "20",
+        "net": "180"
+      },
+      "left": {
+        "tax": "40",
+        "net": "160"
+      },
+      "right": {
+        "tax": "40",
+        "net": "160"
+      },
+      "merge": {
+        "tax": "40",
+        "net": "160"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n04_campos_independentes",
+    "class": "demo.Cart",
+    "method": "checkout(int,int)",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "subtotal": "120",
+        "shipping": "10"
+      },
+      "left": {
+        "subtotal": "108",
+        "shipping": "10"
+      },
+      "right": {
+        "subtotal": "120",
+        "shipping": "0"
+      },
+      "merge": {
+        "subtotal": "108",
+        "shipping": "0"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n05_mudanca_so_de_um_lado",
+    "class": "demo.Counter",
+    "method": "increment()",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "value": "1",
+        "steps": "1"
+      },
+      "left": {
+        "value": "2",
+        "steps": "1"
+      },
+      "right": {
+        "value": "1",
+        "steps": "1"
+      },
+      "merge": {
+        "value": "2",
+        "steps": "1"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n06_refatoracao_e_comportamento",
+    "class": "demo.Limiter",
+    "method": "allowed(int)",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "allowed(15)": "10",
+        "allowed(-3)": "-3"
+      },
+      "left": {
+        "allowed(15)": "10",
+        "allowed(-3)": "-3"
+      },
+      "right": {
+        "allowed(15)": "10",
+        "allowed(-3)": "0"
+      },
+      "merge": {
+        "allowed(15)": "10",
+        "allowed(-3)": "0"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n07_validacao_em_entradas_distintas",
+    "class": "demo.Validator",
+    "method": "valid(java.lang.String)",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "valid(null)": "EXC",
+        "valid(\" a \")": "true"
+      },
+      "left": {
+        "valid(null)": "false",
+        "valid(\" a \")": "true"
+      },
+      "right": {
+        "valid(null)": "EXC",
+        "valid(\" a \")": "false"
+      },
+      "merge": {
+        "valid(null)": "false",
+        "valid(\" a \")": "false"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "n08_casos_novos_no_switch",
+    "class": "demo.OrderLabel",
+    "method": "label(java.lang.String)",
+    "label": "No",
+    "interference": false,
+    "criteria": [],
+    "elements": {},
+    "observed": {
+      "base": {
+        "label(NEW)": "Novo",
+        "label(PAID)": "Pago",
+        "label(CANCELLED)": "Desconhecido",
+        "label(SHIPPED)": "Desconhecido"
+      },
+      "left": {
+        "label(NEW)": "Novo",
+        "label(PAID)": "Pago",
+        "label(CANCELLED)": "Cancelado",
+        "label(SHIPPED)": "Desconhecido"
+      },
+      "right": {
+        "label(NEW)": "Novo",
+        "label(PAID)": "Pago",
+        "label(CANCELLED)": "Desconhecido",
+        "label(SHIPPED)": "Enviado"
+      },
+      "merge": {
+        "label(NEW)": "Novo",
+        "label(PAID)": "Pago",
+        "label(CANCELLED)": "Cancelado",
+        "label(SHIPPED)": "Enviado"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c2a_lista_acumulada",
+    "class": "demo.Keywords",
+    "method": "init()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C2"
+    ],
+    "elements": {
+      "C2": [
+        "size"
+      ]
+    },
+    "observed": {
+      "base": {
+        "size": "3",
+        "contains(while)": "false",
+        "contains(for)": "false"
+      },
+      "left": {
+        "size": "4",
+        "contains(while)": "true",
+        "contains(for)": "false"
+      },
+      "right": {
+        "size": "4",
+        "contains(while)": "false",
+        "contains(for)": "true"
+      },
+      "merge": {
+        "size": "5",
+        "contains(while)": "true",
+        "contains(for)": "true"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c2b_taxa_e_arredondamento",
+    "class": "demo.Invoice",
+    "method": "compute()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C2"
+    ],
+    "elements": {
+      "C2": [
+        "total"
+      ]
+    },
+    "observed": {
+      "base": {
+        "total": "40"
+      },
+      "left": {
+        "total": "45"
+      },
+      "right": {
+        "total": "40"
+      },
+      "merge": {
+        "total": "50"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c2c_texto_espacos_duplicados",
+    "class": "demo.TextCleaner",
+    "method": "cleanText()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C2"
+    ],
+    "elements": {
+      "C2": [
+        "hasDoubleSpace"
+      ]
+    },
+    "observed": {
+      "base": {
+        "hasDoubleSpace": "true",
+        "hasDuplicateWord": "true"
+      },
+      "left": {
+        "hasDoubleSpace": "false",
+        "hasDuplicateWord": "true"
+      },
+      "right": {
+        "hasDoubleSpace": "true",
+        "hasDuplicateWord": "false"
+      },
+      "merge": {
+        "hasDoubleSpace": "true",
+        "hasDuplicateWord": "false"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c2d_guarda_nula_antes_do_trim",
+    "class": "demo.NameCheck",
+    "method": "valid(java.lang.String)",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C2"
+    ],
+    "elements": {
+      "C2": [
+        "valid(null)"
+      ]
+    },
+    "observed": {
+      "base": {
+        "valid(null)": "EXC",
+        "valid(\" a \")": "true"
+      },
+      "left": {
+        "valid(null)": "false",
+        "valid(\" a \")": "true"
+      },
+      "right": {
+        "valid(null)": "EXC",
+        "valid(\" a \")": "false"
+      },
+      "merge": {
+        "valid(null)": "EXC",
+        "valid(\" a \")": "false"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c3a_xyz_apostila",
+    "class": "demo.Flags",
+    "method": "run()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C3"
+    ],
+    "elements": {
+      "C3": [
+        "z"
+      ]
+    },
+    "observed": {
+      "base": {
+        "x": "0",
+        "y": "0",
+        "z": "0"
+      },
+      "left": {
+        "x": "1",
+        "y": "0",
+        "z": "0"
+      },
+      "right": {
+        "x": "0",
+        "y": "1",
+        "z": "0"
+      },
+      "merge": {
+        "x": "1",
+        "y": "1",
+        "z": "1"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c3b_peso_total",
+    "class": "demo.Parcel",
+    "method": "check()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C3"
+    ],
+    "elements": {
+      "C3": [
+        "big"
+      ]
+    },
+    "observed": {
+      "base": {
+        "a": "40",
+        "b": "40",
+        "big": "false"
+      },
+      "left": {
+        "a": "60",
+        "b": "40",
+        "big": "false"
+      },
+      "right": {
+        "a": "40",
+        "b": "60",
+        "big": "false"
+      },
+      "merge": {
+        "a": "60",
+        "b": "60",
+        "big": "true"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "c3c_capacidade",
+    "class": "demo.Storage",
+    "method": "check()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C3"
+    ],
+    "elements": {
+      "C3": [
+        "hasRoom"
+      ]
+    },
+    "observed": {
+      "base": {
+        "used": "4",
+        "incoming": "0",
+        "hasRoom": "true"
+      },
+      "left": {
+        "used": "7",
+        "incoming": "0",
+        "hasRoom": "true"
+      },
+      "right": {
+        "used": "4",
+        "incoming": "3",
+        "hasRoom": "true"
+      },
+      "merge": {
+        "used": "7",
+        "incoming": "3",
+        "hasRoom": "false"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "d1_taxa_sobrescrita",
+    "class": "demo.PriceTable",
+    "method": "quote(int)",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C1",
+      "C2"
+    ],
+    "elements": {
+      "C1": [
+        "total"
+      ],
+      "C2": [
+        "total"
+      ]
+    },
+    "observed": {
+      "base": {
+        "total": "11"
+      },
+      "left": {
+        "total": "21"
+      },
+      "right": {
+        "total": "41"
+      },
+      "merge": {
+        "total": "41"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "d2_regra_de_preco",
+    "class": "demo.PriceRule",
+    "method": "price(int)",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C1",
+      "C2"
+    ],
+    "elements": {
+      "C1": [
+        "price(100)"
+      ],
+      "C2": [
+        "price(100)"
+      ]
+    },
+    "observed": {
+      "base": {
+        "price(100)": "95"
+      },
+      "left": {
+        "price(100)": "105"
+      },
+      "right": {
+        "price(100)": "190"
+      },
+      "merge": {
+        "price(100)": "210"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "d3_titulo_formatado",
+    "class": "demo.TitleFormatter",
+    "method": "title(java.lang.String)",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C1",
+      "C2"
+    ],
+    "elements": {
+      "C1": [
+        "title(ana)"
+      ],
+      "C2": [
+        "title(ana)"
+      ]
+    },
+    "observed": {
+      "base": {
+        "title(ana)": "ana"
+      },
+      "left": {
+        "title(ana)": "ANA"
+      },
+      "right": {
+        "title(ana)": "ana (draft)"
+      },
+      "merge": {
+        "title(ana)": "ANA (draft)"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "e1_taxa_e_capacidade",
+    "class": "demo.Checkout",
+    "method": "compute()",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C2",
+      "C3"
+    ],
+    "elements": {
+      "C2": [
+        "total"
+      ],
+      "C3": [
+        "hasRoom"
+      ]
+    },
+    "observed": {
+      "base": {
+        "total": "40",
+        "hasRoom": "true"
+      },
+      "left": {
+        "total": "45",
+        "hasRoom": "true"
+      },
+      "right": {
+        "total": "40",
+        "hasRoom": "true"
+      },
+      "merge": {
+        "total": "50",
+        "hasRoom": "false"
+      }
+    }
+  },
+  {
+    "project": "sintetico",
+    "commit": "e2_custo_e_sobrepeso",
+    "class": "demo.Shipment",
+    "method": "plan(int)",
+    "label": "Yes",
+    "interference": true,
+    "criteria": [
+      "C1",
+      "C2",
+      "C3"
+    ],
+    "elements": {
+      "C1": [
+        "cost"
+      ],
+      "C2": [
+        "cost"
+      ],
+      "C3": [
+        "oversize"
+      ]
+    },
+    "observed": {
+      "base": {
+        "cost": "95",
+        "oversize": "false"
+      },
+      "left": {
+        "cost": "105",
+        "oversize": "false"
+      },
+      "right": {
+        "cost": "190",
+        "oversize": "false"
+      },
+      "merge": {
+        "cost": "210",
+        "oversize": "true"
+      }
+    }
+  }
+]

@@ -1,0 +1,1787 @@
+[
+  {
+    "projectName": "elasticsearch",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "36884807b3cc9d660db4da062275c7fdbec8ba67"
+    },
+    "targets": {
+      "org.elasticsearch.index.query.SimpleIndexQueryParserTests": [
+        {
+          "method": "setup()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch/36884807b3cc9d660db4da062275c7fdbec8ba67/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch/36884807b3cc9d660db4da062275c7fdbec8ba67/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch/36884807b3cc9d660db4da062275c7fdbec8ba67/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch/36884807b3cc9d660db4da062275c7fdbec8ba67/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "59cb67c7bd0ab6311115b20954e013412b676b29"
+    },
+    "targets": {
+      "org.elasticsearch.index.query.support.NestedInnerQueryParseSupport": [
+        {
+          "method": "setPathLevel()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch/59cb67c7bd0ab6311115b20954e013412b676b29/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch/59cb67c7bd0ab6311115b20954e013412b676b29/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch/59cb67c7bd0ab6311115b20954e013412b676b29/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch/59cb67c7bd0ab6311115b20954e013412b676b29/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "f3d63095dbcc985e24162fbac4ee0d6914dc757d"
+    },
+    "targets": {
+      "org.elasticsearch.index.analysis.synonyms.SynonymsAnalysisTest": [
+        {
+          "method": "testSynonymsAnalysis()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch/f3d63095dbcc985e24162fbac4ee0d6914dc757d/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch/f3d63095dbcc985e24162fbac4ee0d6914dc757d/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch/f3d63095dbcc985e24162fbac4ee0d6914dc757d/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch/f3d63095dbcc985e24162fbac4ee0d6914dc757d/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "okhttp",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "35166168529bd27281685e56a0a122eff44460e9"
+    },
+    "targets": {
+      "com.squareup.okhttp.OkHttpClient": [
+        {
+          "method": "copyWithDefaults()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/okhttp/35166168529bd27281685e56a0a122eff44460e9/original/base/base.jar",
+      "left": "${PATH_DATASET}/okhttp/35166168529bd27281685e56a0a122eff44460e9/original/left/left.jar",
+      "right": "${PATH_DATASET}/okhttp/35166168529bd27281685e56a0a122eff44460e9/original/right/right.jar",
+      "merge": "${PATH_DATASET}/okhttp/35166168529bd27281685e56a0a122eff44460e9/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "antlr4",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "69ff2669eec265e25721dbc27cb00f6c381d0b41"
+    },
+    "targets": {
+      "org.antlr.v4.codegen.target.Python2Target": [
+        {
+          "method": "python2Keywords"
+        }
+      ],
+      "org.antlr.v4.codegen.target.Python3Target": [
+        {
+          "method": "python3Keywords"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/antlr4/69ff2669eec265e25721dbc27cb00f6c381d0b41/original/base/base.jar",
+      "left": "${PATH_DATASET}/antlr4/69ff2669eec265e25721dbc27cb00f6c381d0b41/original/left/left.jar",
+      "right": "${PATH_DATASET}/antlr4/69ff2669eec265e25721dbc27cb00f6c381d0b41/original/right/right.jar",
+      "merge": "${PATH_DATASET}/antlr4/69ff2669eec265e25721dbc27cb00f6c381d0b41/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "cloud-slang",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76"
+    },
+    "targets": {
+      "io.cloudslang.lang.api.SlangImpl": [
+        {
+          "method": "getAllEventTypes()"
+        }
+      ],
+      "io.cloudslang.lang.api.SlangImplTest": [
+        {
+          "method": "ALL_EVENTS_SIZE"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/cloud-slang/20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76/original/base/base.jar",
+      "left": "${PATH_DATASET}/cloud-slang/20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76/original/left/left.jar",
+      "right": "${PATH_DATASET}/cloud-slang/20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76/original/right/right.jar",
+      "merge": "${PATH_DATASET}/cloud-slang/20bac30d9bd76569aa6a4fa1e8261c1a9b5e6f76/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "storm",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "bd1f5c54752f67b484a83c26667331234234d3a3"
+    },
+    "targets": {
+      "org.apache.storm.kafka.spout.KafkaSpout": [
+        {
+          "method": "emitTupleIfNotEmitted(ConsumerRecord<K|V>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/storm/bd1f5c54752f67b484a83c26667331234234d3a3/original/base/base.jar",
+      "left": "${PATH_DATASET}/storm/bd1f5c54752f67b484a83c26667331234234d3a3/original/left/left.jar",
+      "right": "${PATH_DATASET}/storm/bd1f5c54752f67b484a83c26667331234234d3a3/original/right/right.jar",
+      "merge": "${PATH_DATASET}/storm/bd1f5c54752f67b484a83c26667331234234d3a3/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "fitnesse",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "4d9ba9d221d879507440feb084fa7521b95111ec"
+    },
+    "targets": {
+      "fitnesse.testsystems.slim.tables.SlimTableFactory": [
+        {
+          "method": "contructor()"
+        }
+      ],
+      "fitnesse.testsystems.slim.tables.SlimTableFactoryTest": [
+        {
+          "method": "setUp()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/fitnesse/4d9ba9d221d879507440feb084fa7521b95111ec/original/base/base.jar",
+      "left": "${PATH_DATASET}/fitnesse/4d9ba9d221d879507440feb084fa7521b95111ec/original/left/left.jar",
+      "right": "${PATH_DATASET}/fitnesse/4d9ba9d221d879507440feb084fa7521b95111ec/original/right/right.jar",
+      "merge": "${PATH_DATASET}/fitnesse/4d9ba9d221d879507440feb084fa7521b95111ec/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "retrofit",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "71f622ce51031b152a0be6ad5facfb27a654bf5a"
+    },
+    "targets": {
+      "retrofit.RequestBuilder": [
+        {
+          "method": "build()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/retrofit/71f622ce51031b152a0be6ad5facfb27a654bf5a/original/base/base.jar",
+      "left": "${PATH_DATASET}/retrofit/71f622ce51031b152a0be6ad5facfb27a654bf5a/original/left/left.jar",
+      "right": "${PATH_DATASET}/retrofit/71f622ce51031b152a0be6ad5facfb27a654bf5a/original/right/right.jar",
+      "merge": "${PATH_DATASET}/retrofit/71f622ce51031b152a0be6ad5facfb27a654bf5a/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch-river-mongodb",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "3d4f99516ba3177f7d88a1f600923138a8b77cc8"
+    },
+    "targets": {
+      "org.elasticsearch.river.mongodb.Slurper": [
+        {
+          "method": "assignCollections()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch-river-mongodb/3d4f99516ba3177f7d88a1f600923138a8b77cc8/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch-river-mongodb/3d4f99516ba3177f7d88a1f600923138a8b77cc8/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch-river-mongodb/3d4f99516ba3177f7d88a1f600923138a8b77cc8/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch-river-mongodb/3d4f99516ba3177f7d88a1f600923138a8b77cc8/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "jsoup",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "a44e18aa3c1fcd25a68a5965f9490d8f7d026509"
+    },
+    "targets": {
+      "org.jsoup.nodes.TextNode": [
+        {
+          "method": "outerHtmlHead(StringBuilder| int| Document.OutputSettings)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/jsoup/a44e18aa3c1fcd25a68a5965f9490d8f7d026509/original/base/base.jar",
+      "left": "${PATH_DATASET}/jsoup/a44e18aa3c1fcd25a68a5965f9490d8f7d026509/original/left/left.jar",
+      "right": "${PATH_DATASET}/jsoup/a44e18aa3c1fcd25a68a5965f9490d8f7d026509/original/right/right.jar",
+      "merge": "${PATH_DATASET}/jsoup/a44e18aa3c1fcd25a68a5965f9490d8f7d026509/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "SimianArmy",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "345ad9513aafff397050d613fa87ad06ddffe99d"
+    },
+    "targets": {
+      "com.netflix.simianarmy.basic.janitor.BasicJanitorMonkeyContext": [
+        {
+          "method": "getInstanceJanitor()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/SimianArmy/345ad9513aafff397050d613fa87ad06ddffe99d/original/base/base.jar",
+      "left": "${PATH_DATASET}/SimianArmy/345ad9513aafff397050d613fa87ad06ddffe99d/original/left/left.jar",
+      "right": "${PATH_DATASET}/SimianArmy/345ad9513aafff397050d613fa87ad06ddffe99d/original/right/right.jar",
+      "merge": "${PATH_DATASET}/SimianArmy/345ad9513aafff397050d613fa87ad06ddffe99d/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "activiti",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "50d8e43eb5917c63abfbcdec1e68e510943f325a"
+    },
+    "targets": {
+      "org.activiti.engine.impl.persistence.entity.DeploymentEntityManager": [
+        {
+          "method": "deleteDeployment(String| boolean)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/activiti/50d8e43eb5917c63abfbcdec1e68e510943f325a/original/base/base.jar",
+      "left": "${PATH_DATASET}/activiti/50d8e43eb5917c63abfbcdec1e68e510943f325a/original/left/left.jar",
+      "right": "${PATH_DATASET}/activiti/50d8e43eb5917c63abfbcdec1e68e510943f325a/original/right/right.jar",
+      "merge": "${PATH_DATASET}/activiti/50d8e43eb5917c63abfbcdec1e68e510943f325a/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "druid",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "05168808c278c080c59c19e858d9471b316cd1f5"
+    },
+    "targets": {
+      "com.metamx.druid.loading.S3SegmentPusher": [
+        {
+          "method": "push(File| DataSegment)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/druid/05168808c278c080c59c19e858d9471b316cd1f5/original/base/base.jar",
+      "left": "${PATH_DATASET}/druid/05168808c278c080c59c19e858d9471b316cd1f5/original/left/left.jar",
+      "right": "${PATH_DATASET}/druid/05168808c278c080c59c19e858d9471b316cd1f5/original/right/right.jar",
+      "merge": "${PATH_DATASET}/druid/05168808c278c080c59c19e858d9471b316cd1f5/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "netty",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "193acdb36cd3da9bfc62dd69c4208dff3f0a2b1b"
+    },
+    "targets": {
+      "org.jboss.netty.handler.codec.frame.LengthFieldBasedFrameDecoder": [
+        {
+          "method": "decode(ChannelHandlerContext| Channel| ChannelBuffer)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/netty/193acdb36cd3da9bfc62dd69c4208dff3f0a2b1b/original/base/base.jar",
+      "left": "${PATH_DATASET}/netty/193acdb36cd3da9bfc62dd69c4208dff3f0a2b1b/original/left/left.jar",
+      "right": "${PATH_DATASET}/netty/193acdb36cd3da9bfc62dd69c4208dff3f0a2b1b/original/right/right.jar",
+      "merge": "${PATH_DATASET}/netty/193acdb36cd3da9bfc62dd69c4208dff3f0a2b1b/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "OpenTripPlanner",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "4c506dce43775704919d084f0acfba86d251bf4a"
+    },
+    "targets": {
+      "org.opentripplanner.routing.spt.MultiShortestPathTree": [
+        {
+          "method": "dominates(State| State)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/OpenTripPlanner/4c506dce43775704919d084f0acfba86d251bf4a/original/base/base.jar",
+      "left": "${PATH_DATASET}/OpenTripPlanner/4c506dce43775704919d084f0acfba86d251bf4a/original/left/left.jar",
+      "right": "${PATH_DATASET}/OpenTripPlanner/4c506dce43775704919d084f0acfba86d251bf4a/original/right/right.jar",
+      "merge": "${PATH_DATASET}/OpenTripPlanner/4c506dce43775704919d084f0acfba86d251bf4a/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "webbit",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "74d2d2b87704d003acacb34e4ca8fb5f897b938f"
+    },
+    "targets": {
+      "org.webbitserver.netty.WebSocketClient$HandshakeChannelHandler": [
+        {
+          "method": "adjustPipelineToWebSocket(ChannelHandlerContext| MessageEvent| ChannelHandler| ChannelHandler)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/webbit/74d2d2b87704d003acacb34e4ca8fb5f897b938f/original/base/base.jar",
+      "left": "${PATH_DATASET}/webbit/74d2d2b87704d003acacb34e4ca8fb5f897b938f/original/left/left.jar",
+      "right": "${PATH_DATASET}/webbit/74d2d2b87704d003acacb34e4ca8fb5f897b938f/original/right/right.jar",
+      "merge": "${PATH_DATASET}/webbit/74d2d2b87704d003acacb34e4ca8fb5f897b938f/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "jsoup",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "3f7d2c71dbbbb289c684f339874eed8ac2747fa0"
+    },
+    "targets": {
+      "org.jsoup.helper.HttpConnection": [
+        {
+          "method": "execute(Connection.Request| Response)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/jsoup/3f7d2c71dbbbb289c684f339874eed8ac2747fa0/original/base/base.jar",
+      "left": "${PATH_DATASET}/jsoup/3f7d2c71dbbbb289c684f339874eed8ac2747fa0/original/left/left.jar",
+      "right": "${PATH_DATASET}/jsoup/3f7d2c71dbbbb289c684f339874eed8ac2747fa0/original/right/right.jar",
+      "merge": "${PATH_DATASET}/jsoup/3f7d2c71dbbbb289c684f339874eed8ac2747fa0/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "jsoup",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "a8b6982de98ff76ef254031d7152fff57f6bf941"
+    },
+    "targets": {
+      "org.jsoup.helper.HttpConnection": [
+        {
+          "method": "execute(Connection.Request| Response)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/jsoup/a8b6982de98ff76ef254031d7152fff57f6bf941/original/base/base.jar",
+      "left": "${PATH_DATASET}/jsoup/a8b6982de98ff76ef254031d7152fff57f6bf941/original/left/left.jar",
+      "right": "${PATH_DATASET}/jsoup/a8b6982de98ff76ef254031d7152fff57f6bf941/original/right/right.jar",
+      "merge": "${PATH_DATASET}/jsoup/a8b6982de98ff76ef254031d7152fff57f6bf941/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "resty-gwt",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "867b917c43c32acbdcac55767e7f04334006c866"
+    },
+    "targets": {
+      "org.fusesource.restygwt.rebind.DirectRestServiceInterfaceClassCreator": [
+        {
+          "method": "getMethodCallback(JMethod)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/resty-gwt/867b917c43c32acbdcac55767e7f04334006c866/original/base/base.jar",
+      "left": "${PATH_DATASET}/resty-gwt/867b917c43c32acbdcac55767e7f04334006c866/original/left/left.jar",
+      "right": "${PATH_DATASET}/resty-gwt/867b917c43c32acbdcac55767e7f04334006c866/original/right/right.jar",
+      "merge": "${PATH_DATASET}/resty-gwt/867b917c43c32acbdcac55767e7f04334006c866/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "storm",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "ad2be678831b3b060229fd936e3908110162b7ac"
+    },
+    "targets": {
+      "org.apache.storm.kafka.spout.KafkaSpoutConfig": [
+        {
+          "method": "toString()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/storm/ad2be678831b3b060229fd936e3908110162b7ac/original/base/base.jar",
+      "left": "${PATH_DATASET}/storm/ad2be678831b3b060229fd936e3908110162b7ac/original/left/left.jar",
+      "right": "${PATH_DATASET}/storm/ad2be678831b3b060229fd936e3908110162b7ac/original/right/right.jar",
+      "merge": "${PATH_DATASET}/storm/ad2be678831b3b060229fd936e3908110162b7ac/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "jOOQ",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "d96120f327107feb1ebb15e7c090dc38eeff72ca"
+    },
+    "targets": {
+      "org.jooq.impl.DSL": [
+        {
+          "method": "coalesce(Field<T>| T)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/jOOQ/d96120f327107feb1ebb15e7c090dc38eeff72ca/original/base/base.jar",
+      "left": "${PATH_DATASET}/jOOQ/d96120f327107feb1ebb15e7c090dc38eeff72ca/original/left/left.jar",
+      "right": "${PATH_DATASET}/jOOQ/d96120f327107feb1ebb15e7c090dc38eeff72ca/original/right/right.jar",
+      "merge": "${PATH_DATASET}/jOOQ/d96120f327107feb1ebb15e7c090dc38eeff72ca/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "atmosphere",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "ffc0c6e274094c6423e29d1c45bab1593b8fac7d"
+    },
+    "targets": {
+      "org.atmosphere.cpr.AtmosphereConfig": [
+        {
+          "method": "constructor()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/atmosphere/ffc0c6e274094c6423e29d1c45bab1593b8fac7d/original/base/base.jar",
+      "left": "${PATH_DATASET}/atmosphere/ffc0c6e274094c6423e29d1c45bab1593b8fac7d/original/left/left.jar",
+      "right": "${PATH_DATASET}/atmosphere/ffc0c6e274094c6423e29d1c45bab1593b8fac7d/original/right/right.jar",
+      "merge": "${PATH_DATASET}/atmosphere/ffc0c6e274094c6423e29d1c45bab1593b8fac7d/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "swagger-maven-plugin",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "e825a7fdc6ef688f1253b93d2cb236e710acfc56"
+    },
+    "targets": {
+      "com.github.kongchen.swagger.docgen.reader.AbstractReader": [
+        {
+          "method": "hasValidAnnotations(List<Annotation>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/swagger-maven-plugin/e825a7fdc6ef688f1253b93d2cb236e710acfc56/original/base/base.jar",
+      "left": "${PATH_DATASET}/swagger-maven-plugin/e825a7fdc6ef688f1253b93d2cb236e710acfc56/original/left/left.jar",
+      "right": "${PATH_DATASET}/swagger-maven-plugin/e825a7fdc6ef688f1253b93d2cb236e710acfc56/original/right/right.jar",
+      "merge": "${PATH_DATASET}/swagger-maven-plugin/e825a7fdc6ef688f1253b93d2cb236e710acfc56/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c"
+    },
+    "targets": {
+      "org.springframework.boot.context.embedded.undertow.UndertowEmbeddedServletContainerFactory": [
+        {
+          "method": "createDeploymentManager(ServletContextInitializer)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/ea8107b6a53fa60b5f23b33e1b6d2e88bb60133c/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "af20dc6cc45c032573413c401f9f73aa75371744"
+    },
+    "targets": {
+      "org.springframework.boot.loader.archive.ExplodedArchive": [
+        {
+          "method": "getUrl()"
+        }
+      ],
+      "org.springframework.boot.loader.archive.ExplodedArchiveTests": [
+        {
+          "method": "getUrl()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/af20dc6cc45c032573413c401f9f73aa75371744/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/af20dc6cc45c032573413c401f9f73aa75371744/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/af20dc6cc45c032573413c401f9f73aa75371744/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/af20dc6cc45c032573413c401f9f73aa75371744/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "titan",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "387c16ea05ef9fa312f37139228d2bbf61455ff4"
+    },
+    "targets": {
+      "com.thinkaurelius.titan.graphdb.database.serialize.SerializerInitialization": [
+        {
+          "method": "initialize(Serializer)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/titan/387c16ea05ef9fa312f37139228d2bbf61455ff4/original/base/base.jar",
+      "left": "${PATH_DATASET}/titan/387c16ea05ef9fa312f37139228d2bbf61455ff4/original/left/left.jar",
+      "right": "${PATH_DATASET}/titan/387c16ea05ef9fa312f37139228d2bbf61455ff4/original/right/right.jar",
+      "merge": "${PATH_DATASET}/titan/387c16ea05ef9fa312f37139228d2bbf61455ff4/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "jsoup",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "fee4762322f85a1109edd75ccb67f38cf5008c80"
+    },
+    "targets": {
+      "org.jsoup.helper.HttpConnection": [
+        {
+          "method": "createConnection(Connection.Request)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/jsoup/fee4762322f85a1109edd75ccb67f38cf5008c80/original/base/base.jar",
+      "left": "${PATH_DATASET}/jsoup/fee4762322f85a1109edd75ccb67f38cf5008c80/original/left/left.jar",
+      "right": "${PATH_DATASET}/jsoup/fee4762322f85a1109edd75ccb67f38cf5008c80/original/right/right.jar",
+      "merge": "${PATH_DATASET}/jsoup/fee4762322f85a1109edd75ccb67f38cf5008c80/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "retrofit",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "2b6c719c6645f8e48dca6d0047c752069d321bc4"
+    },
+    "targets": {
+      "retrofit.RestAdapter": [
+        {
+          "method": "logAndReplaceResponse(String| Response| long)"
+        },
+        {
+          "method": "logAndReplaceRequest(Request)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/retrofit/2b6c719c6645f8e48dca6d0047c752069d321bc4/original/base/base.jar",
+      "left": "${PATH_DATASET}/retrofit/2b6c719c6645f8e48dca6d0047c752069d321bc4/original/left/left.jar",
+      "right": "${PATH_DATASET}/retrofit/2b6c719c6645f8e48dca6d0047c752069d321bc4/original/right/right.jar",
+      "merge": "${PATH_DATASET}/retrofit/2b6c719c6645f8e48dca6d0047c752069d321bc4/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "activiti",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "bf46684ba62f5883673ea8fb0a14aecfe0aedea2"
+    },
+    "targets": {
+      "org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior": [
+        {
+          "method": "execute(ActivityExecution)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/activiti/bf46684ba62f5883673ea8fb0a14aecfe0aedea2/original/base/base.jar",
+      "left": "${PATH_DATASET}/activiti/bf46684ba62f5883673ea8fb0a14aecfe0aedea2/original/left/left.jar",
+      "right": "${PATH_DATASET}/activiti/bf46684ba62f5883673ea8fb0a14aecfe0aedea2/original/right/right.jar",
+      "merge": "${PATH_DATASET}/activiti/bf46684ba62f5883673ea8fb0a14aecfe0aedea2/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "okhttp",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "1151c9853ccc3c9c3211c613b9b845b925f8c6a6"
+    },
+    "targets": {
+      "com.squareup.okhttp.internal.bytes.GzipSource": [
+        {
+          "method": "consumeHeader(Deadline)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/okhttp/1151c9853ccc3c9c3211c613b9b845b925f8c6a6/original/base/base.jar",
+      "left": "${PATH_DATASET}/okhttp/1151c9853ccc3c9c3211c613b9b845b925f8c6a6/original/left/left.jar",
+      "right": "${PATH_DATASET}/okhttp/1151c9853ccc3c9c3211c613b9b845b925f8c6a6/original/right/right.jar",
+      "merge": "${PATH_DATASET}/okhttp/1151c9853ccc3c9c3211c613b9b845b925f8c6a6/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "HikariCP",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "1bca94af9ec625f21d1b58ff10efb5be71ab87a6"
+    },
+    "targets": {
+      "com.zaxxer.hikari.HikariConfig": [
+        {
+          "method": "validate()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/HikariCP/1bca94af9ec625f21d1b58ff10efb5be71ab87a6/original/base/base.jar",
+      "left": "${PATH_DATASET}/HikariCP/1bca94af9ec625f21d1b58ff10efb5be71ab87a6/original/left/left.jar",
+      "right": "${PATH_DATASET}/HikariCP/1bca94af9ec625f21d1b58ff10efb5be71ab87a6/original/right/right.jar",
+      "merge": "${PATH_DATASET}/HikariCP/1bca94af9ec625f21d1b58ff10efb5be71ab87a6/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "quickml",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "bae968d9a85c0501ba8842a6f88e7fc2c6b78693"
+    },
+    "targets": {
+      "quickdt.experiments.OutOfTimeCrossValidatorRunner": [
+        {
+          "method": "getRandomForestBuilder(int| int)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/quickml/bae968d9a85c0501ba8842a6f88e7fc2c6b78693/original/base/base.jar",
+      "left": "${PATH_DATASET}/quickml/bae968d9a85c0501ba8842a6f88e7fc2c6b78693/original/left/left.jar",
+      "right": "${PATH_DATASET}/quickml/bae968d9a85c0501ba8842a6f88e7fc2c6b78693/original/right/right.jar",
+      "merge": "${PATH_DATASET}/quickml/bae968d9a85c0501ba8842a6f88e7fc2c6b78693/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "pushy",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "58901c846e4f0874977c5aabbc34bcb4de3670e0"
+    },
+    "targets": {
+      "com.relayrides.pushy.apns.PushManager": [
+        {
+          "method": "handleConnectionClosure(ApnsConnection<T>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/pushy/58901c846e4f0874977c5aabbc34bcb4de3670e0/original/base/base.jar",
+      "left": "${PATH_DATASET}/pushy/58901c846e4f0874977c5aabbc34bcb4de3670e0/original/left/left.jar",
+      "right": "${PATH_DATASET}/pushy/58901c846e4f0874977c5aabbc34bcb4de3670e0/original/right/right.jar",
+      "merge": "${PATH_DATASET}/pushy/58901c846e4f0874977c5aabbc34bcb4de3670e0/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "java-faker",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "ca42fcfaf45cae1754c58e02e1d5d2a58ec03561"
+    },
+    "targets": {
+      "com.github.javafaker.Faker": [
+        {
+          "method": "constructor()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/java-faker/ca42fcfaf45cae1754c58e02e1d5d2a58ec03561/original/base/base.jar",
+      "left": "${PATH_DATASET}/java-faker/ca42fcfaf45cae1754c58e02e1d5d2a58ec03561/original/left/left.jar",
+      "right": "${PATH_DATASET}/java-faker/ca42fcfaf45cae1754c58e02e1d5d2a58ec03561/original/right/right.jar",
+      "merge": "${PATH_DATASET}/java-faker/ca42fcfaf45cae1754c58e02e1d5d2a58ec03561/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "swagger-core",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "e7fea7c4889dbdd6a4e0b2d059c8aa0f126ab1c2"
+    },
+    "targets": {
+      "io.swagger.jaxrs2.OperationParser": [
+        {
+          "method": "getSchemaFromAnnotation(io.swagger.oas.annotations.media.Schema)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/swagger-core/e7fea7c4889dbdd6a4e0b2d059c8aa0f126ab1c2/original/base/base.jar",
+      "left": "${PATH_DATASET}/swagger-core/e7fea7c4889dbdd6a4e0b2d059c8aa0f126ab1c2/original/left/left.jar",
+      "right": "${PATH_DATASET}/swagger-core/e7fea7c4889dbdd6a4e0b2d059c8aa0f126ab1c2/original/right/right.jar",
+      "merge": "${PATH_DATASET}/swagger-core/e7fea7c4889dbdd6a4e0b2d059c8aa0f126ab1c2/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "cucumber-jvm",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "4505c156b6267c1b760deec570ddbfe047b42aa9"
+    },
+    "targets": {
+      "cuke4duke.internal.java.JavaLanguage": [
+        {
+          "method": "load(String)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/cucumber-jvm/4505c156b6267c1b760deec570ddbfe047b42aa9/original/base/base.jar",
+      "left": "${PATH_DATASET}/cucumber-jvm/4505c156b6267c1b760deec570ddbfe047b42aa9/original/left/left.jar",
+      "right": "${PATH_DATASET}/cucumber-jvm/4505c156b6267c1b760deec570ddbfe047b42aa9/original/right/right.jar",
+      "merge": "${PATH_DATASET}/cucumber-jvm/4505c156b6267c1b760deec570ddbfe047b42aa9/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "dropwizard",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "ddd15a681bf42360337844412cae4aba1556eb88"
+    },
+    "targets": {
+      "io.dropwizard.setup.Bootstrap.Bootstrap": [
+        {
+          "method": "Bootstrap(Application<T>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/dropwizard/ddd15a681bf42360337844412cae4aba1556eb88/original/base/base.jar",
+      "left": "${PATH_DATASET}/dropwizard/ddd15a681bf42360337844412cae4aba1556eb88/original/left/left.jar",
+      "right": "${PATH_DATASET}/dropwizard/ddd15a681bf42360337844412cae4aba1556eb88/original/right/right.jar",
+      "merge": "${PATH_DATASET}/dropwizard/ddd15a681bf42360337844412cae4aba1556eb88/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "hector",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "0588608e7a2bdf974c985ff546207104f672bf6c"
+    },
+    "targets": {
+      "me.prettyprint.cassandra.connection.client.HSaslThriftClient": [
+        {
+          "method": "open()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/hector/0588608e7a2bdf974c985ff546207104f672bf6c/original/base/base.jar",
+      "left": "${PATH_DATASET}/hector/0588608e7a2bdf974c985ff546207104f672bf6c/original/left/left.jar",
+      "right": "${PATH_DATASET}/hector/0588608e7a2bdf974c985ff546207104f672bf6c/original/right/right.jar",
+      "merge": "${PATH_DATASET}/hector/0588608e7a2bdf974c985ff546207104f672bf6c/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "hector",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "213f7887ea70eabdf0705cf8454de29af89e8c38"
+    },
+    "targets": {
+      "me.prettyprint.cassandra.connection.HConnectionManager": [
+        {
+          "method": "operateWithFailover(Operation<?>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/hector/213f7887ea70eabdf0705cf8454de29af89e8c38/original/base/base.jar",
+      "left": "${PATH_DATASET}/hector/213f7887ea70eabdf0705cf8454de29af89e8c38/original/left/left.jar",
+      "right": "${PATH_DATASET}/hector/213f7887ea70eabdf0705cf8454de29af89e8c38/original/right/right.jar",
+      "merge": "${PATH_DATASET}/hector/213f7887ea70eabdf0705cf8454de29af89e8c38/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "jenkins",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "48b2b951dfb3438999ceda330093cac82b857ce6"
+    },
+    "targets": {
+      "jenkins.slaves.DefaultJnlpSlaveReceiver": [
+        {
+          "method": "handle(String| JnlpSlaveHandshake)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/jenkins/48b2b951dfb3438999ceda330093cac82b857ce6/original/base/base.jar",
+      "left": "${PATH_DATASET}/jenkins/48b2b951dfb3438999ceda330093cac82b857ce6/original/left/left.jar",
+      "right": "${PATH_DATASET}/jenkins/48b2b951dfb3438999ceda330093cac82b857ce6/original/right/right.jar",
+      "merge": "${PATH_DATASET}/jenkins/48b2b951dfb3438999ceda330093cac82b857ce6/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "logback",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "542843fd04a793fb9e0eea0c84d199e66d7c15af"
+    },
+    "targets": {
+      "ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicyBase": [
+        {
+          "method": "start()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/logback/542843fd04a793fb9e0eea0c84d199e66d7c15af/original/base/base.jar",
+      "left": "${PATH_DATASET}/logback/542843fd04a793fb9e0eea0c84d199e66d7c15af/original/left/left.jar",
+      "right": "${PATH_DATASET}/logback/542843fd04a793fb9e0eea0c84d199e66d7c15af/original/right/right.jar",
+      "merge": "${PATH_DATASET}/logback/542843fd04a793fb9e0eea0c84d199e66d7c15af/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "orientdb",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "a5ce3bcc0a1d196745c575ad6602019f7a6b86f8"
+    },
+    "targets": {
+      "com.orientechnologies.orient.core.Orient": [
+        {
+          "method": "startup()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/orientdb/a5ce3bcc0a1d196745c575ad6602019f7a6b86f8/original/base/base.jar",
+      "left": "${PATH_DATASET}/orientdb/a5ce3bcc0a1d196745c575ad6602019f7a6b86f8/original/left/left.jar",
+      "right": "${PATH_DATASET}/orientdb/a5ce3bcc0a1d196745c575ad6602019f7a6b86f8/original/right/right.jar",
+      "merge": "${PATH_DATASET}/orientdb/a5ce3bcc0a1d196745c575ad6602019f7a6b86f8/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "RxJava",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "a40a4130edcdadc2340da5787ca30353018173f2"
+    },
+    "targets": {
+      "rx.internal.operators.OperatorMulticast": [
+        {
+          "method": "connect(Action1<?superSubscription>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/RxJava/a40a4130edcdadc2340da5787ca30353018173f2/original/base/base.jar",
+      "left": "${PATH_DATASET}/RxJava/a40a4130edcdadc2340da5787ca30353018173f2/original/left/left.jar",
+      "right": "${PATH_DATASET}/RxJava/a40a4130edcdadc2340da5787ca30353018173f2/original/right/right.jar",
+      "merge": "${PATH_DATASET}/RxJava/a40a4130edcdadc2340da5787ca30353018173f2/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "SimianArmy",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c39c19bc6b9231601f6bc7358e638a99adf37e0d"
+    },
+    "targets": {
+      "com.netflix.simianarmy.basic.BasicSimianArmyContext": [
+        {
+          "method": "BasicSimianArmyContext(String)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/SimianArmy/c39c19bc6b9231601f6bc7358e638a99adf37e0d/original/base/base.jar",
+      "left": "${PATH_DATASET}/SimianArmy/c39c19bc6b9231601f6bc7358e638a99adf37e0d/original/left/left.jar",
+      "right": "${PATH_DATASET}/SimianArmy/c39c19bc6b9231601f6bc7358e638a99adf37e0d/original/right/right.jar",
+      "merge": "${PATH_DATASET}/SimianArmy/c39c19bc6b9231601f6bc7358e638a99adf37e0d/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "alluxio",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "dafe76c90024a915224264b4862b33f40cb8478c"
+    },
+    "targets": {
+      "tachyon.hadoop.HdfsFileInputStream": [
+        {
+          "method": "HdfsFileInputStream(TachyonFS| int| Path| Configuration| int)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/alluxio/dafe76c90024a915224264b4862b33f40cb8478c/original/base/base.jar",
+      "left": "${PATH_DATASET}/alluxio/dafe76c90024a915224264b4862b33f40cb8478c/original/left/left.jar",
+      "right": "${PATH_DATASET}/alluxio/dafe76c90024a915224264b4862b33f40cb8478c/original/right/right.jar",
+      "merge": "${PATH_DATASET}/alluxio/dafe76c90024a915224264b4862b33f40cb8478c/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "voldemort",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "b30fdfebe30c9b6e37b9fbc3fec0ff74cd19f997"
+    },
+    "targets": {
+      "voldemort.VoldemortClientShell": [
+        {
+          "method": "VoldemortClientShell(ClientConfig| String| BufferedReader| PrintStream| PrintStream)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/voldemort/b30fdfebe30c9b6e37b9fbc3fec0ff74cd19f997/original/base/base.jar",
+      "left": "${PATH_DATASET}/voldemort/b30fdfebe30c9b6e37b9fbc3fec0ff74cd19f997/original/left/left.jar",
+      "right": "${PATH_DATASET}/voldemort/b30fdfebe30c9b6e37b9fbc3fec0ff74cd19f997/original/right/right.jar",
+      "merge": "${PATH_DATASET}/voldemort/b30fdfebe30c9b6e37b9fbc3fec0ff74cd19f997/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "voldemort",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "4cc1c145819030c8e2baffe4c92383de14b8d880"
+    },
+    "targets": {
+      "voldemort.server.VoldemortConfig": [
+        {
+          "method": "VoldemortConfig(Props)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/voldemort/4cc1c145819030c8e2baffe4c92383de14b8d880/original/base/base.jar",
+      "left": "${PATH_DATASET}/voldemort/4cc1c145819030c8e2baffe4c92383de14b8d880/original/left/left.jar",
+      "right": "${PATH_DATASET}/voldemort/4cc1c145819030c8e2baffe4c92383de14b8d880/original/right/right.jar",
+      "merge": "${PATH_DATASET}/voldemort/4cc1c145819030c8e2baffe4c92383de14b8d880/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch-river-mongodb",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "6b6ce8e851c6613213c4508c3f277a80649e0c7b"
+    },
+    "targets": {
+      "org.elasticsearch.river.mongodb.MongoDBRiverDefinition": [
+        {
+          "method": "parseSettings(String| String| RiverSettings| ScriptService)"
+        }
+      ],
+      "org.elasticsearch.river.mongodb.MongoDBRiverDefinition.parseSettings": [
+        {
+          "method": "parseSettings(String| String| RiverSettings| ScriptService)"
+        }
+      ],
+      "org.elasticsearch.river.mongodb.Indexer": [
+        {
+          "method": "processBlockingQueue(QueueEntry)"
+        },
+        {
+          "method": "applyAdvancedTransformation(QueueEntry| String)"
+        }
+      ],
+      "org.elasticsearch.river.mongodb.Slurper": [
+        {
+          "method": "run()"
+        },
+        {
+          "method": "addToStream(Operation| Timestamp<?>| DBObject| String)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch-river-mongodb/6b6ce8e851c6613213c4508c3f277a80649e0c7b/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch-river-mongodb/6b6ce8e851c6613213c4508c3f277a80649e0c7b/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch-river-mongodb/6b6ce8e851c6613213c4508c3f277a80649e0c7b/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch-river-mongodb/6b6ce8e851c6613213c4508c3f277a80649e0c7b/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "0404db65e3497452886173957729c8e82cfd4a03"
+    },
+    "targets": {
+      "org.elasticsearch.test.ESSingleNodeTestCase": [
+        {
+          "method": "newNode()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch/0404db65e3497452886173957729c8e82cfd4a03/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch/0404db65e3497452886173957729c8e82cfd4a03/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch/0404db65e3497452886173957729c8e82cfd4a03/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch/0404db65e3497452886173957729c8e82cfd4a03/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "3764b3ff800c94293aba0bb0fa18c7df80a764f7"
+    },
+    "targets": {
+      "org.elasticsearch.rest.action.cat.RestShardsAction": [
+        {
+          "method": "getTableWithHeader(RestRequest)"
+        }
+      ],
+      "org.elasticsearch.rest.action.cat.RestIndicesAction": [
+        {
+          "method": "getTableWithHeader(RestRequest)"
+        }
+      ],
+      "org.elasticsearch.rest.action.cat.RestNodesAction": [
+        {
+          "method": "getTableWithHeader(RestRequest)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch/3764b3ff800c94293aba0bb0fa18c7df80a764f7/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch/3764b3ff800c94293aba0bb0fa18c7df80a764f7/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch/3764b3ff800c94293aba0bb0fa18c7df80a764f7/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch/3764b3ff800c94293aba0bb0fa18c7df80a764f7/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "libgdx",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "da27e2dae56be0a159e82231e5c3a5b83b099063"
+    },
+    "targets": {
+      "com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application": [
+        {
+          "method": "newWindow(ApplicationListener| Lwjgl3WindowConfiguration)"
+        }
+      ],
+      "com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration": [
+        {
+          "method": "copy(Lwjgl3ApplicationConfiguration)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/libgdx/da27e2dae56be0a159e82231e5c3a5b83b099063/original/base/base.jar",
+      "left": "${PATH_DATASET}/libgdx/da27e2dae56be0a159e82231e5c3a5b83b099063/original/left/left.jar",
+      "right": "${PATH_DATASET}/libgdx/da27e2dae56be0a159e82231e5c3a5b83b099063/original/right/right.jar",
+      "merge": "${PATH_DATASET}/libgdx/da27e2dae56be0a159e82231e5c3a5b83b099063/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "RxJava",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "1c47b0cb26e6d971eefa42ebb3479099236b0125"
+    },
+    "targets": {
+      "rx.concurrency.TestScheduler": [
+        {
+          "method": "triggerActions(long)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/RxJava/1c47b0cb26e6d971eefa42ebb3479099236b0125/original/base/base.jar",
+      "left": "${PATH_DATASET}/RxJava/1c47b0cb26e6d971eefa42ebb3479099236b0125/original/left/left.jar",
+      "right": "${PATH_DATASET}/RxJava/1c47b0cb26e6d971eefa42ebb3479099236b0125/original/right/right.jar",
+      "merge": "${PATH_DATASET}/RxJava/1c47b0cb26e6d971eefa42ebb3479099236b0125/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "hector",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "a33a46506656a39d1b0f7780973905665d3b6145"
+    },
+    "targets": {
+      "me.prettyprint.cassandra.connection.client.HKerberosThriftClient": [
+        {
+          "method": "open()"
+        }
+      ],
+      "me.prettyprint.cassandra.connection.client.HThriftClient": [
+        {
+          "method": "open()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/hector/a33a46506656a39d1b0f7780973905665d3b6145/original/base/base.jar",
+      "left": "${PATH_DATASET}/hector/a33a46506656a39d1b0f7780973905665d3b6145/original/left/left.jar",
+      "right": "${PATH_DATASET}/hector/a33a46506656a39d1b0f7780973905665d3b6145/original/right/right.jar",
+      "merge": "${PATH_DATASET}/hector/a33a46506656a39d1b0f7780973905665d3b6145/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "titan",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "04edd7f0e7eab2e8255a497922e34dc707d84c19"
+    },
+    "targets": {
+      "com.thinkaurelius.titan.graphdb.transaction.StandardTitanTx": [
+        {
+          "method": "StandardTitanTx(StandardTitanGraph| TransactionConfiguration| BackendTransaction)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/titan/04edd7f0e7eab2e8255a497922e34dc707d84c19/original/base/base.jar",
+      "left": "${PATH_DATASET}/titan/04edd7f0e7eab2e8255a497922e34dc707d84c19/original/left/left.jar",
+      "right": "${PATH_DATASET}/titan/04edd7f0e7eab2e8255a497922e34dc707d84c19/original/right/right.jar",
+      "merge": "${PATH_DATASET}/titan/04edd7f0e7eab2e8255a497922e34dc707d84c19/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "MPAndroidChart",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "af114d180da6ec5633d32c701ff5467f7629fcf3"
+    },
+    "targets": {
+      "com.xxmassdeveloper.mpchartexample.fragments.SimpleFragment": [
+        {
+          "method": "generateScatterData(int| float| int)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/MPAndroidChart/af114d180da6ec5633d32c701ff5467f7629fcf3/original/base/base.jar",
+      "left": "${PATH_DATASET}/MPAndroidChart/af114d180da6ec5633d32c701ff5467f7629fcf3/original/left/left.jar",
+      "right": "${PATH_DATASET}/MPAndroidChart/af114d180da6ec5633d32c701ff5467f7629fcf3/original/right/right.jar",
+      "merge": "${PATH_DATASET}/MPAndroidChart/af114d180da6ec5633d32c701ff5467f7629fcf3/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "MPAndroidChart",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "9297923f09460d0484cd713b0abbeaea9b888ec0"
+    },
+    "targets": {
+      "com.xxmassdeveloper.mpchartexample.LineChartActivity1": [
+        {
+          "method": "onCreate(Bundle)"
+        }
+      ],
+      "com.xxmassdeveloper.mpchartexample.StackedBarActivityNegative": [
+        {
+          "method": "onCreate(Bundle)"
+        }
+      ],
+      "com.xxmassdeveloper.mpchartexample.RadarChartActivitry": [
+        {
+          "method": "onCreate(Bundle)"
+        }
+      ],
+      "com.xxmassdeveloper.mpchartexample.LineChartActivity2": [
+        {
+          "method": "onCreate(Bundle)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/MPAndroidChart/9297923f09460d0484cd713b0abbeaea9b888ec0/original/base/base.jar",
+      "left": "${PATH_DATASET}/MPAndroidChart/9297923f09460d0484cd713b0abbeaea9b888ec0/original/left/left.jar",
+      "right": "${PATH_DATASET}/MPAndroidChart/9297923f09460d0484cd713b0abbeaea9b888ec0/original/right/right.jar",
+      "merge": "${PATH_DATASET}/MPAndroidChart/9297923f09460d0484cd713b0abbeaea9b888ec0/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "MPAndroidChart",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "9531ba69895cd64fce48038ffd8df2543eeea1d2"
+    },
+    "targets": {
+      "com.github.mikephil.charting.renderer.PieChartRenderer": [
+        {
+          "method": "drawData(Canvas)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/MPAndroidChart/9531ba69895cd64fce48038ffd8df2543eeea1d2/original/base/base.jar",
+      "left": "${PATH_DATASET}/MPAndroidChart/9531ba69895cd64fce48038ffd8df2543eeea1d2/original/left/left.jar",
+      "right": "${PATH_DATASET}/MPAndroidChart/9531ba69895cd64fce48038ffd8df2543eeea1d2/original/right/right.jar",
+      "merge": "${PATH_DATASET}/MPAndroidChart/9531ba69895cd64fce48038ffd8df2543eeea1d2/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "elasticsearch",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "d896886973660785aac45275ddb110c1a6babc57"
+    },
+    "targets": {
+      "org.elasticsearch.action.DocWriteResponse": [
+        {
+          "method": "writeTo(StreamOutput)"
+        },
+        {
+          "method": "readFrom(StreamInput)"
+        },
+        {
+          "method": "toXContent(XContentBuilder| Params)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/elasticsearch/d896886973660785aac45275ddb110c1a6babc57/original/base/base.jar",
+      "left": "${PATH_DATASET}/elasticsearch/d896886973660785aac45275ddb110c1a6babc57/original/left/left.jar",
+      "right": "${PATH_DATASET}/elasticsearch/d896886973660785aac45275ddb110c1a6babc57/original/right/right.jar",
+      "merge": "${PATH_DATASET}/elasticsearch/d896886973660785aac45275ddb110c1a6babc57/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "fdd3f12ee0f92ac18844c08bf71df39feebb6673"
+    },
+    "targets": {
+      "org.springframework.boot.autoconfigure.logging.AutoConfigurationReportLoggingInitializer": [
+        {
+          "method": "logAutoConfigurationReport(boolean)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/fdd3f12ee0f92ac18844c08bf71df39feebb6673/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/fdd3f12ee0f92ac18844c08bf71df39feebb6673/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/fdd3f12ee0f92ac18844c08bf71df39feebb6673/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/fdd3f12ee0f92ac18844c08bf71df39feebb6673/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "6664ce19d6f2388ebd6cf54763f54fdddd226b9a"
+    },
+    "targets": {
+      "org.springframework.boot.jta.atomikos.AtomikosProperties": [
+        {
+          "method": "asProperties()"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/6664ce19d6f2388ebd6cf54763f54fdddd226b9a/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/6664ce19d6f2388ebd6cf54763f54fdddd226b9a/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/6664ce19d6f2388ebd6cf54763f54fdddd226b9a/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/6664ce19d6f2388ebd6cf54763f54fdddd226b9a/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "2d4e68a9777601bfb8309c94d8b74bc21be80ad1"
+    },
+    "targets": {
+      "org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory": [
+        {
+          "method": "customizeConnector(Connector)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/2d4e68a9777601bfb8309c94d8b74bc21be80ad1/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/2d4e68a9777601bfb8309c94d8b74bc21be80ad1/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/2d4e68a9777601bfb8309c94d8b74bc21be80ad1/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/2d4e68a9777601bfb8309c94d8b74bc21be80ad1/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "958a0a45f164601d01cb706c19f22ed3e25eff56"
+    },
+    "targets": {
+      "org.springframework.boot.autoconfigure.mongo.MongoProperties": [
+        {
+          "method": "builder(MongoClientOptions)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/958a0a45f164601d01cb706c19f22ed3e25eff56/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/958a0a45f164601d01cb706c19f22ed3e25eff56/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/958a0a45f164601d01cb706c19f22ed3e25eff56/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/958a0a45f164601d01cb706c19f22ed3e25eff56/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "3444ebbc05b99a164474c14d6a6784f749514428"
+    },
+    "targets": {
+      "org.springframework.boot.context.web.SpringBootServletInitializer": [
+        {
+          "method": "createRootApplicationContext(ServletContext)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/3444ebbc05b99a164474c14d6a6784f749514428/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/3444ebbc05b99a164474c14d6a6784f749514428/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/3444ebbc05b99a164474c14d6a6784f749514428/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/3444ebbc05b99a164474c14d6a6784f749514428/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "074771ec125dd407af0282b92960e9e9e3377e84"
+    },
+    "targets": {
+      "org.springframework.boot.context.web.SpringBootServletInitializer": [
+        {
+          "method": "createRootApplicationContext(ServletContext)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/074771ec125dd407af0282b92960e9e9e3377e84/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/074771ec125dd407af0282b92960e9e9e3377e84/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/074771ec125dd407af0282b92960e9e9e3377e84/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/074771ec125dd407af0282b92960e9e9e3377e84/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "spring-boot",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "c93ea54ea3e08eaa2a17640d5d2b3e60264c1a9c"
+    },
+    "targets": {
+      "org.springframework.boot.autoconfigure.cache.RedisCacheConfiguration": [
+        {
+          "method": "cacheManager(RedisTemplate<Object|Object>)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/spring-boot/c93ea54ea3e08eaa2a17640d5d2b3e60264c1a9c/original/base/base.jar",
+      "left": "${PATH_DATASET}/spring-boot/c93ea54ea3e08eaa2a17640d5d2b3e60264c1a9c/original/left/left.jar",
+      "right": "${PATH_DATASET}/spring-boot/c93ea54ea3e08eaa2a17640d5d2b3e60264c1a9c/original/right/right.jar",
+      "merge": "${PATH_DATASET}/spring-boot/c93ea54ea3e08eaa2a17640d5d2b3e60264c1a9c/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "quickml",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "0d29fd9917e6e53993ea96798b84e945d17aa41e"
+    },
+    "targets": {
+      "quickdt.experiments.OutOfTimeCrossValidatorRunner": [
+        {
+          "method": ""
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/quickml/0d29fd9917e6e53993ea96798b84e945d17aa41e/original/base/base.jar",
+      "left": "${PATH_DATASET}/quickml/0d29fd9917e6e53993ea96798b84e945d17aa41e/original/left/left.jar",
+      "right": "${PATH_DATASET}/quickml/0d29fd9917e6e53993ea96798b84e945d17aa41e/original/right/right.jar",
+      "merge": "${PATH_DATASET}/quickml/0d29fd9917e6e53993ea96798b84e945d17aa41e/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "vavr",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "204635d9156b498079c2f34b821dca7ca1711ef6"
+    },
+    "targets": {
+      "javaslang.control.Validation": [
+        {
+          "method": ""
+        }
+      ],
+      "javaslang.collection.HashSet": [
+        {
+          "method": "of(T)"
+        }
+      ],
+      "javaslang.collection.LinkedHashSet": [
+        {
+          "method": "of(T)"
+        }
+      ],
+      "javaslang.collection.CharSeq": [
+        {
+          "method": "of(char)"
+        }
+      ],
+      "javaslang.collection.Iterator": [
+        {
+          "method": "of(T)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/vavr/204635d9156b498079c2f34b821dca7ca1711ef6/original/base/base.jar",
+      "left": "${PATH_DATASET}/vavr/204635d9156b498079c2f34b821dca7ca1711ef6/original/left/left.jar",
+      "right": "${PATH_DATASET}/vavr/204635d9156b498079c2f34b821dca7ca1711ef6/original/right/right.jar",
+      "merge": "${PATH_DATASET}/vavr/204635d9156b498079c2f34b821dca7ca1711ef6/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "crawler4j",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "6fdb8f27b53c5d69b552341a459d0e1fa610f68d"
+    },
+    "targets": {
+      "edu.uci.ics.crawler4j.parser.Parser": [
+        {
+          "method": "parse(Page| String)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/crawler4j/6fdb8f27b53c5d69b552341a459d0e1fa610f68d/original/base/base.jar",
+      "left": "${PATH_DATASET}/crawler4j/6fdb8f27b53c5d69b552341a459d0e1fa610f68d/original/left/left.jar",
+      "right": "${PATH_DATASET}/crawler4j/6fdb8f27b53c5d69b552341a459d0e1fa610f68d/original/right/right.jar",
+      "merge": "${PATH_DATASET}/crawler4j/6fdb8f27b53c5d69b552341a459d0e1fa610f68d/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  },
+  {
+    "projectName": "moshi",
+    "runAnalysis": true,
+    "scenarioCommits": {
+      "base": "",
+      "left": "",
+      "right": "",
+      "merge": "afb82cb3e890d075e1786cb900ec18a87fc24758"
+    },
+    "targets": {
+      "com.squareup.moshi.ClassJsonAdapter": [
+        {
+          "method": "create(Type| Set<Annotations>| com.square.moshi.Moshi)"
+        }
+      ]
+    },
+    "scenarioJars": {
+      "base": "${PATH_DATASET}/moshi/afb82cb3e890d075e1786cb900ec18a87fc24758/original/base/base.jar",
+      "left": "${PATH_DATASET}/moshi/afb82cb3e890d075e1786cb900ec18a87fc24758/original/left/left.jar",
+      "right": "${PATH_DATASET}/moshi/afb82cb3e890d075e1786cb900ec18a87fc24758/original/right/right.jar",
+      "merge": "${PATH_DATASET}/moshi/afb82cb3e890d075e1786cb900ec18a87fc24758/original/merge/merge.jar"
+    },
+    "jarType": "original"
+  }
+]

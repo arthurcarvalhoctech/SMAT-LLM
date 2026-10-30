@@ -7,13 +7,16 @@ from nimrod.dynamic_analysis.criteria.second_semantic_conflict_criteria import S
 from nimrod.core.feature_flags import (
   DYNAMIC_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
   LAYA_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
+  LLM_INTERFERENCE_DETECTION_DISABLED_MESSAGE,
   NO_INTERFERENCE_FLOW_ENABLED_MESSAGE,
   is_dynamic_interference_detection_enabled,
   is_laya_interference_detection_enabled,
+  is_llm_interference_detection_enabled,
 )
 from nimrod.dynamic_analysis.main import DynamicAnalysis
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
 from nimrod.laya_interference import LayaFlowConfig, LayaInterferenceFlow
+from nimrod.llm_interference import LlmFlowConfig, LlmInterferenceFlow
 from nimrod.output_generation.behavior_change_output_generator import BehaviorChangeOutputGenerator
 from nimrod.output_generation.output_generator import OutputGenerator
 from nimrod.output_generation.semantic_conflicts_output_generator import SemanticConflictsOutputGenerator
@@ -157,25 +160,37 @@ def _build_laya_flow() -> LayaInterferenceFlow:
   return LayaInterferenceFlow(config)
 
 
+def _build_llm_flow() -> LlmInterferenceFlow:
+  default_log_dir = os.path.join(
+      os.path.dirname(get_base_output_path()), "reports", "llm_interference"
+  )
+  config = LlmFlowConfig.from_env(default_log_dir=default_log_dir)
+  return LlmInterferenceFlow(config)
+
+
 def main():
   setup_logging()
 
   dynamic_enabled = is_dynamic_interference_detection_enabled()
   laya_enabled = is_laya_interference_detection_enabled()
+  llm_enabled = is_llm_interference_detection_enabled()
 
   if not dynamic_enabled:
     logging.warning(DYNAMIC_INTERFERENCE_DETECTION_DISABLED_MESSAGE)
   if not laya_enabled:
     logging.info(LAYA_INTERFERENCE_DETECTION_DISABLED_MESSAGE)
+  if not llm_enabled:
+    logging.info(LLM_INTERFERENCE_DETECTION_DISABLED_MESSAGE)
 
-  if not dynamic_enabled and not laya_enabled:
+  if not dynamic_enabled and not laya_enabled and not llm_enabled:
     logging.warning(NO_INTERFERENCE_FLOW_ENABLED_MESSAGE)
     return
 
   logging.info(
-      "Active interference detection flows: dynamic=%s laya=%s",
+      "Active interference detection flows: dynamic=%s laya=%s llm=%s",
       dynamic_enabled,
       laya_enabled,
+      llm_enabled,
   )
 
   config = get_config()
@@ -189,13 +204,17 @@ def main():
 
   dynamic_flow = _build_dynamic_flow(config) if dynamic_enabled else None
   laya_flow = _build_laya_flow() if laya_enabled else None
+  llm_flow = _build_llm_flow() if llm_enabled else None
 
   if laya_flow is not None:
     logging.info("Laya pre-analysis logs: %s", laya_flow.log_dir)
+  if llm_flow is not None:
+    logging.info("LLM pre-analysis logs: %s", llm_flow.log_dir)
 
   run_scenarios(
       scenarios,
       laya_flow=laya_flow,
+      llm_flow=llm_flow,
       dynamic_flow=dynamic_flow,
   )
 

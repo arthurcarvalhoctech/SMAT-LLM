@@ -37,6 +37,10 @@ Notas:
 - Existe também um fluxo opcional de pré-análise com Laya, executado antes da
   detecção dinâmica. Ele levanta hipóteses sobre os três critérios de estado do
   artigo e não substitui a detecção por execução. Ver `docs/fluxo-laya.md`.
+- Existe um fluxo opcional de pré-análise com LLM, também executado antes da
+  detecção dinâmica. Ele usa o provedor LLM configurado para avaliar os mesmos
+  três critérios e grava logs, JSONL e classificações em
+  `reports/llm_interference`. Ver `docs/fluxo-llm.md`.
 
 ## 2. Visão geral do pipeline
 
@@ -102,16 +106,17 @@ flowchart TD
 
 ### 4.0 Flags de habilitação
 
-O SMAT tem dois fluxos independentes:
+O SMAT tem três fluxos independentes:
 
 - `SMAT_DYNAMIC_INTERFERENCE_DETECTION` (padrão `true`): pipeline dinâmico
   descrito neste documento.
 - `SMAT_LAYA_INTERFERENCE_DETECTION` (padrão `false`): pré-análise com Laya.
+- `SMAT_LLM_INTERFERENCE_DETECTION` (padrão `false`): pré-análise com LLM.
 
-Qualquer combinação é válida: nenhum fluxo, apenas Laya, apenas dinâmico ou os
-dois. Quando o fluxo dinâmico está desabilitado, o console exibe
-`O fluxo de detecção de interferências baseado em testes não está ativo.`;
-quando os dois estão desabilitados, o SMAT informa que nenhum fluxo está ativo.
+Qualquer combinação é válida. A ordem quando vários estão habilitados é
+**Laya → LLM → dinâmico**. Quando o fluxo dinâmico está desabilitado, o console
+exibe `O fluxo de detecção de interferências baseado em testes não está ativo.`;
+quando todos estão desabilitados, o SMAT informa que nenhum fluxo está ativo.
 
 O guard do fluxo dinâmico existe em dois níveis: `nimrod/__main__.py` (evita o
 setup) e `SMAT.run_tool_for_semmantic_conflict_detection` (protege chamadas
@@ -299,6 +304,19 @@ antes do fluxo dinâmico. Para cada método-alvo ele:
 
 O Laya não executa código; o resultado é uma hipótese de triagem. A detecção
 por execução continua sendo a autoridade. Detalhes em `docs/fluxo-laya.md`.
+
+### 4.7 Pré-análise com LLM (opcional)
+
+Quando `SMAT_LLM_INTERFERENCE_DETECTION=true`, o `LlmInterferenceFlow` roda
+depois do Laya e antes da detecção dinâmica. Para cada método-alvo ele monta o
+mesmo estado de fontes (`base`, `left`, `right`, `merge`), envia um prompt
+estruturado ao provedor configurado em `LLM_PROVIDER`/`LLM_MODEL` e grava um
+log legível, um JSONL e uma classificação por método em
+`SMAT/output-test-dest/reports/llm_interference`.
+
+O resultado usa `possible_interference`, `no_signal` ou `error`. Assim como o
+Laya, o LLM não executa código; o viewer apresenta os critérios e as
+probabilidades como hipóteses. Detalhes em `docs/fluxo-llm.md`.
 
 ### 4.7 Persistência dos cenários de merge
 

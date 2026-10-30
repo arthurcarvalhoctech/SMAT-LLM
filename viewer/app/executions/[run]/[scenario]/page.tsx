@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LayaScenarioPanel } from "@/components/laya-scenario-summary";
+import { LlmScenarioPanel } from "@/components/llm-scenario-summary";
 import { ScenarioSourceExplorer } from "@/components/scenario-source-explorer";
 import {
   Badge,
@@ -11,7 +12,11 @@ import {
   StatCard,
 } from "@/components/ui";
 import { formatNumber } from "@/lib/format";
-import { getLayaSummaryForScenario, getScenario } from "@/lib/smat-data";
+import {
+  getLayaSummaryForScenario,
+  getLlmSummaryForScenario,
+  getScenario,
+} from "@/lib/smat-data";
 import { normalizeTargets } from "@/lib/targets";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +31,10 @@ export default async function ScenarioPage({ params }: ScenarioPageProps) {
 
   if (!detail) notFound();
 
-  const layaSummary = await getLayaSummaryForScenario(detail.summary);
+  const [layaSummary, llmSummary] = await Promise.all([
+    getLayaSummaryForScenario(detail.summary, detail.runId),
+    getLlmSummaryForScenario(detail.summary, detail.runId),
+  ]);
   const targets = normalizeTargets(detail.summary.targets);
   const methodCount = targets.reduce(
     (total, target) => total + target.methods.length,
@@ -182,10 +190,19 @@ export default async function ScenarioPage({ params }: ScenarioPageProps) {
       <section>
         <SectionHeading
           eyebrow="Laya"
-          title="Resultado da pré-análise"
+          title="Resultado da análise Laya"
           description="Hipótese do Laya para os três critérios de interferência. A detecção por execução continua sendo a referência."
         />
         <LayaScenarioPanel summary={layaSummary} />
+      </section>
+
+      <section>
+        <SectionHeading
+          eyebrow="LLM"
+          title="Resultado da análise LLM"
+          description="Hipótese do modelo de linguagem para os três critérios de interferência. A detecção por execução continua sendo a referência."
+        />
+        <LlmScenarioPanel summary={llmSummary} />
       </section>
 
       <section>

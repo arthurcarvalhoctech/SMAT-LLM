@@ -17,6 +17,12 @@ LAYA_INTERFERENCE_DETECTION_DISABLED_MESSAGE = (
     "O fluxo de detecção de interferências com Laya não está ativo."
 )
 
+LLM_INTERFERENCE_DETECTION_ENV_VAR = "SMAT_LLM_INTERFERENCE_DETECTION"
+
+LLM_INTERFERENCE_DETECTION_DISABLED_MESSAGE = (
+    "O fluxo de detecção de interferências com LLM não está ativo."
+)
+
 NO_INTERFERENCE_FLOW_ENABLED_MESSAGE = (
     "Nenhum fluxo de detecção de interferências está ativo."
 )
@@ -71,4 +77,19 @@ def is_laya_interference_detection_enabled() -> bool:
         os.environ.get(LAYA_INTERFERENCE_DETECTION_ENV_VAR),
         default=False,
         env_var=LAYA_INTERFERENCE_DETECTION_ENV_VAR,
+    )
+
+
+def is_llm_interference_detection_enabled() -> bool:
+    """Return whether the LLM-based interference pre-analysis is enabled.
+
+    It is disabled by default because it calls an external LLM provider (and
+    may incur cost). Configure the provider with ``LLM_PROVIDER``,
+    ``LLM_MODEL`` and the corresponding API key, then set
+    ``SMAT_LLM_INTERFERENCE_DETECTION`` to a true-like value.
+    """
+    return _parse_bool(
+        os.environ.get(LLM_INTERFERENCE_DETECTION_ENV_VAR),
+        default=False,
+        env_var=LLM_INTERFERENCE_DETECTION_ENV_VAR,
     )

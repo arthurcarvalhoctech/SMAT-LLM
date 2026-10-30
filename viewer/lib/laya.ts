@@ -30,8 +30,12 @@ export function layaStatusLabel(status: LayaScenarioStatus): string {
   switch (status) {
     case "interference":
       return "Interferência detectada";
+    case "possible_interference":
+      return "Possível interferência";
     case "no_interference":
       return "Sem interferência";
+    case "no_signal":
+      return "Sem sinal de interferência";
     case "error":
       return "Erro na análise Laya";
     default:
@@ -43,8 +47,12 @@ export function layaStatusShort(status: LayaScenarioStatus): string {
   switch (status) {
     case "interference":
       return "Interferência";
+    case "possible_interference":
+      return "Possível interf.";
     case "no_interference":
       return "Sem interf.";
+    case "no_signal":
+      return "Sem sinal";
     case "error":
       return "Erro";
     default:
@@ -57,9 +65,12 @@ export function layaStatusTone(
 ): "rose" | "emerald" | "amber" | "slate" {
   switch (status) {
     case "interference":
+    case "possible_interference":
       return "rose";
     case "no_interference":
       return "emerald";
+    case "no_signal":
+      return "slate";
     case "error":
       return "amber";
     default:
