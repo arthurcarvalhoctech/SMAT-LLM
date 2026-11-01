@@ -25,11 +25,19 @@ from nimrod.laya_interference.criteria import (
     CONFIDENCE_QUESTION_ID,
     CRITERIA,
     PRIMARY_CRITERION_QUESTION_ID,
+    WITNESS_QUESTION_ID,
     build_questions,
     choice_label,
+    choice_probability,
     noul_probability,
     score_label,
     score_value,
+)
+from nimrod.laya_interference.decision import (
+    NO_SIGNAL,
+    POSSIBLE_INTERFERENCE,
+    UNCERTAIN,
+    decide,
 )
 from nimrod.laya_interference.flow import LayaInterferenceFlow
 from nimrod.laya_interference.source_context import (
@@ -40,15 +48,18 @@ from nimrod.laya_interference.source_context import (
 
 
 class FakeLayaClient:
-    def __init__(self, result=None, error=None):
+    def __init__(self, result=None, error=None, results=None):
         self.result = result or {}
         self.error = error
+        self.results = list(results) if results is not None else None
         self.calls = []
 
     def predict(self, state, questions):
         self.calls.append((state, questions))
         if self.error is not None:
             raise self.error
+        if self.results is not None:
+            return self.results.pop(0)
         return self.result
 
     def describe(self):
@@ -62,24 +73,40 @@ def make_result(
     primary="criterion_1_global_divergence",
     branch="left",
     confidence=3.2,
+    none_probability=0.2,
+    witness=None,
 ):
-    return {
-        "answers": {
-            "criterion_1_global_divergence": {"type": "noul", "noul": c1},
-            "criterion_2_parent_change_loss": {"type": "noul", "noul": c2},
-            "criterion_3_merge_new_effect": {"type": "noul", "noul": c3},
-            "primary_criterion": {
-                "type": "choice",
-                "choice": primary,
-                "confidence": 0.77,
+    answers = {
+        "criterion_1_global_divergence": {"type": "noul", "noul": c1},
+        "criterion_2_parent_change_loss": {"type": "noul", "noul": c2},
+        "criterion_3_merge_new_effect": {"type": "noul", "noul": c3},
+        "primary_criterion": {
+            "type": "choice",
+            "choice": primary,
+            "confidence": 0.77,
+            "probabilities": {
+                "criterion_1_global_divergence": 0.2,
+                "criterion_2_parent_change_loss": 0.15,
+                "criterion_3_merge_new_effect": 0.1,
+                "none": none_probability,
             },
-            "affected_branch": {
-                "type": "choice",
-                "choice": branch,
-                "confidence": 0.66,
-            },
-            "analysis_confidence": {"type": "score", "score": confidence},
         },
+        "affected_branch": {
+            "type": "choice",
+            "choice": branch,
+            "confidence": 0.66,
+        },
+        "analysis_confidence": {"type": "score", "score": confidence},
+    }
+    if witness is not None:
+        answers[WITNESS_QUESTION_ID] = {
+            "type": "choice",
+            "choice": witness,
+            "confidence": 0.8,
+            "probabilities": {witness: 0.8, "none": 0.2},
+        }
+    return {
+        "answers": answers,
         "routing": {"model": "english"},
         "usage": {"state_tokens": 120, "truncated": False},
     }
@@ -129,8 +156,213 @@ class LayaCriteriaTest(unittest.TestCase):
             choice_label(result, PRIMARY_CRITERION_QUESTION_ID),
             "criterion_1_global_divergence",
         )
+        self.assertAlmostEqual(
+            choice_probability(result, PRIMARY_CRITERION_QUESTION_ID, "none"),
+            0.2,
+        )
         self.assertAlmostEqual(score_value(result, CONFIDENCE_QUESTION_ID), 3.2)
         self.assertEqual(score_label(result, CONFIDENCE_QUESTION_ID), "high")
+
+    def test_witness_question_is_added_when_candidates_exist(self):
+        questions = build_questions(
+            {
+                "return": "The returned value.",
+                "none": "No concrete element.",
+            }
+        )
+        self.assertIn(WITNESS_QUESTION_ID, questions)
+        self.assertEqual(questions[WITNESS_QUESTION_ID]["type"], "choice")
+        self.assertIn("return", questions[WITNESS_QUESTION_ID]["criteria"])
+
+    def test_witness_only_questions_for_two_stage(self):
+        questions = build_questions(
+            {"return": "The returned value.", "none": "No concrete element."},
+            include_criteria=False,
+        )
+        self.assertEqual(list(questions), [WITNESS_QUESTION_ID])
+
+    def test_negative_instructions_can_be_toggled(self):
+        with_negative = build_questions()
+        without_negative = build_questions(negative_instructions=False)
+        for criterion in CRITERIA:
+            self.assertIn(
+                criterion.negative_instruction,
+                with_negative[criterion.id]["instructions"],
+            )
+            self.assertNotIn(
+                criterion.negative_instruction,
+                without_negative[criterion.id]["instructions"],
+            )
+
+
+class LayaDecisionTest(unittest.TestCase):
+    THRESHOLDS = {
+        "criterion_1_global_divergence": 0.5,
+        "criterion_2_parent_change_loss": 0.5,
+        "criterion_3_merge_new_effect": 0.5,
+    }
+
+    def test_baseline_matches_any_threshold(self):
+        classification, _ = decide(
+            "baseline",
+            {"criterion_1_global_divergence": 0.91},
+            self.THRESHOLDS,
+            "none",
+            0.99,
+        )
+        self.assertEqual(classification, POSSIBLE_INTERFERENCE)
+
+    def test_consistent_abstains_when_primary_is_none(self):
+        classification, _ = decide(
+            "consistent",
+            {
+                "criterion_1_global_divergence": 0.91,
+                "criterion_2_parent_change_loss": 0.88,
+                "criterion_3_merge_new_effect": 0.92,
+            },
+            self.THRESHOLDS,
+            "none",
+            0.97,
+        )
+        self.assertEqual(classification, UNCERTAIN)
+
+    def test_consistent_accepts_matching_primary_criterion(self):
+        classification, _ = decide(
+            "consistent",
+            {
+                "criterion_1_global_divergence": 0.91,
+                "criterion_2_parent_change_loss": 0.2,
+                "criterion_3_merge_new_effect": 0.1,
+            },
+            self.THRESHOLDS,
+            "criterion_1_global_divergence",
+            0.1,
+        )
+        self.assertEqual(classification, POSSIBLE_INTERFERENCE)
+
+    def test_conservative_abstains_on_high_none_probability(self):
+        classification, _ = decide(
+            "conservative",
+            {"criterion_1_global_divergence": 0.91},
+            self.THRESHOLDS,
+            "criterion_1_global_divergence",
+            0.97,
+        )
+        self.assertEqual(classification, UNCERTAIN)
+
+    def test_conservative_accepts_confident_primary(self):
+        classification, _ = decide(
+            "conservative",
+            {"criterion_1_global_divergence": 0.91},
+            self.THRESHOLDS,
+            "criterion_1_global_divergence",
+            0.1,
+        )
+        self.assertEqual(classification, POSSIBLE_INTERFERENCE)
+
+    def test_witness_none_forces_abstention(self):
+        classification, _ = decide(
+            "consistent",
+            {"criterion_1_global_divergence": 0.91},
+            self.THRESHOLDS,
+            "criterion_1_global_divergence",
+            0.1,
+            witness="none",
+        )
+        self.assertEqual(classification, UNCERTAIN)
+
+    def test_no_signal_when_nothing_triggers(self):
+        classification, _ = decide(
+            "conservative",
+            {"criterion_1_global_divergence": 0.1},
+            self.THRESHOLDS,
+            "none",
+            0.1,
+        )
+        self.assertIn(classification, (NO_SIGNAL, UNCERTAIN))
+
+
+class LayaCompactStateTest(unittest.TestCase):
+    def test_compact_payload_contains_merge_and_is_smaller(self):
+        state = make_state()
+
+        compact = state.to_compact_payload(include_merge=True)
+        compact_without_merge = state.to_compact_payload()
+        as_json = json.dumps(state.to_payload())
+
+        self.assertIn("Método: Foo.value()", compact)
+        self.assertIn("Corpo de base (B):", compact)
+        self.assertIn("Corpo do merge (M):", compact)
+        self.assertIn("Resumo de Left:", compact)
+        self.assertNotIn("Corpo do merge (M):", compact_without_merge)
+        self.assertLess(len(compact), len(as_json))
+        self.assertNotEqual(state.digest(compact), state.digest())
+
+    def test_witness_candidates_include_return_and_none(self):
+        candidates = make_state().witness_candidates()
+        self.assertIn("return", candidates)
+        self.assertIn("none", candidates)
+
+
+class LayaConfigTest(unittest.TestCase):
+    def test_reads_decision_rule_state_format_and_thresholds(self):
+        with patch.dict(
+            os.environ,
+            {
+                "SMAT_LAYA_DECISION_RULE": "consistent",
+                "SMAT_LAYA_STATE_FORMAT": "compact",
+                "SMAT_LAYA_THRESHOLDS": "0.8,0.7,0.6",
+                "SMAT_LAYA_WITNESS": "true",
+                "SMAT_LAYA_WITNESS_TWO_STAGE": "true",
+            },
+            clear=True,
+        ):
+            config = LayaFlowConfig.from_env("/tmp/laya")
+        self.assertEqual(config.decision_rule, "consistent")
+        self.assertEqual(config.state_format, "compact")
+        self.assertTrue(config.witness)
+        self.assertTrue(config.witness_two_stage)
+        self.assertEqual(config.criterion_thresholds, (0.8, 0.7, 0.6))
+
+    def test_witness_forces_consistent_rule(self):
+        config = LayaFlowConfig(witness=True, decision_rule="baseline")
+        self.assertEqual(config.decision_rule, "consistent")
+
+    def test_two_stage_implies_witness_and_consistent(self):
+        config = LayaFlowConfig(
+            witness=False,
+            witness_two_stage=True,
+            decision_rule="baseline",
+        )
+        self.assertTrue(config.witness)
+        self.assertEqual(config.decision_rule, "consistent")
+
+    def test_allow_baseline_with_witness_keeps_baseline(self):
+        config = LayaFlowConfig(
+            witness=True,
+            witness_two_stage=False,
+            decision_rule="baseline",
+            allow_baseline_with_witness=True,
+        )
+        self.assertEqual(config.decision_rule, "baseline")
+
+    def test_negative_instructions_can_be_disabled_by_env(self):
+        with patch.dict(
+            os.environ,
+            {"SMAT_LAYA_NEGATIVE_INSTRUCTIONS": "false"},
+            clear=True,
+        ):
+            config = LayaFlowConfig.from_env("/tmp/laya")
+        self.assertFalse(config.negative_instructions)
+
+    def test_diagnostic_questions_can_be_enabled_by_env(self):
+        with patch.dict(
+            os.environ,
+            {"SMAT_LAYA_DIAGNOSTIC_QUESTIONS": "true"},
+            clear=True,
+        ):
+            config = LayaFlowConfig.from_env("/tmp/laya")
+        self.assertTrue(config.diagnostic_questions)
 
 
 class LayaFlowTest(unittest.TestCase):
@@ -177,6 +409,10 @@ class LayaFlowTest(unittest.TestCase):
 
         self.assertEqual(len(assessments), 1)
         self.assertEqual(len(client.calls), 1)
+        self.assertEqual(
+            set(client.calls[0][1]),
+            {criterion.id for criterion in CRITERIA},
+        )
         assessment = assessments[0]
 
         self.assertTrue(assessment.criteria["criterion_1_global_divergence"].triggered)
@@ -194,6 +430,7 @@ class LayaFlowTest(unittest.TestCase):
         self.assertIn("TRIGGERED", log_content)
         self.assertIn("not-triggered", log_content)
         self.assertIn("primary_criterion: criterion_1_global_divergence", log_content)
+        self.assertIn("witness_two_stage=False", log_content)
 
         jsonl_lines = Path(flow.jsonl_path).read_text(encoding="utf-8").splitlines()
         self.assertEqual(len(jsonl_lines), 1)
@@ -202,6 +439,116 @@ class LayaFlowTest(unittest.TestCase):
         self.assertEqual(record["method"], "value")
         self.assertEqual(record["triggered_criteria"], ["criterion_1_global_divergence"])
         self.assertFalse(record["usage"]["truncated"])
+        self.assertEqual(record["criterion_thresholds"], [0.5, 0.5, 0.5])
+        self.assertFalse(record["witness_two_stage"])
+
+    def test_consistent_compact_flow_returns_uncertain(self):
+        config = LayaFlowConfig(
+            model="english",
+            threshold=0.5,
+            max_len=512,
+            log_dir=self.log_dir,
+            decision_rule="consistent",
+            state_format="compact",
+            witness=True,
+        )
+        client = FakeLayaClient(
+            result=make_result(
+                c1=0.95,
+                c2=0.92,
+                c3=0.90,
+                primary="none",
+                none_probability=0.97,
+                witness="none",
+            )
+        )
+        with patch(
+            "nimrod.laya_interference.flow.build_method_state",
+            return_value=make_state(),
+        ):
+            flow = LayaInterferenceFlow(config, client=client, log_dir=self.log_dir)
+            assessments = flow.run_for_scenario(self.scenario)
+
+        assessment = assessments[0]
+        self.assertEqual(assessment.classification, "uncertain")
+        self.assertAlmostEqual(assessment.none_probability, 0.97)
+        self.assertEqual(assessment.state_format, "compact")
+        self.assertIsInstance(client.calls[0][0], str)
+        self.assertIn("Corpo de base (B):", client.calls[0][0])
+
+    def test_two_stage_witness_focuses_criteria_on_selected_element(self):
+        config = LayaFlowConfig(
+            model="english",
+            threshold=0.5,
+            max_len=512,
+            log_dir=self.log_dir,
+            decision_rule="consistent",
+            state_format="compact",
+            witness=True,
+            witness_two_stage=True,
+        )
+        witness_result = {
+            "answers": {
+                WITNESS_QUESTION_ID: {
+                    "type": "choice",
+                    "choice": "return",
+                    "confidence": 0.9,
+                }
+            }
+        }
+        criteria_result = make_result(
+            c1=0.95,
+            c2=0.2,
+            c3=0.1,
+            primary="criterion_1_global_divergence",
+            none_probability=0.1,
+        )
+        client = FakeLayaClient(results=[witness_result, criteria_result])
+        with patch(
+            "nimrod.laya_interference.flow.build_method_state",
+            return_value=make_state(),
+        ):
+            flow = LayaInterferenceFlow(config, client=client, log_dir=self.log_dir)
+            assessments = flow.run_for_scenario(self.scenario)
+
+        self.assertEqual(len(client.calls), 2)
+        self.assertEqual(list(client.calls[0][1]), [WITNESS_QUESTION_ID])
+        self.assertIn("Testemunha: return", client.calls[1][0])
+        assessment = assessments[0]
+        self.assertEqual(assessment.witness, "return")
+        self.assertEqual(assessment.classification, "possible_interference")
+
+    def test_two_stage_witness_none_skips_criteria(self):
+        config = LayaFlowConfig(
+            model="english",
+            threshold=0.5,
+            max_len=512,
+            log_dir=self.log_dir,
+            decision_rule="consistent",
+            state_format="compact",
+            witness=True,
+            witness_two_stage=True,
+        )
+        witness_result = {
+            "answers": {
+                WITNESS_QUESTION_ID: {
+                    "type": "choice",
+                    "choice": "none",
+                    "confidence": 0.8,
+                }
+            }
+        }
+        client = FakeLayaClient(results=[witness_result])
+        with patch(
+            "nimrod.laya_interference.flow.build_method_state",
+            return_value=make_state(),
+        ):
+            flow = LayaInterferenceFlow(config, client=client, log_dir=self.log_dir)
+            assessments = flow.run_for_scenario(self.scenario)
+
+        self.assertEqual(len(client.calls), 1)
+        self.assertEqual(assessments[0].witness, "none")
+        self.assertEqual(assessments[0].classification, "uncertain")
 
     def test_handles_unavailable_laya_without_crashing(self):
         client = FakeLayaClient(error=LayaUnavailableError("laya not installed"))

@@ -6,5 +6,6 @@ __pycache__/
 SMAT/output-test-dest/
 runs/
 .laya_smat/
+laya_checkpoints/
 output-test-dest
 **/*.orig

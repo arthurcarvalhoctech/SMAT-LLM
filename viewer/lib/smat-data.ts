@@ -90,6 +90,21 @@ interface LayaJson {
   max_len?: number;
   maxLen?: number;
   threshold?: number;
+  state_format?: string;
+  stateFormat?: string;
+  decision_rule?: string;
+  decisionRule?: string;
+  criterion_thresholds?: number[] | null;
+  criterionThresholds?: number[] | null;
+  witness?: string | null;
+  witness_two_stage?: boolean | null;
+  witnessTwoStage?: boolean | null;
+  allow_baseline_with_witness?: boolean | null;
+  allowBaselineWithWitness?: boolean | null;
+  negative_instructions?: boolean | null;
+  negativeInstructions?: boolean | null;
+  diagnostic_questions?: boolean | null;
+  diagnosticQuestions?: boolean | null;
   classification?: string;
   triggered_criteria?: string[];
   triggeredCriteria?: string[];
@@ -468,6 +483,21 @@ function toLayaRecord(raw: LayaJson): LayaRecord {
     model: raw.model,
     maxLen: raw.max_len ?? raw.maxLen,
     threshold: raw.threshold,
+    stateFormat: raw.state_format ?? raw.stateFormat,
+    decisionRule: raw.decision_rule ?? raw.decisionRule,
+    criterionThresholds:
+      raw.criterion_thresholds ?? raw.criterionThresholds ?? undefined,
+    witness: raw.witness ?? null,
+    witnessTwoStage:
+      raw.witness_two_stage ?? raw.witnessTwoStage ?? undefined,
+    allowBaselineWithWitness:
+      raw.allow_baseline_with_witness ??
+      raw.allowBaselineWithWitness ??
+      undefined,
+    negativeInstructions:
+      raw.negative_instructions ?? raw.negativeInstructions ?? undefined,
+    diagnosticQuestions:
+      raw.diagnostic_questions ?? raw.diagnosticQuestions ?? undefined,
     classification,
     triggeredCriteria,
     primaryCriterion:
@@ -791,6 +821,20 @@ async function loadFlowRecords(
         ...record.probabilities,
         ...existing.probabilities,
       },
+      stateFormat: existing.stateFormat ?? record.stateFormat,
+      decisionRule: existing.decisionRule ?? record.decisionRule,
+      criterionThresholds:
+        existing.criterionThresholds ?? record.criterionThresholds,
+      witness: existing.witness ?? record.witness,
+      witnessTwoStage:
+        existing.witnessTwoStage ?? record.witnessTwoStage,
+      allowBaselineWithWitness:
+        existing.allowBaselineWithWitness ??
+        record.allowBaselineWithWitness,
+      negativeInstructions:
+        existing.negativeInstructions ?? record.negativeInstructions,
+      diagnosticQuestions:
+        existing.diagnosticQuestions ?? record.diagnosticQuestions,
       evidence: existing.evidence ?? record.evidence,
       summary: existing.summary ?? record.summary,
       reasoning: existing.reasoning ?? record.reasoning,
@@ -903,6 +947,9 @@ function summarizeLayaRecords(
   const noSignal = records.some(
     (record) => record.classification === "no_signal",
   );
+  const uncertain = records.some(
+    (record) => record.classification === "uncertain",
+  );
   const errorRecords = records.filter(
     (record) => record.classification === "error" || record.error,
   );
@@ -941,11 +988,13 @@ function summarizeLayaRecords(
         ? "possible_interference"
         : noInterference
           ? "no_interference"
-          : errorRecords.length > 0
-            ? "error"
-            : noSignal
-              ? "no_signal"
-              : "no_data",
+          : uncertain
+            ? "uncertain"
+            : errorRecords.length > 0
+              ? "error"
+              : noSignal
+                ? "no_signal"
+                : "no_data",
     criteria: Array.from(criteriaSet),
     primaryCriteria: Array.from(primarySet),
     records,

@@ -10,6 +10,7 @@ cannot compute state values. The execution-based SMAT pipeline remains the
 authoritative detector.
 """
 
+import gc
 import json
 import logging
 import os
@@ -17,7 +18,7 @@ import re
 import traceback
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
 from nimrod.laya_interference.client import (
@@ -26,14 +27,17 @@ from nimrod.laya_interference.client import (
     RouterLayaClient,
 )
 from nimrod.laya_interference.config import LayaFlowConfig
+from nimrod.laya_interference.decision import decide
 from nimrod.laya_interference.criteria import (
     AFFECTED_BRANCH_QUESTION_ID,
     CONFIDENCE_QUESTION_ID,
     CRITERIA,
     PRIMARY_CRITERION_QUESTION_ID,
+    WITNESS_QUESTION_ID,
     build_questions,
     choice_confidence,
     choice_label,
+    choice_probability,
     noul_probability,
     score_label,
     score_value,
@@ -53,6 +57,7 @@ def _default_log_dir() -> str:
 
 CLASSIFICATION_POSSIBLE_INTERFERENCE = "possible_interference"
 CLASSIFICATION_NO_SIGNAL = "no_signal"
+CLASSIFICATION_UNCERTAIN = "uncertain"
 CLASSIFICATION_ERROR = "error"
 
 CLASSIFICATION_NOTE = (
@@ -102,6 +107,18 @@ class LayaAssessment:
     source_paths: Dict[str, str]
     missing_branches: List[str]
     criteria: Dict[str, CriterionAssessment] = field(default_factory=dict)
+    state_format: str = "json"
+    none_probability: Optional[float] = None
+    witness: Optional[str] = None
+    witness_confidence: Optional[float] = None
+    witness_two_stage: bool = False
+    allow_baseline_with_witness: bool = False
+    negative_instructions: bool = True
+    diagnostic_questions: bool = False
+    criterion_thresholds: Tuple[float, float, float] = ()
+    decision_rule: str = "baseline"
+    decision_reason: str = ""
+    classification_override: Optional[str] = None
     primary_criterion: Optional[str] = None
     primary_criterion_confidence: Optional[float] = None
     affected_branch: Optional[str] = None
@@ -126,6 +143,8 @@ class LayaAssessment:
     def classification(self) -> str:
         if self.error:
             return CLASSIFICATION_ERROR
+        if self.classification_override is not None:
+            return self.classification_override
         if self.triggered_criteria:
             return CLASSIFICATION_POSSIBLE_INTERFERENCE
         return CLASSIFICATION_NO_SIGNAL
@@ -142,6 +161,17 @@ class LayaAssessment:
             "model": self.model,
             "max_len": self.max_len,
             "threshold": self.threshold,
+            "state_format": self.state_format,
+            "witness_two_stage": self.witness_two_stage,
+            "allow_baseline_with_witness": self.allow_baseline_with_witness,
+            "negative_instructions": self.negative_instructions,
+            "diagnostic_questions": self.diagnostic_questions,
+            "criterion_thresholds": list(self.criterion_thresholds),
+            "none_probability": self.none_probability,
+            "witness": self.witness,
+            "witness_confidence": self.witness_confidence,
+            "decision_rule": self.decision_rule,
+            "decision_reason": self.decision_reason,
             "classification": self.classification,
             "triggered_criteria": self.triggered_criteria,
             "primary_criterion": self.primary_criterion,
@@ -166,7 +196,18 @@ class LayaAssessment:
             "model": self.model,
             "threshold": self.threshold,
             "max_len": self.max_len,
+            "state_format": self.state_format,
             "state_digest": self.state_digest,
+            "witness_two_stage": self.witness_two_stage,
+            "allow_baseline_with_witness": self.allow_baseline_with_witness,
+            "negative_instructions": self.negative_instructions,
+            "diagnostic_questions": self.diagnostic_questions,
+            "criterion_thresholds": list(self.criterion_thresholds),
+            "none_probability": self.none_probability,
+            "witness": self.witness,
+            "witness_confidence": self.witness_confidence,
+            "decision_rule": self.decision_rule,
+            "decision_reason": self.decision_reason,
             "source_paths": self.source_paths,
             "missing_branches": self.missing_branches,
             "criteria": {
@@ -197,6 +238,14 @@ class LayaAssessment:
             f"[{self.timestamp}] {self.project_name} :: {self.class_name}.{self.method_name}",
             f"  jar_type={self.jar_type} method_signature={self.method_signature!r}",
             f"  state_digest={self.state_digest}",
+            f"  state_format={self.state_format}",
+            f"  decision_rule={self.decision_rule}",
+            f"  witness_two_stage={self.witness_two_stage}",
+            f"  criterion_thresholds={self.criterion_thresholds}",
+            f"  decision={self.classification} ({self.decision_reason or '-'})",
+            f"  none_probability={self.none_probability}",
+            f"  witness={self.witness}",
+            f"  witness_confidence={self.witness_confidence}",
             f"  sources: {sources}",
             f"  missing_branches={self.missing_branches or '-'}",
         ]
@@ -215,7 +264,8 @@ class LayaAssessment:
             )
             lines.append(
                 f"  {criterion.id}: p={probability} "
-                f"threshold={self.threshold:.2f} -> {triggered}"
+                f"threshold={assessment.threshold if assessment else self.threshold:.2f} "
+                f"-> {triggered}"
             )
             lines.append(f"    definition: {criterion.article_definition}")
 
@@ -315,6 +365,27 @@ class LayaInterferenceFlow:
                 log_file.write(f"max_len={self.config.max_len}\n")
                 log_file.write(f"threshold={self.config.threshold:.2f}\n")
                 log_file.write(
+                    "criterion_thresholds="
+                    + ",".join(f"{value:.2f}" for value in self.config.criterion_thresholds)
+                    + "\n"
+                )
+                log_file.write(f"decision_rule={self.config.decision_rule}\n")
+                log_file.write(f"state_format={self.config.state_format}\n")
+                log_file.write(f"witness={self.config.witness}\n")
+                log_file.write(f"witness_two_stage={self.config.witness_two_stage}\n")
+                log_file.write(
+                    "allow_baseline_with_witness="
+                    f"{self.config.allow_baseline_with_witness}\n"
+                )
+                log_file.write(
+                    "negative_instructions="
+                    f"{self.config.negative_instructions}\n"
+                )
+                log_file.write(
+                    "diagnostic_questions="
+                    f"{self.config.diagnostic_questions}\n"
+                )
+                log_file.write(
                     "client="
                     + json.dumps(
                         client_description,
@@ -350,6 +421,8 @@ class LayaInterferenceFlow:
                     assessments.append(assessment)
                     self._write_assessment(assessment)
                     self._write_classification(assessment)
+                    # The Laya runtime can retain large tensors between calls.
+                    gc.collect()
 
         logging.info(
             "Finished Laya interference pre-analysis for project %s (%d method(s))",
@@ -364,6 +437,26 @@ class LayaInterferenceFlow:
             return None
         self._logged_errors.add(message)
         return traceback.format_exc()
+
+    def _questions_for(self, witness_candidates=None):
+        """Return only the questions used by the configured decision rule.
+
+        baseline uses C1/C2/C3 only. consistent/conservative additionally need
+        witness and primary. affected_branch/analysis_confidence are diagnostic
+        and only requested when explicitly enabled.
+        """
+        questions = build_questions(
+            witness_candidates,
+            negative_instructions=self.config.negative_instructions,
+        )
+        allowed = {criterion.id for criterion in CRITERIA}
+        if self.config.decision_rule != "baseline":
+            allowed.add(PRIMARY_CRITERION_QUESTION_ID)
+            if witness_candidates:
+                allowed.add(WITNESS_QUESTION_ID)
+        if self.config.diagnostic_questions:
+            allowed.update({AFFECTED_BRANCH_QUESTION_ID, CONFIDENCE_QUESTION_ID})
+        return {key: value for key, value in questions.items() if key in allowed}
 
     def _analyze_method(
         self,
@@ -397,9 +490,50 @@ class LayaInterferenceFlow:
             )
 
         try:
-            raw_result = self.client.predict(
-                state.to_payload(), build_questions()
+            state_payload = (
+                state.to_compact_payload()
+                if self.config.state_format == "compact"
+                else state.to_payload()
             )
+            use_witness = self.config.witness and (
+                self.config.decision_rule != "baseline"
+                or self.config.witness_two_stage
+            )
+            witness_candidates = (
+                state.witness_candidates() if use_witness else None
+            )
+            witness_override = None
+            witness_confidence_override = None
+            if witness_candidates and self.config.witness_two_stage:
+                witness_result = self.client.predict(
+                    state_payload,
+                    build_questions(
+                        witness_candidates,
+                        include_criteria=False,
+                        negative_instructions=self.config.negative_instructions,
+                    ),
+                )
+                witness_override = choice_label(
+                    witness_result, WITNESS_QUESTION_ID
+                )
+                witness_confidence_override = choice_confidence(
+                    witness_result, WITNESS_QUESTION_ID
+                )
+                if witness_override in (None, "none"):
+                    raw_result = witness_result
+                else:
+                    focused_payload = self._with_witness(
+                        state_payload, witness_override
+                    )
+                    raw_result = self.client.predict(
+                        focused_payload,
+                        self._questions_for(),
+                    )
+            else:
+                raw_result = self.client.predict(
+                    state_payload,
+                    self._questions_for(witness_candidates),
+                )
         except LayaUnavailableError as error:
             self._unavailable_reason = str(error)
             logging.error("Laya pre-analysis is unavailable: %s", error)
@@ -427,30 +561,90 @@ class LayaInterferenceFlow:
                 error_traceback=self._traceback_once(error),
             )
 
-        return self._assessment_from_result(state, raw_result)
+        return self._assessment_from_result(
+            state,
+            raw_result,
+            state_payload,
+            witness_candidates,
+            witness_override=witness_override,
+            witness_confidence_override=witness_confidence_override,
+        )
+
+    def _with_witness(self, payload: Any, witness: str) -> Any:
+        if isinstance(payload, str):
+            return payload + f"\nTestemunha: {witness}"
+        if isinstance(payload, dict):
+            focused = dict(payload)
+            focused["witness"] = witness
+            return focused
+        return payload
 
     def _assessment_from_result(
-        self, state: LayaMethodState, raw_result: Dict[str, Any]
+        self,
+        state: LayaMethodState,
+        raw_result: Dict[str, Any],
+        state_payload: Any = None,
+        witness_candidates: Optional[Dict[str, str]] = None,
+        witness_override: Optional[str] = None,
+        witness_confidence_override: Optional[float] = None,
     ) -> LayaAssessment:
+        thresholds = {
+            criterion.id: self.config.criterion_thresholds[index]
+            for index, criterion in enumerate(CRITERIA)
+        }
         criteria: Dict[str, CriterionAssessment] = {}
+        probabilities: Dict[str, Optional[float]] = {}
         for criterion in CRITERIA:
             probability = noul_probability(raw_result, criterion.id)
+            probabilities[criterion.id] = probability
             criteria[criterion.id] = CriterionAssessment(
                 criterion_id=criterion.id,
                 number=criterion.number,
                 title=criterion.title,
                 article_definition=criterion.article_definition,
                 probability=probability,
-                threshold=self.config.threshold,
+                threshold=thresholds[criterion.id],
                 triggered=(
                     probability is not None
-                    and probability >= self.config.threshold
+                    and probability >= thresholds[criterion.id]
                 ),
             )
 
         routing = raw_result.get("routing", {}) if isinstance(raw_result, dict) else {}
         usage = raw_result.get("usage", {}) if isinstance(raw_result, dict) else {}
         answers = raw_result.get("answers", {}) if isinstance(raw_result, dict) else {}
+        primary_criterion = choice_label(
+            raw_result, PRIMARY_CRITERION_QUESTION_ID
+        )
+        none_probability = choice_probability(
+            raw_result, PRIMARY_CRITERION_QUESTION_ID, "none"
+        )
+        witness = (
+            witness_override
+            if witness_override is not None
+            else (
+                choice_label(raw_result, WITNESS_QUESTION_ID)
+                if witness_candidates
+                else None
+            )
+        )
+        witness_confidence = (
+            witness_confidence_override
+            if witness_confidence_override is not None
+            else (
+                choice_confidence(raw_result, WITNESS_QUESTION_ID)
+                if witness_candidates
+                else None
+            )
+        )
+        classification, decision_reason = decide(
+            self.config.decision_rule,
+            probabilities,
+            thresholds,
+            primary_criterion,
+            none_probability,
+            witness=witness,
+        )
 
         return LayaAssessment(
             timestamp=datetime.now().isoformat(timespec="seconds"),
@@ -462,13 +656,23 @@ class LayaInterferenceFlow:
             model=self.config.model,
             threshold=self.config.threshold,
             max_len=self.config.max_len,
-            state_digest=state.digest(),
+            state_format=self.config.state_format,
+            state_digest=state.digest(state_payload),
             source_paths=state.source_paths(),
             missing_branches=state.missing_branches,
             criteria=criteria,
-            primary_criterion=choice_label(
-                raw_result, PRIMARY_CRITERION_QUESTION_ID
-            ),
+            witness_two_stage=self.config.witness_two_stage,
+            allow_baseline_with_witness=self.config.allow_baseline_with_witness,
+            negative_instructions=self.config.negative_instructions,
+            diagnostic_questions=self.config.diagnostic_questions,
+            criterion_thresholds=self.config.criterion_thresholds,
+            none_probability=none_probability,
+            witness=witness,
+            witness_confidence=witness_confidence,
+            decision_rule=self.config.decision_rule,
+            decision_reason=decision_reason,
+            classification_override=classification,
+            primary_criterion=primary_criterion,
             primary_criterion_confidence=choice_confidence(
                 raw_result, PRIMARY_CRITERION_QUESTION_ID
             ),
@@ -535,10 +739,17 @@ class LayaInterferenceFlow:
             model=self.config.model,
             threshold=self.config.threshold,
             max_len=self.config.max_len,
+            state_format=self.config.state_format,
             state_digest=state.digest(),
             source_paths=state.source_paths(),
             missing_branches=state.missing_branches,
             criteria=criteria,
+            witness_two_stage=self.config.witness_two_stage,
+            allow_baseline_with_witness=self.config.allow_baseline_with_witness,
+            negative_instructions=self.config.negative_instructions,
+            diagnostic_questions=self.config.diagnostic_questions,
+            criterion_thresholds=self.config.criterion_thresholds,
+            decision_rule=self.config.decision_rule,
             error=str(error),
             error_traceback=error_traceback,
         )

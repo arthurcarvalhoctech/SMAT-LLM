@@ -1,0 +1,316 @@
+{
+  "cases": [
+    "c2a_lista_acumulada",
+    "c3a_xyz_apostila",
+    "d1_taxa_sobrescrita",
+    "n01_mapa_chaves_distintas",
+    "n02_texto_ordem_independente",
+    "n03_mesma_mudanca_dos_dois_lados"
+  ],
+  "model": "multilingual",
+  "max_len": 4000,
+  "results": [
+    {
+      "case": "n01_mapa_chaves_distintas",
+      "config": "baseline_json",
+      "label": "No",
+      "class": "demo.TableTypes",
+      "method": "init",
+      "classification": "possible_interference",
+      "triggered_criteria": [
+        "criterion_1_global_divergence",
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.853,
+      "witness": null,
+      "witness_confidence": null,
+      "decision_rule": "baseline",
+      "decision_reason": "any criterion reached its threshold",
+      "state_format": "json",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.9312,
+        "criterion_2_parent_change_loss": 0.9788,
+        "criterion_3_merge_new_effect": 0.9875
+      },
+      "state_digest": "6eeaa9d608baa567668f0a65169be6fa841c86f1203dc45425d048373462a274",
+      "error": null
+    },
+    {
+      "case": "n01_mapa_chaves_distintas",
+      "config": "compact_consistent",
+      "label": "No",
+      "class": "demo.TableTypes",
+      "method": "init",
+      "classification": "uncertain",
+      "triggered_criteria": [],
+      "primary_criterion": null,
+      "none_probability": null,
+      "witness": "none",
+      "witness_confidence": 0.013,
+      "decision_rule": "consistent",
+      "decision_reason": "the witness choice is none",
+      "state_format": "compact",
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "state_digest": "1c99559c90017f3b3ad92e00a8a3f655d524a35d5a9d15178b15b896610e6395",
+      "error": null
+    },
+    {
+      "case": "n02_texto_ordem_independente",
+      "config": "baseline_json",
+      "label": "No",
+      "class": "demo.Text",
+      "method": "cleanText",
+      "classification": "possible_interference",
+      "triggered_criteria": [
+        "criterion_1_global_divergence",
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.558,
+      "witness": null,
+      "witness_confidence": null,
+      "decision_rule": "baseline",
+      "decision_reason": "any criterion reached its threshold",
+      "state_format": "json",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.9508,
+        "criterion_2_parent_change_loss": 0.9799,
+        "criterion_3_merge_new_effect": 0.9805
+      },
+      "state_digest": "238e12f20a555c88e40736d2f6557d36287595ee075819d253e7e45761d53fc0",
+      "error": null
+    },
+    {
+      "case": "n02_texto_ordem_independente",
+      "config": "compact_consistent",
+      "label": "No",
+      "class": "demo.Text",
+      "method": "cleanText",
+      "classification": "uncertain",
+      "triggered_criteria": [],
+      "primary_criterion": null,
+      "none_probability": null,
+      "witness": "none",
+      "witness_confidence": 1.0,
+      "decision_rule": "consistent",
+      "decision_reason": "the witness choice is none",
+      "state_format": "compact",
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "state_digest": "8b043e89642d68f7e48d684bcd11336714ef3748015e501d27ee9869a7404d56",
+      "error": null
+    },
+    {
+      "case": "n03_mesma_mudanca_dos_dois_lados",
+      "config": "baseline_json",
+      "label": "No",
+      "class": "demo.TaxCalculator",
+      "method": "apply",
+      "classification": "possible_interference",
+      "triggered_criteria": [
+        "criterion_1_global_divergence",
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.5781,
+      "witness": null,
+      "witness_confidence": null,
+      "decision_rule": "baseline",
+      "decision_reason": "any criterion reached its threshold",
+      "state_format": "json",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.9534,
+        "criterion_2_parent_change_loss": 0.9887,
+        "criterion_3_merge_new_effect": 0.9916
+      },
+      "state_digest": "ce8713a0d6015482b4df4a81957db158010db6fcbf1dadb9ee1cc4f4e18a8f7a",
+      "error": null
+    },
+    {
+      "case": "n03_mesma_mudanca_dos_dois_lados",
+      "config": "compact_consistent",
+      "label": "No",
+      "class": "demo.TaxCalculator",
+      "method": "apply",
+      "classification": "uncertain",
+      "triggered_criteria": [],
+      "primary_criterion": null,
+      "none_probability": null,
+      "witness": "none",
+      "witness_confidence": 0.3073,
+      "decision_rule": "consistent",
+      "decision_reason": "the witness choice is none",
+      "state_format": "compact",
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "state_digest": "4e717db0d5def25471119e0c5e0e94cfb471ad07f7b908684a460447f18fbeea",
+      "error": null
+    },
+    {
+      "case": "c2a_lista_acumulada",
+      "config": "baseline_json",
+      "label": "Yes",
+      "class": "demo.Keywords",
+      "method": "init",
+      "classification": "possible_interference",
+      "triggered_criteria": [
+        "criterion_1_global_divergence",
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.5763,
+      "witness": null,
+      "witness_confidence": null,
+      "decision_rule": "baseline",
+      "decision_reason": "any criterion reached its threshold",
+      "state_format": "json",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.9657,
+        "criterion_2_parent_change_loss": 0.9938,
+        "criterion_3_merge_new_effect": 0.9919
+      },
+      "state_digest": "adb9982ccfe97ac0f95e908ee45a5bdccac95fb5d8b496c4103b897273f256c5",
+      "error": null
+    },
+    {
+      "case": "c2a_lista_acumulada",
+      "config": "compact_consistent",
+      "label": "Yes",
+      "class": "demo.Keywords",
+      "method": "init",
+      "classification": "uncertain",
+      "triggered_criteria": [],
+      "primary_criterion": null,
+      "none_probability": null,
+      "witness": "none",
+      "witness_confidence": 0.3975,
+      "decision_rule": "consistent",
+      "decision_reason": "the witness choice is none",
+      "state_format": "compact",
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "state_digest": "3e13444297e9fadbd985a36365a13788ae0209c597e557014d5bc3f51d234055",
+      "error": null
+    },
+    {
+      "case": "c3a_xyz_apostila",
+      "config": "baseline_json",
+      "label": "Yes",
+      "class": "demo.Flags",
+      "method": "run",
+      "classification": "possible_interference",
+      "triggered_criteria": [
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.9724,
+      "witness": null,
+      "witness_confidence": null,
+      "decision_rule": "baseline",
+      "decision_reason": "any criterion reached its threshold",
+      "state_format": "json",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.8701,
+        "criterion_2_parent_change_loss": 0.9426,
+        "criterion_3_merge_new_effect": 0.9603
+      },
+      "state_digest": "0c52dd99b815c442df0dd124ec32871da7aff6823d274480822e5c32bd1555c2",
+      "error": null
+    },
+    {
+      "case": "c3a_xyz_apostila",
+      "config": "compact_consistent",
+      "label": "Yes",
+      "class": "demo.Flags",
+      "method": "run",
+      "classification": "uncertain",
+      "triggered_criteria": [],
+      "primary_criterion": null,
+      "none_probability": null,
+      "witness": "none",
+      "witness_confidence": 0.6642,
+      "decision_rule": "consistent",
+      "decision_reason": "the witness choice is none",
+      "state_format": "compact",
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "state_digest": "6303031035baf387b4a35d8a8359716107c67701e572f943427ba7d5adce5fec",
+      "error": null
+    },
+    {
+      "case": "d1_taxa_sobrescrita",
+      "config": "baseline_json",
+      "label": "Yes",
+      "class": "demo.PriceTable",
+      "method": "quote",
+      "classification": "possible_interference",
+      "triggered_criteria": [
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.7906,
+      "witness": null,
+      "witness_confidence": null,
+      "decision_rule": "baseline",
+      "decision_reason": "any criterion reached its threshold",
+      "state_format": "json",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.8844,
+        "criterion_2_parent_change_loss": 0.9619,
+        "criterion_3_merge_new_effect": 0.9843
+      },
+      "state_digest": "21b4f471e55f3cda60925a4151eb95b35ea83c45eb4fc11a8ed9f91fa52f3151",
+      "error": null
+    },
+    {
+      "case": "d1_taxa_sobrescrita",
+      "config": "compact_consistent",
+      "label": "Yes",
+      "class": "demo.PriceTable",
+      "method": "quote",
+      "classification": "uncertain",
+      "triggered_criteria": [
+        "criterion_1_global_divergence",
+        "criterion_2_parent_change_loss",
+        "criterion_3_merge_new_effect"
+      ],
+      "primary_criterion": "none",
+      "none_probability": 0.6388,
+      "witness": "field:total",
+      "witness_confidence": 0.438,
+      "decision_rule": "consistent",
+      "decision_reason": "criteria triggered but the primary choice is none",
+      "state_format": "compact",
+      "probabilities": {
+        "criterion_1_global_divergence": 0.9723,
+        "criterion_2_parent_change_loss": 0.9951,
+        "criterion_3_merge_new_effect": 0.9953
+      },
+      "state_digest": "c3fd443646e38c67a9043cd6f04344dc161da98be709fc51e19a90deb5692516",
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,560 @@
+{
+  "checkpoint": "/home/arthur/UFPE/SMAT-LLM/laya_checkpoints/laya_finetuned_smat_multilingual",
+  "max_len": 4000,
+  "thresholds": {
+    "criterion_1_global_divergence": 0.8,
+    "criterion_2_parent_change_loss": 0.81,
+    "criterion_3_merge_new_effect": 0.84
+  },
+  "negative_instructions": {
+    "criterion_1_global_divergence": "A textual or code difference alone is not C1. C1 is true only when the same concrete state element has pairwise different values in B, L and R. If B and R are equal and only L changed, answer false.",
+    "criterion_2_parent_change_loss": "If Merge preserves the change made by L or R, C2 is false, even if the source text differs. C2 requires the parent's value to be lost from both B and Merge.",
+    "criterion_3_merge_new_effect": "If B, L and R are not all equal for the same state element, C3 is false. A merge-only textual addition is not enough."
+  },
+  "old": {
+    "per_criterion": {
+      "criterion_1_global_divergence": {
+        "tp": 3,
+        "fp": 3,
+        "tn": 13,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.75,
+        "f1": 0.6
+      },
+      "criterion_2_parent_change_loss": {
+        "tp": 6,
+        "fp": 8,
+        "tn": 3,
+        "fn": 3,
+        "precision": 0.4286,
+        "recall": 0.6667,
+        "f1": 0.5217
+      },
+      "criterion_3_merge_new_effect": {
+        "tp": 1,
+        "fp": 9,
+        "tn": 6,
+        "fn": 4,
+        "precision": 0.1,
+        "recall": 0.2,
+        "f1": 0.1333
+      }
+    },
+    "final": {
+      "tp": 7,
+      "fp": 7,
+      "tn": 1,
+      "fn": 5,
+      "precision": 0.5,
+      "recall": 0.5833,
+      "f1": 0.5385
+    }
+  },
+  "new": {
+    "per_criterion": {
+      "criterion_1_global_divergence": {
+        "tp": 3,
+        "fp": 8,
+        "tn": 8,
+        "fn": 1,
+        "precision": 0.2727,
+        "recall": 0.75,
+        "f1": 0.4
+      },
+      "criterion_2_parent_change_loss": {
+        "tp": 6,
+        "fp": 8,
+        "tn": 3,
+        "fn": 3,
+        "precision": 0.4286,
+        "recall": 0.6667,
+        "f1": 0.5217
+      },
+      "criterion_3_merge_new_effect": {
+        "tp": 2,
+        "fp": 9,
+        "tn": 6,
+        "fn": 3,
+        "precision": 0.1818,
+        "recall": 0.4,
+        "f1": 0.25
+      }
+    },
+    "final": {
+      "tp": 9,
+      "fp": 7,
+      "tn": 1,
+      "fn": 3,
+      "precision": 0.5625,
+      "recall": 0.75,
+      "f1": 0.6429
+    }
+  },
+  "results": {
+    "old": [
+      {
+        "id": "n01_mapa_chaves_distintas",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7022,
+          "criterion_2_parent_change_loss": 0.8542,
+          "criterion_3_merge_new_effect": 0.8205
+        }
+      },
+      {
+        "id": "n02_texto_ordem_independente",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7339,
+          "criterion_2_parent_change_loss": 0.8357,
+          "criterion_3_merge_new_effect": 0.7528
+        }
+      },
+      {
+        "id": "n03_mesma_mudanca_dos_dois_lados",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7754,
+          "criterion_2_parent_change_loss": 0.8507,
+          "criterion_3_merge_new_effect": 0.8594
+        }
+      },
+      {
+        "id": "n04_campos_independentes",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7929,
+          "criterion_2_parent_change_loss": 0.8499,
+          "criterion_3_merge_new_effect": 0.8418
+        }
+      },
+      {
+        "id": "n05_mudanca_so_de_um_lado",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8017,
+          "criterion_2_parent_change_loss": 0.8429,
+          "criterion_3_merge_new_effect": 0.8524
+        }
+      },
+      {
+        "id": "n06_refatoracao_e_comportamento",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7597,
+          "criterion_2_parent_change_loss": 0.895,
+          "criterion_3_merge_new_effect": 0.9202
+        }
+      },
+      {
+        "id": "n07_validacao_em_entradas_distintas",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.6847,
+          "criterion_2_parent_change_loss": 0.773,
+          "criterion_3_merge_new_effect": 0.8398
+        }
+      },
+      {
+        "id": "n08_casos_novos_no_switch",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8342,
+          "criterion_2_parent_change_loss": 0.9175,
+          "criterion_3_merge_new_effect": 0.9449
+        }
+      },
+      {
+        "id": "c2a_lista_acumulada",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8431,
+          "criterion_2_parent_change_loss": 0.8657,
+          "criterion_3_merge_new_effect": 0.8956
+        }
+      },
+      {
+        "id": "c2b_taxa_e_arredondamento",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.5383,
+          "criterion_2_parent_change_loss": 0.7305,
+          "criterion_3_merge_new_effect": 0.7215
+        }
+      },
+      {
+        "id": "c2c_texto_espacos_duplicados",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7488,
+          "criterion_2_parent_change_loss": 0.8328,
+          "criterion_3_merge_new_effect": 0.7614
+        }
+      },
+      {
+        "id": "c2d_guarda_nula_antes_do_trim",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.724,
+          "criterion_2_parent_change_loss": 0.7539,
+          "criterion_3_merge_new_effect": 0.8338
+        }
+      },
+      {
+        "id": "c3a_xyz_apostila",
+        "label": "Yes",
+        "criteria": [
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7259,
+          "criterion_2_parent_change_loss": 0.8218,
+          "criterion_3_merge_new_effect": 0.8335
+        }
+      },
+      {
+        "id": "c3b_peso_total",
+        "label": "Yes",
+        "criteria": [
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7249,
+          "criterion_2_parent_change_loss": 0.7504,
+          "criterion_3_merge_new_effect": 0.7997
+        }
+      },
+      {
+        "id": "c3c_capacidade",
+        "label": "Yes",
+        "criteria": [
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.771,
+          "criterion_2_parent_change_loss": 0.7664,
+          "criterion_3_merge_new_effect": 0.7557
+        }
+      },
+      {
+        "id": "d1_taxa_sobrescrita",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.6981,
+          "criterion_2_parent_change_loss": 0.8288,
+          "criterion_3_merge_new_effect": 0.8691
+        }
+      },
+      {
+        "id": "d2_regra_de_preco",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8064,
+          "criterion_2_parent_change_loss": 0.8724,
+          "criterion_3_merge_new_effect": 0.8634
+        }
+      },
+      {
+        "id": "d3_titulo_formatado",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.809,
+          "criterion_2_parent_change_loss": 0.8427,
+          "criterion_3_merge_new_effect": 0.8804
+        }
+      },
+      {
+        "id": "e1_taxa_e_capacidade",
+        "label": "Yes",
+        "criteria": [
+          "C2",
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.6915,
+          "criterion_2_parent_change_loss": 0.7648,
+          "criterion_3_merge_new_effect": 0.7749
+        }
+      },
+      {
+        "id": "e2_custo_e_sobrepeso",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2",
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8155,
+          "criterion_2_parent_change_loss": 0.8716,
+          "criterion_3_merge_new_effect": 0.9498
+        }
+      }
+    ],
+    "new": [
+      {
+        "id": "n01_mapa_chaves_distintas",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7803,
+          "criterion_2_parent_change_loss": 0.8505,
+          "criterion_3_merge_new_effect": 0.8513
+        }
+      },
+      {
+        "id": "n02_texto_ordem_independente",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7811,
+          "criterion_2_parent_change_loss": 0.852,
+          "criterion_3_merge_new_effect": 0.8206
+        }
+      },
+      {
+        "id": "n03_mesma_mudanca_dos_dois_lados",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.811,
+          "criterion_2_parent_change_loss": 0.8625,
+          "criterion_3_merge_new_effect": 0.8824
+        }
+      },
+      {
+        "id": "n04_campos_independentes",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8205,
+          "criterion_2_parent_change_loss": 0.8563,
+          "criterion_3_merge_new_effect": 0.8704
+        }
+      },
+      {
+        "id": "n05_mudanca_so_de_um_lado",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8255,
+          "criterion_2_parent_change_loss": 0.8543,
+          "criterion_3_merge_new_effect": 0.8608
+        }
+      },
+      {
+        "id": "n06_refatoracao_e_comportamento",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7925,
+          "criterion_2_parent_change_loss": 0.8885,
+          "criterion_3_merge_new_effect": 0.9073
+        }
+      },
+      {
+        "id": "n07_validacao_em_entradas_distintas",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7071,
+          "criterion_2_parent_change_loss": 0.7894,
+          "criterion_3_merge_new_effect": 0.8059
+        }
+      },
+      {
+        "id": "n08_casos_novos_no_switch",
+        "label": "No",
+        "criteria": [],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8566,
+          "criterion_2_parent_change_loss": 0.9201,
+          "criterion_3_merge_new_effect": 0.9302
+        }
+      },
+      {
+        "id": "c2a_lista_acumulada",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8645,
+          "criterion_2_parent_change_loss": 0.8635,
+          "criterion_3_merge_new_effect": 0.8946
+        }
+      },
+      {
+        "id": "c2b_taxa_e_arredondamento",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.6224,
+          "criterion_2_parent_change_loss": 0.6239,
+          "criterion_3_merge_new_effect": 0.7796
+        }
+      },
+      {
+        "id": "c2c_texto_espacos_duplicados",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7784,
+          "criterion_2_parent_change_loss": 0.8455,
+          "criterion_3_merge_new_effect": 0.8182
+        }
+      },
+      {
+        "id": "c2d_guarda_nula_antes_do_trim",
+        "label": "Yes",
+        "criteria": [
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7181,
+          "criterion_2_parent_change_loss": 0.771,
+          "criterion_3_merge_new_effect": 0.8066
+        }
+      },
+      {
+        "id": "c3a_xyz_apostila",
+        "label": "Yes",
+        "criteria": [
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.808,
+          "criterion_2_parent_change_loss": 0.8379,
+          "criterion_3_merge_new_effect": 0.8729
+        }
+      },
+      {
+        "id": "c3b_peso_total",
+        "label": "Yes",
+        "criteria": [
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8081,
+          "criterion_2_parent_change_loss": 0.7999,
+          "criterion_3_merge_new_effect": 0.7635
+        }
+      },
+      {
+        "id": "c3c_capacidade",
+        "label": "Yes",
+        "criteria": [
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8137,
+          "criterion_2_parent_change_loss": 0.8005,
+          "criterion_3_merge_new_effect": 0.8324
+        }
+      },
+      {
+        "id": "d1_taxa_sobrescrita",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7725,
+          "criterion_2_parent_change_loss": 0.8333,
+          "criterion_3_merge_new_effect": 0.8594
+        }
+      },
+      {
+        "id": "d2_regra_de_preco",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8346,
+          "criterion_2_parent_change_loss": 0.8712,
+          "criterion_3_merge_new_effect": 0.8184
+        }
+      },
+      {
+        "id": "d3_titulo_formatado",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.8085,
+          "criterion_2_parent_change_loss": 0.8693,
+          "criterion_3_merge_new_effect": 0.8835
+        }
+      },
+      {
+        "id": "e1_taxa_e_capacidade",
+        "label": "Yes",
+        "criteria": [
+          "C2",
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.7137,
+          "criterion_2_parent_change_loss": 0.7685,
+          "criterion_3_merge_new_effect": 0.8117
+        }
+      },
+      {
+        "id": "e2_custo_e_sobrepeso",
+        "label": "Yes",
+        "criteria": [
+          "C1",
+          "C2",
+          "C3"
+        ],
+        "probabilities": {
+          "criterion_1_global_divergence": 0.817,
+          "criterion_2_parent_change_loss": 0.8561,
+          "criterion_3_merge_new_effect": 0.8773
+        }
+      }
+    ]
+  }
+}

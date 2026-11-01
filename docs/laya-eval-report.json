@@ -1,0 +1,51 @@
+{
+  "labeled_cases": 31,
+  "yes": 15,
+  "no": 16,
+  "baseline_v3_base_0.70": {
+    "tp": 15,
+    "fp": 16,
+    "tn": 0,
+    "fn": 0,
+    "precision": 0.4839,
+    "recall": 1.0,
+    "f1": 0.6522
+  },
+  "best_v3_base": {
+    "threshold": 0.91,
+    "metrics": {
+      "tp": 15,
+      "fp": 14,
+      "tn": 2,
+      "fn": 0,
+      "precision": 0.5172,
+      "recall": 1.0,
+      "f1": 0.6818
+    }
+  },
+  "best_v3_ajustado": {
+    "threshold": 0.01,
+    "metrics": {
+      "tp": 15,
+      "fp": 16,
+      "tn": 0,
+      "fn": 0,
+      "precision": 0.4839,
+      "recall": 1.0,
+      "f1": 0.6522
+    }
+  },
+  "best_v3pt_ajustado": {
+    "threshold": 0.01,
+    "metrics": {
+      "tp": 12,
+      "fp": 8,
+      "tn": 8,
+      "fn": 3,
+      "precision": 0.6,
+      "recall": 0.8,
+      "f1": 0.6857
+    }
+  },
+  "note": "Probe probabilities only; no Laya forward pass is performed. Use this report to compare operating points before live runs."
+}

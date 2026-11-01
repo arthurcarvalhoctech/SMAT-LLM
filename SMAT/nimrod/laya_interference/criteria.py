@@ -35,6 +35,7 @@ class InterferenceCriterion:
     laya_instruction: str
     laya_false: str
     laya_true: str
+    negative_instruction: str
 
 
 CRITERIA: Tuple[InterferenceCriterion, ...] = (
@@ -62,6 +63,12 @@ CRITERIA: Tuple[InterferenceCriterion, ...] = (
             "At least one state element is computed with pairwise different "
             "values by base, left and right."
         ),
+        negative_instruction=(
+            "A textual or code difference alone is not C1. C1 is true only "
+            "when the same concrete state element has pairwise different "
+            "values in B, L and R. If B and R are equal and only L changed, "
+            "answer false."
+        ),
     ),
     InterferenceCriterion(
         id="criterion_2_parent_change_loss",
@@ -87,6 +94,11 @@ CRITERIA: Tuple[InterferenceCriterion, ...] = (
         laya_true=(
             "At least one state element shows a parent value that differs "
             "from both base and merge."
+        ),
+        negative_instruction=(
+            "If Merge preserves the change made by L or R, C2 is false, even "
+            "if the source text differs. C2 requires the parent's value to be "
+            "lost from both B and Merge."
         ),
     ),
     InterferenceCriterion(
@@ -115,6 +127,10 @@ CRITERIA: Tuple[InterferenceCriterion, ...] = (
             "At least one state element is unchanged in base, left and right "
             "while differing in merge."
         ),
+        negative_instruction=(
+            "If B, L and R are not all equal for the same state element, C3 "
+            "is false. A merge-only textual addition is not enough."
+        ),
     ),
 )
 
@@ -125,11 +141,42 @@ CRITERIA_BY_ID: Dict[str, InterferenceCriterion] = {
 PRIMARY_CRITERION_QUESTION_ID = "primary_criterion"
 AFFECTED_BRANCH_QUESTION_ID = "affected_branch"
 CONFIDENCE_QUESTION_ID = "analysis_confidence"
+WITNESS_QUESTION_ID = "witness_state_element"
+
+WITNESS_CANDIDATE_DESCRIPTIONS = {
+    "return": "The value returned by the method.",
+    "param_0": "The first method parameter.",
+    "param_1": "The second method parameter.",
+    "param_2": "The third method parameter.",
+    "field_0": "The first field listed in Atributos and used by the method.",
+    "field_1": "The second field listed in Atributos and used by the method.",
+    "field_2": "The third field listed in Atributos and used by the method.",
+    "field_3": "The fourth field listed in Atributos and used by the method.",
+    "none": "No concrete state element can be named.",
+}
 
 NONE_CRITERION_LABEL = "none"
 
 
-def build_questions() -> Dict[str, Dict[str, Any]]:
+def build_witness_question(
+    witness_candidates: Dict[str, str],
+) -> Dict[str, Any]:
+    return {
+        "type": "choice",
+        "instructions": (
+            "Which single concrete state element is the most plausible witness "
+            "for a semantic difference among base, left, right and merge? "
+            "If you cannot name a concrete state element, choose none."
+        ),
+        "criteria": witness_candidates,
+    }
+
+
+def build_questions(
+    witness_candidates: Optional[Dict[str, str]] = None,
+    include_criteria: bool = True,
+    negative_instructions: bool = True,
+) -> Dict[str, Dict[str, Any]]:
     """Build the typed Laya questions for the three criteria.
 
     Each criterion gets an independent ``noul`` question so its probability is
@@ -137,13 +184,29 @@ def build_questions() -> Dict[str, Dict[str, Any]]:
     ``choice`` question selects the strongest criterion, a ``choice`` question
     identifies the affected branch, and a ``score`` question records the
     model's confidence.
+
+    When ``witness_candidates`` is provided, a ``choice`` question asks the
+    model to name one concrete state element (or ``none``) before the criteria
+    are considered. This supports the witness-first decision policy. Set
+    ``include_criteria=False`` to obtain only the witness question (two-stage
+    mode).
     """
     questions: Dict[str, Dict[str, Any]] = {}
 
+    if witness_candidates:
+        questions[WITNESS_QUESTION_ID] = build_witness_question(
+            witness_candidates
+        )
+    if not include_criteria:
+        return questions
+
     for criterion in CRITERIA:
+        instruction = criterion.laya_instruction
+        if negative_instructions:
+            instruction = f"{instruction} {criterion.negative_instruction}"
         questions[criterion.id] = {
             "type": "noul",
-            "instructions": criterion.laya_instruction,
+            "instructions": instruction,
             "criteria": {
                 "false": criterion.laya_false,
                 "true": criterion.laya_true,
@@ -231,6 +294,23 @@ def choice_label(raw_result: Any, question_id: str) -> Optional[str]:
 def choice_confidence(raw_result: Any, question_id: str) -> Optional[float]:
     answer = _answer_for(raw_result, question_id)
     value = answer.get("confidence")
+    if value is None:
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def choice_probability(
+    raw_result: Any, question_id: str, label: str
+) -> Optional[float]:
+    """Return the probability assigned to one label of a choice question."""
+    answer = _answer_for(raw_result, question_id)
+    probabilities = answer.get("probabilities")
+    if not isinstance(probabilities, dict):
+        return None
+    value = probabilities.get(label)
     if value is None:
         return None
     try:

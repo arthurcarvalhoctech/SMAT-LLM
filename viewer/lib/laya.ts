@@ -34,6 +34,8 @@ export function layaStatusLabel(status: LayaScenarioStatus): string {
       return "Possível interferência";
     case "no_interference":
       return "Sem interferência";
+    case "uncertain":
+      return "Análise inconclusiva";
     case "no_signal":
       return "Sem sinal de interferência";
     case "error":
@@ -51,6 +53,8 @@ export function layaStatusShort(status: LayaScenarioStatus): string {
       return "Possível interf.";
     case "no_interference":
       return "Sem interf.";
+    case "uncertain":
+      return "Inconclusivo";
     case "no_signal":
       return "Sem sinal";
     case "error":
@@ -69,6 +73,8 @@ export function layaStatusTone(
       return "rose";
     case "no_interference":
       return "emerald";
+    case "uncertain":
+      return "amber";
     case "no_signal":
       return "slate";
     case "error":

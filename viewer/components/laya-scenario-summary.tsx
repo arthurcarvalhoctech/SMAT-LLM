@@ -83,6 +83,35 @@ export function LayaScenarioPanel({
   const maxLens = uniqueValues(
     summary.records.map((record) => record.maxLen),
   );
+  const stateFormats = uniqueValues(
+    summary.records.map((record) => record.stateFormat),
+  ).filter((value): value is string => Boolean(value));
+  const decisionRules = uniqueValues(
+    summary.records.map((record) => record.decisionRule),
+  ).filter((value): value is string => Boolean(value));
+  const criterionThresholds = summary.records
+    .map((record) => record.criterionThresholds)
+    .filter((value): value is number[] => Array.isArray(value));
+  const thresholdAt = (index: number) =>
+    uniqueValues(criterionThresholds.map((values) => values[index]));
+  const witnessValues = uniqueValues(
+    summary.records.map((record) => record.witness),
+  ).filter((value): value is string => Boolean(value));
+  const twoStageValues = uniqueValues(
+    summary.records.map((record) => record.witnessTwoStage),
+  );
+  const allowBaselineValues = uniqueValues(
+    summary.records.map((record) => record.allowBaselineWithWitness),
+  );
+  const negativeValues = uniqueValues(
+    summary.records.map((record) => record.negativeInstructions),
+  );
+  const diagnosticValues = uniqueValues(
+    summary.records.map((record) => record.diagnosticQuestions),
+  );
+  const formatBool = (value: boolean) => (value ? "sim" : "não");
+  const formatNumbers = (values: number[]) =>
+    values.length ? values.map((value) => value.toFixed(2)).join(", ") : "—";
 
   return (
     <div className="space-y-4">
@@ -128,6 +157,62 @@ export function LayaScenarioPanel({
               value={
                 maxLens.length
                   ? maxLens.map((value) => String(value)).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="Threshold C1"
+              value={formatNumbers(thresholdAt(0))}
+            />
+            <ConfigItem
+              label="Threshold C2"
+              value={formatNumbers(thresholdAt(1))}
+            />
+            <ConfigItem
+              label="Threshold C3"
+              value={formatNumbers(thresholdAt(2))}
+            />
+            <ConfigItem
+              label="Regra de decisão"
+              value={decisionRules.length ? decisionRules.join(", ") : "—"}
+            />
+            <ConfigItem
+              label="Formato do estado"
+              value={stateFormats.length ? stateFormats.join(", ") : "—"}
+            />
+            <ConfigItem
+              label="Witness"
+              value={witnessValues.length ? witnessValues.join(", ") : "—"}
+            />
+            <ConfigItem
+              label="Witness two-stage"
+              value={
+                twoStageValues.length
+                  ? twoStageValues.map(formatBool).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="Baseline + witness"
+              value={
+                allowBaselineValues.length
+                  ? allowBaselineValues.map(formatBool).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="Instruções negativas"
+              value={
+                negativeValues.length
+                  ? negativeValues.map(formatBool).join(", ")
+                  : "—"
+              }
+            />
+            <ConfigItem
+              label="Perguntas de diagnóstico"
+              value={
+                diagnosticValues.length
+                  ? diagnosticValues.map(formatBool).join(", ")
                   : "—"
               }
             />

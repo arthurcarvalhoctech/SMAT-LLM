@@ -1,0 +1,22 @@
+{
+  "source": "dataset-sintetico/resultados/probe_t1.json",
+  "total_labeled": 34,
+  "train": 27,
+  "eval": 7,
+  "sets": {
+    "mergedataset/No": 11,
+    "mergedataset/Yes": 3,
+    "sintetico/No": 8,
+    "sintetico/Yes": 12
+  },
+  "witness": {
+    "none": 20,
+    "concrete": 14
+  },
+  "primary": {
+    "none": 19,
+    "concrete": 12,
+    "unlabeled": 3
+  },
+  "note": "Small labeled set. Keep eval separate and treat the result as an experiment; synthetic cases have criterion labels, real cases may only have the T1 yes/no label."
+}

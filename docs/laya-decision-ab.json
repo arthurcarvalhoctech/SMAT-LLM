@@ -1,0 +1,570 @@
+{
+  "checkpoint": "/home/arthur/UFPE/SMAT-LLM/laya_checkpoints/laya_finetuned_smat_multilingual",
+  "max_len": 4000,
+  "thresholds": {
+    "criterion_1_global_divergence": 0.8,
+    "criterion_2_parent_change_loss": 0.81,
+    "criterion_3_merge_new_effect": 0.84
+  },
+  "none_threshold": 0.9,
+  "rules": {
+    "baseline": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 8,
+      "fn": 12,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "uncertain": 0,
+      "no_signal": 20,
+      "coverage": 1.0
+    },
+    "consistent": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 8,
+      "fn": 12,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "uncertain": 12,
+      "no_signal": 8,
+      "coverage": 0.4
+    },
+    "conservative": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 8,
+      "fn": 12,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "uncertain": 19,
+      "no_signal": 1,
+      "coverage": 0.05
+    }
+  },
+  "results": [
+    {
+      "id": "n01_mapa_chaves_distintas",
+      "label": "No",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "n02_texto_ordem_independente",
+      "label": "No",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "n03_mesma_mudanca_dos_dois_lados",
+      "label": "No",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.8239,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.5725,
+        "criterion_2_parent_change_loss": 0.5969,
+        "criterion_3_merge_new_effect": 0.5766
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "n04_campos_independentes",
+      "label": "No",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.8086,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.5702,
+        "criterion_2_parent_change_loss": 0.589,
+        "criterion_3_merge_new_effect": 0.5968
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "n05_mudanca_so_de_um_lado",
+      "label": "No",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.9434,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.5682,
+        "criterion_2_parent_change_loss": 0.5809,
+        "criterion_3_merge_new_effect": 0.5889
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "n06_refatoracao_e_comportamento",
+      "label": "No",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "n07_validacao_em_entradas_distintas",
+      "label": "No",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "n08_casos_novos_no_switch",
+      "label": "No",
+      "witness": "field_0",
+      "primary": "none",
+      "none_probability": 0.4412,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.6245,
+        "criterion_2_parent_change_loss": 0.6637,
+        "criterion_3_merge_new_effect": 0.6508
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "c2a_lista_acumulada",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "c2b_taxa_e_arredondamento",
+      "label": "Yes",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.816,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.5483,
+        "criterion_2_parent_change_loss": 0.5654,
+        "criterion_3_merge_new_effect": 0.5911
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "c2c_texto_espacos_duplicados",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "c2d_guarda_nula_antes_do_trim",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "c3a_xyz_apostila",
+      "label": "Yes",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.8784,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.5656,
+        "criterion_2_parent_change_loss": 0.5796,
+        "criterion_3_merge_new_effect": 0.5884
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "c3b_peso_total",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "c3c_capacidade",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "d1_taxa_sobrescrita",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    },
+    {
+      "id": "d2_regra_de_preco",
+      "label": "Yes",
+      "witness": "return",
+      "primary": "criterion_1_global_divergence",
+      "none_probability": 0.0056,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.626,
+        "criterion_2_parent_change_loss": 0.6692,
+        "criterion_3_merge_new_effect": 0.6785
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the primary choice and the criterion probabilities disagree"
+        },
+        "conservative": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        }
+      }
+    },
+    {
+      "id": "d3_titulo_formatado",
+      "label": "Yes",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.8896,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.5924,
+        "criterion_2_parent_change_loss": 0.6438,
+        "criterion_3_merge_new_effect": 0.6272
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "e1_taxa_e_capacidade",
+      "label": "Yes",
+      "witness": "return",
+      "primary": "none",
+      "none_probability": 0.906,
+      "probabilities": {
+        "criterion_1_global_divergence": 0.544,
+        "criterion_2_parent_change_loss": 0.5696,
+        "criterion_3_merge_new_effect": 0.559
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "no_signal",
+          "reason": "no criterion triggered and the primary choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the primary choice is none"
+        }
+      }
+    },
+    {
+      "id": "e2_custo_e_sobrepeso",
+      "label": "Yes",
+      "witness": "none",
+      "primary": null,
+      "none_probability": null,
+      "probabilities": {
+        "criterion_1_global_divergence": null,
+        "criterion_2_parent_change_loss": null,
+        "criterion_3_merge_new_effect": null
+      },
+      "decisions": {
+        "baseline": {
+          "classification": "no_signal",
+          "reason": "no criterion reached its threshold"
+        },
+        "consistent": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        },
+        "conservative": {
+          "classification": "uncertain",
+          "reason": "the witness choice is none"
+        }
+      }
+    }
+  ]
+}

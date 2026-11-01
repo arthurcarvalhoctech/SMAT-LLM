@@ -44,6 +44,8 @@ export function classificationTone(
       return "rose";
     case "no_interference":
       return "emerald";
+    case "uncertain":
+      return "amber";
     case "no_signal":
       return "slate";
     case "error":
@@ -61,6 +63,8 @@ export function classificationLabel(classification?: string | null): string {
       return "Possível interferência";
     case "no_interference":
       return "Sem interferência";
+    case "uncertain":
+      return "Inconclusivo";
     case "no_signal":
       return "Sem sinal";
     case "error":

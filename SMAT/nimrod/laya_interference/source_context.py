@@ -2,11 +2,13 @@
 
 import hashlib
 import json
+import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union
 
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
 from nimrod.source_code import extract_java_class_info, find_source_code_paths
+from nimrod.laya_interference.criteria import WITNESS_CANDIDATE_DESCRIPTIONS
 
 
 BRANCHES = ("base", "left", "right", "merge")
@@ -80,10 +82,82 @@ class LayaMethodState:
             },
         }
 
-    def digest(self) -> str:
-        serialized = json.dumps(
-            self.to_payload(), sort_keys=True, ensure_ascii=False
+    def _compact_attributes(self) -> str:
+        base = self.branches.get("base")
+        if base is None or not base.fields:
+            return "nenhum"
+        method_text = "\n".join(
+            branch.method_code
+            for branch in self.branches.values()
+            if branch.method_code
         )
+        selected = []
+        for declaration in base.fields:
+            match = re.search(r"\b([A-Za-z_]\w*)\s*(?:=|;)", declaration)
+            if match and re.search(
+                r"\b" + re.escape(match.group(1)) + r"\b", method_text
+            ):
+                selected.append(declaration.strip())
+        return ", ".join(selected) or "nenhum"
+
+    def witness_candidates(self) -> Dict[str, str]:
+        """Return the fixed witness slots used at inference and fine-tuning.
+
+        The question schema must be identical across training rows; the state
+        itself carries the concrete field/parameter names and their order.
+        """
+        return dict(WITNESS_CANDIDATE_DESCRIPTIONS)
+
+    def to_compact_payload(self, include_merge: bool = False) -> str:
+        """Return the training-format text state.
+
+        The fine-tuned checkpoint used the probe ``state_v1`` layout, which
+        contains B/L/R and the summaries but not the merge body. ``include_merge``
+        is available for experiments that want the extra context.
+        """
+        simple_class = self.class_name.split(".")[-1]
+        labels = {
+            "base": "base (B)",
+            "left": "Left (L)",
+            "right": "Right (R)",
+            "merge": "merge (M)",
+        }
+        branches = (
+            BRANCHES if include_merge else ("base", "left", "right")
+        )
+        lines = [f"Método: {simple_class}.{self.method_signature}"]
+        for branch in branches:
+            source = self.branches.get(branch)
+            body = (
+                source.method_code.strip()
+                if source is not None and source.method_code
+                else "não disponível"
+            )
+            header = (
+                "Corpo do merge (M):"
+                if branch == "merge"
+                else f"Corpo de {labels[branch]}:"
+            )
+            lines.extend([header, body])
+        lines.extend(
+            [
+                "Resumo de Left: "
+                + (self.left_changes_summary or "não informado"),
+                "Resumo de Right: "
+                + (self.right_changes_summary or "não informado"),
+                "Atributos: " + self._compact_attributes(),
+                "Construtores: padrão",
+            ]
+        )
+        return "\n".join(lines)
+
+    def digest(self, payload: Any = None) -> str:
+        if payload is None:
+            payload = self.to_payload()
+        if isinstance(payload, str):
+            serialized = payload
+        else:
+            serialized = json.dumps(payload, sort_keys=True, ensure_ascii=False)
         return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
 
 

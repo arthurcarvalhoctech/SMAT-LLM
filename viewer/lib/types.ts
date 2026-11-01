@@ -91,6 +91,14 @@ export interface LayaRecord {
   model?: string;
   maxLen?: number;
   threshold?: number;
+  stateFormat?: string;
+  decisionRule?: string;
+  criterionThresholds?: number[];
+  witness?: string | null;
+  witnessTwoStage?: boolean;
+  allowBaselineWithWitness?: boolean;
+  negativeInstructions?: boolean;
+  diagnosticQuestions?: boolean;
   classification?: string;
   triggeredCriteria: string[];
   primaryCriterion?: string | null;
@@ -120,6 +128,7 @@ export type LayaScenarioStatus =
   | "interference"
   | "possible_interference"
   | "no_interference"
+  | "uncertain"
   | "no_signal"
   | "error"
   | "no_data";
