@@ -1,0 +1,8 @@
+# Keep only the semantic-conflicts/ directory under version control.
+# Top-level files (Makefile, sources.txt, scripts and input JSON) remain
+# eligible to be tracked; every other subdirectory is ignored.
+/*/
+!/semantic-conflicts/
+
+# LibreOffice lock files are temporary artifacts.
+semantic-conflicts/.~lock.*
