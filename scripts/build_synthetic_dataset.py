@@ -622,6 +622,16 @@ def criteria(values):
     return {name: elements for name, elements in triggered.items() if elements}
 
 
+def observation_context(case):
+    """Instrumentation and inputs only; never include expected output values."""
+    return (
+        "Run this observation sequence independently on each version. "
+        "p(key, value) observes value under key; compare each key separately. "
+        "t(callable) evaluates the callable and returns the outcome EXC on any exception.\n"
+        + case["harness"]
+    )
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--output", required=True)
@@ -661,6 +671,8 @@ def main():
                 "method": case["method"],
                 "leftChangesSummary": case["ls"],
                 "rightChangesSummary": case["rs"],
+                "observations": list(values["base"]),
+                "observationContext": observation_context(case),
             }]},
             "scenarioJars": {b: "%s/%s/%s.jar" % (prefix, b, b) for b in BRANCHES},
             "jarType": "original",

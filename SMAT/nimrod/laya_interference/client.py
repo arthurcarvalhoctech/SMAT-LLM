@@ -10,6 +10,7 @@ import inspect
 import logging
 import os
 import sys
+from importlib.metadata import PackageNotFoundError, version
 from typing import Any, Dict, Optional, Protocol
 
 
@@ -114,8 +115,13 @@ class RouterLayaClient:
         return self._router.predict(state, questions, **kwargs)
 
     def describe(self) -> Dict[str, Any]:
+        try:
+            package_version = version("laya")
+        except PackageNotFoundError:
+            package_version = None
         return {
             "package": "laya",
+            "package_version": package_version,
             "model": self.model,
             "max_len": self.max_len,
         }

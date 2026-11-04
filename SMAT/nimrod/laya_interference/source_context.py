@@ -7,6 +7,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from nimrod.core.merge_scenario_under_analysis import MergeScenarioUnderAnalysis
 from nimrod.source_code import extract_java_class_info, find_source_code_paths
+from nimrod.laya_interference.criteria import OBSERVATION_POLICY
 
 
 BRANCHES = ("base", "left", "right", "merge")
@@ -23,14 +24,15 @@ class BranchSource:
 
     @property
     def available(self) -> bool:
-        return bool(self.path)
+        return bool(self.path and self.method_code.strip()) and self.error is None
 
     def to_payload(self) -> Dict[str, Any]:
         return {
-            "path": self.path,
+            "available": self.available,
+            "error": self.error,
+            "method": self.method_code,
             "fields": self.fields,
             "constructors": self.constructors,
-            "method": self.method_code,
         }
 
 
@@ -44,6 +46,8 @@ class LayaMethodState:
     left_changes_summary: str
     right_changes_summary: str
     branches: Dict[str, BranchSource] = field(default_factory=dict)
+    observations: List[str] = field(default_factory=list)
+    observation_context: str = ""
 
     @property
     def missing_branches(self) -> List[str]:
@@ -65,19 +69,18 @@ class LayaMethodState:
 
     def to_payload(self) -> Dict[str, Any]:
         return {
-            "project": self.project_name,
-            "class": self.class_name,
-            "method": self.method_name,
+            "observation_policy": OBSERVATION_POLICY,
+            "observations": self.observations,
+            "observation_context": self.observation_context,
             "method_signature": self.method_signature,
-            "jar_type": self.jar_type,
-            "left_changes_summary": self.left_changes_summary,
-            "right_changes_summary": self.right_changes_summary,
             "versions": {
                 branch: self.branches[branch].to_payload()
                 if branch in self.branches
-                else {"path": "", "fields": [], "constructors": [], "method": ""}
+                else {"available": False, "error": "source unavailable"}
                 for branch in BRANCHES
             },
+            "left_changes_summary": self.left_changes_summary,
+            "right_changes_summary": self.right_changes_summary,
         }
 
     def digest(self) -> str:
@@ -103,7 +106,7 @@ def parse_method_item(
 def build_method_state(
     scenario: MergeScenarioUnderAnalysis,
     class_name: str,
-    method_item: Union[str, Dict[str, str]],
+    method_item: Union[str, Dict[str, Any]],
 ) -> LayaMethodState:
     """Extract the base/left/right/merge snippets for one target method."""
     jar_for_paths = scenario.scenario_jars.left or scenario.scenario_jars.right
@@ -113,10 +116,17 @@ def build_method_state(
         )
 
     method_signature, left_summary, right_summary = parse_method_item(method_item)
+    observations = method_item.get("observations", []) if isinstance(method_item, dict) else []
+    observation_context = method_item.get("observationContext", "") if isinstance(method_item, dict) else ""
+    if not isinstance(observations, list) or any(not isinstance(x, str) or not x.strip() for x in observations):
+        raise ValueError("observations must be a list of non-empty expressions")
+    if not isinstance(observation_context, str):
+        raise ValueError("observationContext must be a string")
     method_name = method_signature.split("(")[0]
-    source_paths = find_source_code_paths(
-        jar_for_paths, scenario.jar_type, class_name
-    )
+    try:
+        source_paths = find_source_code_paths(jar_for_paths, scenario.jar_type, class_name)
+    except FileNotFoundError:
+        source_paths = {}
 
     branches: Dict[str, BranchSource] = {}
     for branch in BRANCHES:
@@ -130,7 +140,7 @@ def build_method_state(
 
         try:
             fields, constructors, method_code = extract_java_class_info(
-                source_path, method_signature, class_name
+                source_path, method_signature, class_name, strict=True
             )
             branches[branch] = BranchSource(
                 branch=branch,
@@ -138,6 +148,7 @@ def build_method_state(
                 fields=fields,
                 constructors=constructors,
                 method_code=method_code,
+                error=None if method_code.strip() else "target body not found",
             )
         except Exception as error:
             branches[branch] = BranchSource(
@@ -145,6 +156,13 @@ def build_method_state(
                 path=source_path,
                 error=str(error),
             )
+
+    # The legacy resolver can reuse one generic file for both parents. Such a
+    # fallback cannot establish the behavior of two independent source versions.
+    for branch, source in branches.items():
+        if source.path and any(other != branch and item.path == source.path
+                               for other, item in branches.items()):
+            source.error = "same source path reused for multiple versions"
 
     return LayaMethodState(
         project_name=scenario.project_name,
@@ -155,4 +173,6 @@ def build_method_state(
         left_changes_summary=left_summary,
         right_changes_summary=right_summary,
         branches=branches,
+        observations=observations,
+        observation_context=observation_context,
     )

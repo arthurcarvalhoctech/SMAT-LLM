@@ -13,7 +13,15 @@
         {
           "method": "init()",
           "leftChangesSummary": "Left removes the entries for keys a and b from the map",
-          "rightChangesSummary": "Right adds the entry for key e to the map"
+          "rightChangesSummary": "Right adds the entry for key e to the map",
+          "observations": [
+            "get(a)",
+            "get(b)",
+            "get(c)",
+            "get(d)",
+            "get(e)"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nTableTypes t = new TableTypes();\nt.init();\nfor (String k : new String[] {\"a\", \"b\", \"c\", \"d\", \"e\"}) {\n    p(\"get(\" + k + \")\", t.types.get(k));\n}"
         }
       ]
     },
@@ -39,7 +47,12 @@
         {
           "method": "cleanText()",
           "leftChangesSummary": "Left adds a call to normalizeWhitespace after removeComments",
-          "rightChangesSummary": "Right adds a call to removeDuplicateWords before removeComments"
+          "rightChangesSummary": "Right adds a call to removeDuplicateWords before removeComments",
+          "observations": [
+            "hasDoubleSpace",
+            "hasDuplicateWord"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nText t = new Text();\nt.cleanText();\np(\"hasDoubleSpace\", t.text.contains(\"  \"));\np(\"hasDuplicateWord\", java.util.regex.Pattern.compile(\"\\\\b(\\\\w+) \\\\1\\\\b\").matcher(t.text).find());"
         }
       ]
     },
@@ -65,7 +78,12 @@
         {
           "method": "apply(int)",
           "leftChangesSummary": "Left changes the default tax rate from 10 to 20",
-          "rightChangesSummary": "Right changes the default tax rate from 10 to 20"
+          "rightChangesSummary": "Right changes the default tax rate from 10 to 20",
+          "observations": [
+            "tax",
+            "net"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nTaxCalculator t = new TaxCalculator();\nt.apply(200);\np(\"tax\", t.tax);\np(\"net\", t.net);"
         }
       ]
     },
@@ -91,7 +109,12 @@
         {
           "method": "checkout(int,int)",
           "leftChangesSummary": "Left applies a ten percent discount to the subtotal",
-          "rightChangesSummary": "Right makes the shipping free when the subtotal is above one hundred"
+          "rightChangesSummary": "Right makes the shipping free when the subtotal is above one hundred",
+          "observations": [
+            "subtotal",
+            "shipping"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nCart t = new Cart();\nt.checkout(3, 40);\np(\"subtotal\", t.subtotal);\np(\"shipping\", t.shipping);"
         }
       ]
     },
@@ -117,7 +140,12 @@
         {
           "method": "increment()",
           "leftChangesSummary": "Left changes the increment step of value from one to two",
-          "rightChangesSummary": "Right adds a reset method that is not called by increment"
+          "rightChangesSummary": "Right adds a reset method that is not called by increment",
+          "observations": [
+            "value",
+            "steps"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nCounter t = new Counter();\nt.increment();\np(\"value\", t.value);\np(\"steps\", t.steps);"
         }
       ]
     },
@@ -143,7 +171,12 @@
         {
           "method": "allowed(int)",
           "leftChangesSummary": "Left rewrites the limit constant as a sum without changing its value",
-          "rightChangesSummary": "Right returns zero instead of a negative number of requests"
+          "rightChangesSummary": "Right returns zero instead of a negative number of requests",
+          "observations": [
+            "allowed(15)",
+            "allowed(-3)"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nLimiter t = new Limiter();\np(\"allowed(15)\", t.allowed(15));\np(\"allowed(-3)\", t.allowed(-3));"
         }
       ]
     },
@@ -169,7 +202,12 @@
         {
           "method": "valid(java.lang.String)",
           "leftChangesSummary": "Left adds a guard that returns false for a null name",
-          "rightChangesSummary": "Right trims the name before measuring its length, keeping null as null"
+          "rightChangesSummary": "Right trims the name before measuring its length, keeping null as null",
+          "observations": [
+            "valid(null)",
+            "valid(\" a \")"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nValidator t = new Validator();\np(\"valid(null)\", t(() -> t.valid(null)));\np(\"valid(\\\" a \\\")\", t(() -> t.valid(\" a \")));"
         }
       ]
     },
@@ -195,7 +233,14 @@
         {
           "method": "label(java.lang.String)",
           "leftChangesSummary": "Left adds a case for the CANCELLED status",
-          "rightChangesSummary": "Right adds a case for the SHIPPED status"
+          "rightChangesSummary": "Right adds a case for the SHIPPED status",
+          "observations": [
+            "label(NEW)",
+            "label(PAID)",
+            "label(CANCELLED)",
+            "label(SHIPPED)"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nOrderLabel t = new OrderLabel();\nfor (String s : new String[] {\"NEW\", \"PAID\", \"CANCELLED\", \"SHIPPED\"}) {\n    p(\"label(\" + s + \")\", t.label(s));\n}"
         }
       ]
     },
@@ -221,7 +266,13 @@
         {
           "method": "init()",
           "leftChangesSummary": "Left adds a new value into a list",
-          "rightChangesSummary": "Right adds a different new value into the same list"
+          "rightChangesSummary": "Right adds a different new value into the same list",
+          "observations": [
+            "size",
+            "contains(while)",
+            "contains(for)"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nKeywords t = new Keywords();\nt.init();\np(\"size\", t.words.size());\np(\"contains(while)\", t.words.contains(\"while\"));\np(\"contains(for)\", t.words.contains(\"for\"));"
         }
       ]
     },
@@ -247,7 +298,11 @@
         {
           "method": "compute()",
           "leftChangesSummary": "Left adds a flat fee of five to the total",
-          "rightChangesSummary": "Right rounds the total up to a multiple of ten"
+          "rightChangesSummary": "Right rounds the total up to a multiple of ten",
+          "observations": [
+            "total"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nInvoice t = new Invoice();\nt.compute();\np(\"total\", t.total);"
         }
       ]
     },
@@ -273,7 +328,12 @@
         {
           "method": "cleanText()",
           "leftChangesSummary": "Left adds a call to normalizeWhitespace before removeComments",
-          "rightChangesSummary": "Right adds a call to removeDuplicateWords after removeComments"
+          "rightChangesSummary": "Right adds a call to removeDuplicateWords after removeComments",
+          "observations": [
+            "hasDoubleSpace",
+            "hasDuplicateWord"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nTextCleaner t = new TextCleaner();\nt.cleanText();\np(\"hasDoubleSpace\", t.text.contains(\"  \"));\np(\"hasDuplicateWord\", java.util.regex.Pattern.compile(\"\\\\b(\\\\w+) \\\\1\\\\b\").matcher(t.text).find());"
         }
       ]
     },
@@ -299,7 +359,12 @@
         {
           "method": "valid(java.lang.String)",
           "leftChangesSummary": "Left adds a guard that returns false for a null name",
-          "rightChangesSummary": "Right trims the name before measuring its length"
+          "rightChangesSummary": "Right trims the name before measuring its length",
+          "observations": [
+            "valid(null)",
+            "valid(\" a \")"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nNameCheck t = new NameCheck();\np(\"valid(null)\", t(() -> t.valid(null)));\np(\"valid(\\\" a \\\")\", t(() -> t.valid(\" a \")));"
         }
       ]
     },
@@ -325,7 +390,13 @@
         {
           "method": "run()",
           "leftChangesSummary": "Left changes the initial value of x from zero to one",
-          "rightChangesSummary": "Right changes the initial value of y from zero to one"
+          "rightChangesSummary": "Right changes the initial value of y from zero to one",
+          "observations": [
+            "x",
+            "y",
+            "z"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nFlags t = new Flags();\nt.run();\np(\"x\", t.x);\np(\"y\", t.y);\np(\"z\", t.z);"
         }
       ]
     },
@@ -351,7 +422,13 @@
         {
           "method": "check()",
           "leftChangesSummary": "Left raises the weight of the first item from forty to sixty",
-          "rightChangesSummary": "Right raises the weight of the second item from forty to sixty"
+          "rightChangesSummary": "Right raises the weight of the second item from forty to sixty",
+          "observations": [
+            "a",
+            "b",
+            "big"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nParcel t = new Parcel();\nt.check();\np(\"a\", t.a);\np(\"b\", t.b);\np(\"big\", t.big);"
         }
       ]
     },
@@ -377,7 +454,13 @@
         {
           "method": "check()",
           "leftChangesSummary": "Left increases the used space from four to seven",
-          "rightChangesSummary": "Right sets an incoming load of three"
+          "rightChangesSummary": "Right sets an incoming load of three",
+          "observations": [
+            "used",
+            "incoming",
+            "hasRoom"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nStorage t = new Storage();\nt.check();\np(\"used\", t.used);\np(\"incoming\", t.incoming);\np(\"hasRoom\", t.hasRoom);"
         }
       ]
     },
@@ -403,7 +486,11 @@
         {
           "method": "quote(int)",
           "leftChangesSummary": "Left changes the initial rate from five to ten",
-          "rightChangesSummary": "Right assigns a new rate of twenty after the fee is set"
+          "rightChangesSummary": "Right assigns a new rate of twenty after the fee is set",
+          "observations": [
+            "total"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nPriceTable t = new PriceTable();\nt.quote(2);\np(\"total\", t.total);"
         }
       ]
     },
@@ -429,7 +516,11 @@
         {
           "method": "price(int)",
           "leftChangesSummary": "Left adds a surcharge of ten to the price before the vip discount",
-          "rightChangesSummary": "Right doubles the price after the vip discount"
+          "rightChangesSummary": "Right doubles the price after the vip discount",
+          "observations": [
+            "price(100)"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nPriceRule t = new PriceRule();\np(\"price(100)\", t.price(100));"
         }
       ]
     },
@@ -455,7 +546,11 @@
         {
           "method": "title(java.lang.String)",
           "leftChangesSummary": "Left converts the title to upper case",
-          "rightChangesSummary": "Right appends a draft marker to the title"
+          "rightChangesSummary": "Right appends a draft marker to the title",
+          "observations": [
+            "title(ana)"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nTitleFormatter t = new TitleFormatter();\np(\"title(ana)\", t.title(\"ana\"));"
         }
       ]
     },
@@ -481,7 +576,12 @@
         {
           "method": "compute()",
           "leftChangesSummary": "Left adds a flat fee of five to the total and raises the used space to seven",
-          "rightChangesSummary": "Right rounds the total up to a multiple of ten and sets an incoming load of three"
+          "rightChangesSummary": "Right rounds the total up to a multiple of ten and sets an incoming load of three",
+          "observations": [
+            "total",
+            "hasRoom"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nCheckout t = new Checkout();\nt.compute();\np(\"total\", t.total);\np(\"hasRoom\", t.hasRoom);"
         }
       ]
     },
@@ -507,7 +607,12 @@
         {
           "method": "plan(int)",
           "leftChangesSummary": "Left adds a surcharge of ten to the cost and raises the first weight to sixty",
-          "rightChangesSummary": "Right doubles the cost after the vip discount and raises the second weight to sixty"
+          "rightChangesSummary": "Right doubles the cost after the vip discount and raises the second weight to sixty",
+          "observations": [
+            "cost",
+            "oversize"
+          ],
+          "observationContext": "Run this observation sequence independently on each version. p(key, value) observes value under key; compare each key separately. t(callable) evaluates the callable and returns the outcome EXC on any exception.\nShipment t = new Shipment();\nt.plan(100);\np(\"cost\", t.cost);\np(\"oversize\", t.oversize);"
         }
       ]
     },

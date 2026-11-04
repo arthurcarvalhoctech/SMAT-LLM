@@ -218,7 +218,9 @@ O SMAT tem dois fluxos independentes:
 | `SMAT_LAYA_INTERFERENCE_DETECTION` | `false` | Liga/desliga a pré-análise com Laya. |
 | `SMAT_LAYA_MODEL` | `english` | Checkpoint do Laya (`english`, `multilingual` ou `typed-decisions`). |
 | `SMAT_LAYA_THRESHOLD` | `0.5` | Probabilidade mínima para marcar um critério como acionado. |
-| `SMAT_LAYA_MAX_LEN` | `512` | Limite de tokens do estado enviado ao Laya. |
+| `SMAT_LAYA_THRESHOLD_C1`, `..._C2`, `..._C3` | vazio | Sobrescritas por critério, calibradas em validação. |
+| `SMAT_LAYA_QUESTION_FORMAT` | `noul` | Formato experimental: `noul`, `noul_ab` ou `choice_ab`. |
+| `SMAT_LAYA_MAX_LEN` | `512` | Orçamento total de tokens incluindo pergunta e opções. |
 | `SMAT_LAYA_LOG_DIR` | `.../reports/laya` | Diretório dos logs `.log` e `.jsonl`. |
 
 Combinações possíveis:

@@ -7,6 +7,7 @@ the same method/field/constructor snippets.
 
 import logging
 import os
+import re
 from pathlib import Path
 from typing import Dict, List, Tuple
 
@@ -27,7 +28,7 @@ def find_source_code_paths(input_jar: str, jar_type: str, class_name: str) -> Di
     value is an empty string when that version has no matching source file.
     """
     class_name = class_name.split(".")[-1]
-    first_jar = input_jar.split(":")[0]
+    first_jar = input_jar.split(os.pathsep)[0]
     path_parts = Path(first_jar).parts
 
     if jar_type in path_parts:
@@ -132,12 +133,16 @@ def extract_java_class_info(
     source_code_path: str,
     full_method_name: str,
     full_class_name: str,
+    *,
+    strict: bool = False,
 ) -> Tuple[List[str], List[str], str]:
     """Extract class fields, constructors, and the target method body.
 
-    The method matches by name (not by full signature). Overloaded methods are a
-    known limitation of the original extractor.
+    The legacy default matches by name. ``strict=True`` scopes the target to
+    its declaring class and signature, rejecting absent/ambiguous overloads.
     """
+    if strict:
+        return _extract_strict_java_target(source_code_path, full_method_name, full_class_name)
     try:
         class_name = full_class_name.split(".")[-1]
         method_name = full_method_name.split("(")[0]
@@ -249,3 +254,147 @@ def extract_java_class_info(
             error,
         )
         raise
+
+
+def _split_java_types(parameters: str) -> List[str]:
+    """Split a signature without splitting generic arguments."""
+    if not parameters.strip():
+        return []
+    parts, start, depth = [], 0, 0
+    for index, char in enumerate(parameters):
+        if char == "<":
+            depth += 1
+        elif char == ">":
+            depth -= 1
+        elif char == "," and depth == 0:
+            parts.append(parameters[start:index].strip())
+            start = index + 1
+    parts.append(parameters[start:].strip())
+    return parts
+
+
+def _normalize_java_type(value: str, simple: bool = False) -> str:
+    value = re.sub(r"\s+", "", value).replace("...", "[]").replace("$", ".")
+    if simple:
+        value = re.sub(r"(?:\b\w+\.)+(\w+)", r"\1", value)
+    return value
+
+
+def _extract_strict_java_target(path: str, signature: str, class_name: str) -> Tuple[List[str], List[str], str]:
+    """AST-only selection; never substitute a method from another class.
+
+    Qualified and simple parameter names may match if exactly one candidate
+    remains. This is conservative source matching, not Java symbol resolution.
+    """
+    _, source, tree = parse_java_code(path)
+    if tree.root_node.has_error:
+        raise ValueError("Java source contains parse errors")
+
+    def text(node):
+        return extract_java_snippet(source, node.start_byte, node.end_byte) if node else ""
+
+    classes = []
+    class_types = {"class_declaration", "interface_declaration", "enum_declaration", "record_declaration"}
+
+    def visit(node, parents=()):
+        if node.type in class_types:
+            parents = parents + (text(node.child_by_field_name("name")),)
+            classes.append((parents, node))
+        for child in node.named_children:
+            visit(child, parents)
+
+    visit(tree.root_node)
+    target = class_name.replace("$", ".")
+    matches = [(names, node) for names, node in classes
+               if target == ".".join(names) or target.endswith("." + ".".join(names))]
+    if matches:
+        longest = max(len(names) for names, _ in matches)
+        matches = [(names, node) for names, node in matches if len(names) == longest]
+    if len(matches) != 1:
+        raise ValueError(f"Class not found or ambiguous: {class_name}")
+    body = matches[0][1].child_by_field_name("body")
+    members = list(body.named_children) if body else []
+    # Enum members live in an extra body-declarations node.
+    members += [child for member in members if member.type == "enum_body_declarations"
+                for child in member.named_children]
+    fields = [text(n) for n in members if n.type in {"field_declaration", "constant_declaration"}]
+    constructors = [text(n) for n in members if n.type in {"constructor_declaration", "compact_constructor_declaration"}]
+    constructors += [text(n) for n in members if n.type in {"static_initializer", "block"}]
+
+    def with_dependencies(target_node):
+        # Retain reachable same-class helpers. Include every overload of a called
+        # name rather than pretending to resolve Java dispatch statically.
+        all_methods = [n for n in members if n.type == "method_declaration"]
+        selected = {target_node.start_byte: target_node}
+        pending = [target_node] + [n for n in members if n.type in {
+            "field_declaration", "constructor_declaration", "static_initializer", "block"
+        }]
+        while pending:
+            node = pending.pop()
+            if node.type == "method_invocation":
+                receiver = text(node.child_by_field_name("object"))
+                if receiver in {"", "this", matches[0][0][-1]}:
+                    called = text(node.child_by_field_name("name"))
+                    for method in all_methods:
+                        if text(method.child_by_field_name("name")) == called and method.start_byte not in selected:
+                            selected[method.start_byte] = method
+                            pending.append(method)
+            pending.extend(node.named_children)
+        helpers = [text(n) for offset, n in sorted(selected.items()) if offset != target_node.start_byte]
+        return text(target_node) + ("\n// Referenced same-class methods\n" + "\n".join(helpers) if helpers else "")
+    name = signature.split("(", 1)[0].strip()
+    methods = [n for n in members if n.type == "method_declaration"
+               and text(n.child_by_field_name("name")) == name]
+    if "(" in signature:
+        if not signature.endswith(")"):
+            raise ValueError(f"Invalid method signature: {signature}")
+        expected = _split_java_types(signature.split("(", 1)[1][:-1])
+
+        def parameter_types(method):
+            parameters = method.child_by_field_name("parameters")
+            types = []
+            for parameter in parameters.named_children:
+                if parameter.type not in {"formal_parameter", "spread_parameter"}:
+                    continue
+                type_node = parameter.child_by_field_name("type")
+                if type_node is None and parameter.type == "spread_parameter":
+                    type_node = next((n for n in parameter.named_children
+                                      if n.type not in {"modifiers", "variable_declarator"}), None)
+                value = text(type_node) + text(parameter.child_by_field_name("dimensions"))
+                if parameter.type == "spread_parameter":
+                    value += "[]"
+                types.append(value)
+            return types
+
+        candidates = []
+        for simple in (False, True):
+            wanted = [_normalize_java_type(t, simple) for t in expected]
+            candidates = [m for m in methods if
+                          [_normalize_java_type(t, simple) for t in parameter_types(m)] == wanted
+                          and all(_qualified_types_compatible(a, b)
+                                  for a, b in zip(parameter_types(m), expected))]
+            if candidates:
+                break
+        methods = candidates
+    if len(methods) == 1:
+        if methods[0].child_by_field_name("body") is None:
+            raise ValueError(f"Target method has no executable body: {signature}")
+        return fields, constructors, with_dependencies(methods[0])
+    if len(methods) > 1:
+        raise ValueError(f"Ambiguous method signature: {signature}")
+    if "(" not in signature:
+        field_targets = [n for n in members if n.type in {"field_declaration", "constant_declaration"}
+                         and any(c.type == "variable_declarator" and
+                                 text(c.child_by_field_name("name")) == name for c in n.named_children)]
+        if len(field_targets) == 1:
+            return fields, constructors, with_dependencies(field_targets[0])
+    raise ValueError(f"Target not found in {class_name}: {signature}")
+
+
+def _qualified_types_compatible(actual: str, expected: str) -> bool:
+    """A simple-name fallback must not erase a known qualified-name mismatch."""
+    pattern = r"\b(?:\w+\.)+\w+"
+    actual_names = {name.rsplit(".", 1)[-1]: name for name in re.findall(pattern, actual)}
+    expected_names = {name.rsplit(".", 1)[-1]: name for name in re.findall(pattern, expected)}
+    return all(actual_names[name] == expected_names[name]
+               for name in actual_names.keys() & expected_names.keys())

@@ -165,7 +165,7 @@ class LayaFlowTest(unittest.TestCase):
     def tearDown(self):
         self._temp_dir.cleanup()
 
-    def test_runs_real_laya_and_writes_readable_log_and_jsonl(self):
+    def test_runs_fake_laya_and_writes_readable_log_and_jsonl(self):
         client = FakeLayaClient(result=make_result())
 
         with patch(
@@ -185,7 +185,8 @@ class LayaFlowTest(unittest.TestCase):
         self.assertEqual(
             assessment.primary_criterion, "criterion_1_global_divergence"
         )
-        self.assertEqual(assessment.affected_branch, "left")
+        self.assertEqual(assessment.affected_branch, "not_applicable")
+        self.assertIn("affected_branch_without_parent_change_signal", assessment.warnings)
         self.assertEqual(assessment.confidence_label, "high")
 
         log_content = Path(flow.log_path).read_text(encoding="utf-8")

@@ -4,6 +4,7 @@
 
 - `cases/<id>/source/<Classe>/{base,left,right,merge}.java`: as 4 versões. Left e right são a base com edições em regiões disjuntas, e o merge aplica as duas.
 - `input-smat-sintetico.json`: input do SMAT para a triagem Laya. Os JARs são fictícios (o Laya só lê `source/`) e os caminhos usam o prefixo `/app/dataset-sintetico`.
+- Os alvos declaram `observations` e `observationContext`: nomes observados e a sequência de instrumentação, sem valores esperados. Isso fixa a granularidade da comparação nos prompts v2.
 - `gold-sintetico.json`: gabarito por **execução**. Cada caso traz os valores observados em B, L, R e M e os critérios que dispararam.
 - Gerado por `scripts/build_synthetic_dataset.py`, que compila e executa as 4 versões e confere o resultado com o critério previsto.
 
@@ -24,3 +25,8 @@ Critérios, aplicados a elementos de estado observados:
 Não há caso só com C1. Quando B, L e R são dois a dois diferentes, L difere de B e também de M (ou R difere), então C2 dispara junto. Por isso C1 aparece sempre com C2.
 
 Exemplos tirados de `mergedataset` (listas com valores novos dos dois lados, `SlangImpl`/`Keywords`) e da apostila (cleanText, x/y/z, mapa, ordem das chamadas).
+
+Os arquivos em `resultados/` são experimentos anteriores aos prompts v2 e não foram
+reescritos. Para novas avaliações e exportação de treino com o contexto de produção,
+veja [o procedimento de validação](../docs/laya-validacao.md). Os 20 casos não bastam
+para escolher limiares finais; famílias com o mesmo template exigem separação cuidadosa.

@@ -2,7 +2,7 @@
 
 This flow runs before SMAT's execution-based detection. It builds a compact
 source state for each target method, asks Laya three independent ``noul``
-questions plus one ``choice`` and one ``score`` question, and writes a readable
+questions plus diagnostic choices and a rubric score, and writes a readable
 log and a JSONL file for analysis.
 
 Laya is a hypothesis generator here, not an oracle: it does not execute code and
@@ -12,6 +12,7 @@ authoritative detector.
 
 import json
 import logging
+import math
 import os
 import re
 import traceback
@@ -30,11 +31,12 @@ from nimrod.laya_interference.criteria import (
     AFFECTED_BRANCH_QUESTION_ID,
     CONFIDENCE_QUESTION_ID,
     CRITERIA,
+    PROMPT_VERSION,
     PRIMARY_CRITERION_QUESTION_ID,
     build_questions,
     choice_confidence,
     choice_label,
-    noul_probability,
+    criterion_probability,
     score_label,
     score_value,
 )
@@ -54,16 +56,29 @@ def _default_log_dir() -> str:
 CLASSIFICATION_POSSIBLE_INTERFERENCE = "possible_interference"
 CLASSIFICATION_NO_SIGNAL = "no_signal"
 CLASSIFICATION_ERROR = "error"
+CLASSIFICATION_INSUFFICIENT_CONTEXT = "insufficient_context"
 
 CLASSIFICATION_NOTE = (
     "Laya triage only. possible_interference is a hypothesis, not a confirmed "
     "conflict. no_signal does not prove the absence of interference. "
+    "insufficient_context means a required comparison could not be assessed. "
     "Execution-based detection remains the reference."
 )
 
 
 def _safe_file_part(value: str) -> str:
     return re.sub(r"[^A-Za-z0-9_.-]+", "_", value).strip("_") or "unnamed"
+
+
+def _json_safe(value: Any) -> Any:
+    """Keep invalid raw numeric answers auditable without emitting invalid JSON."""
+    if isinstance(value, float) and not math.isfinite(value):
+        return str(value)
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    return value
 
 
 @dataclass
@@ -75,6 +90,8 @@ class CriterionAssessment:
     probability: Optional[float]
     threshold: float
     triggered: bool
+    status: str = "assessed"
+    reasons: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -84,6 +101,8 @@ class CriterionAssessment:
             "probability": self.probability,
             "threshold": self.threshold,
             "triggered": self.triggered,
+            "status": self.status,
+            "reasons": self.reasons,
         }
 
 
@@ -113,6 +132,15 @@ class LayaAssessment:
     answers: Dict[str, Any] = field(default_factory=dict)
     error: Optional[str] = None
     error_traceback: Optional[str] = None
+    prompt_version: str = PROMPT_VERSION
+    question_format: str = "noul"
+    warnings: List[str] = field(default_factory=list)
+    source_errors: Dict[str, str] = field(default_factory=dict)
+
+    @property
+    def assessment_complete(self) -> bool:
+        return all(c.id in self.criteria and self.criteria[c.id].status == "assessed"
+                   and self.criteria[c.id].probability is not None for c in CRITERIA)
 
     @property
     def triggered_criteria(self) -> List[str]:
@@ -128,6 +156,8 @@ class LayaAssessment:
             return CLASSIFICATION_ERROR
         if self.triggered_criteria:
             return CLASSIFICATION_POSSIBLE_INTERFERENCE
+        if not self.assessment_complete:
+            return CLASSIFICATION_INSUFFICIENT_CONTEXT
         return CLASSIFICATION_NO_SIGNAL
 
     def classification_dict(self, run_id: str) -> Dict[str, Any]:
@@ -142,6 +172,13 @@ class LayaAssessment:
             "model": self.model,
             "max_len": self.max_len,
             "threshold": self.threshold,
+            "criterion_thresholds": {key: value.threshold for key, value in self.criteria.items()},
+            "prompt_version": self.prompt_version,
+            "question_format": self.question_format,
+            "assessment_complete": self.assessment_complete,
+            "warnings": self.warnings,
+            "source_errors": self.source_errors,
+            "criteria": {key: value.to_dict() for key, value in self.criteria.items()},
             "classification": self.classification,
             "triggered_criteria": self.triggered_criteria,
             "primary_criterion": self.primary_criterion,
@@ -157,6 +194,13 @@ class LayaAssessment:
 
     def to_dict(self) -> Dict[str, Any]:
         return {
+            "classification": self.classification,
+            "assessment_complete": self.assessment_complete,
+            "prompt_version": self.prompt_version,
+            "question_format": self.question_format,
+            "warnings": self.warnings,
+            "confidence_kind": "source_evidence_rubric_not_calibrated_probability",
+            "source_errors": self.source_errors,
             "timestamp": self.timestamp,
             "project": self.project_name,
             "class": self.class_name,
@@ -180,9 +224,9 @@ class LayaAssessment:
             "affected_branch_confidence": self.affected_branch_confidence,
             "confidence_score": self.confidence_score,
             "confidence_label": self.confidence_label,
-            "routing": self.routing,
-            "usage": self.usage,
-            "answers": self.answers,
+            "routing": _json_safe(self.routing),
+            "usage": _json_safe(self.usage),
+            "answers": _json_safe(self.answers),
             "error": self.error,
             "error_traceback": self.error_traceback,
         }
@@ -199,6 +243,10 @@ class LayaAssessment:
             f"  state_digest={self.state_digest}",
             f"  sources: {sources}",
             f"  missing_branches={self.missing_branches or '-'}",
+            f"  classification={self.classification} assessment_complete={self.assessment_complete}",
+            f"  prompt_version={self.prompt_version} question_format={self.question_format}",
+            f"  warnings={self.warnings or '-'}",
+            f"  source_errors={self.source_errors or '-'}",
         ]
 
         for criterion in CRITERIA:
@@ -215,8 +263,10 @@ class LayaAssessment:
             )
             lines.append(
                 f"  {criterion.id}: p={probability} "
-                f"threshold={self.threshold:.2f} -> {triggered}"
+                f"threshold={assessment.threshold if assessment else self.threshold:.2f} -> {triggered}"
             )
+            if assessment and assessment.status != "assessed":
+                lines.append(f"    status={assessment.status} reasons={assessment.reasons}")
             lines.append(f"    definition: {criterion.article_definition}")
 
         def format_choice(label: Optional[str], confidence: Optional[float]) -> str:
@@ -314,6 +364,9 @@ class LayaInterferenceFlow:
                 log_file.write(f"model={self.config.model}\n")
                 log_file.write(f"max_len={self.config.max_len}\n")
                 log_file.write(f"threshold={self.config.threshold:.2f}\n")
+                log_file.write(f"prompt_version={PROMPT_VERSION}\n")
+                log_file.write(f"question_format={self.config.question_format}\n")
+                log_file.write(f"criterion_thresholds={json.dumps(self.config.criterion_thresholds)}\n")
                 log_file.write(
                     "client="
                     + json.dumps(
@@ -387,6 +440,17 @@ class LayaInterferenceFlow:
                 error_traceback=self._traceback_once(error),
             )
 
+        questions = build_questions(self.config.question_format)
+        for criterion in CRITERIA:
+            if set(criterion.required_branches).intersection(state.missing_branches):
+                questions.pop(criterion.id)
+        if not any(c.id in questions for c in CRITERIA):
+            return self._assessment_from_result(state, {})
+        if state.missing_branches:
+            # Diagnostic questions require all versions; C1 can still be useful.
+            questions = {key: value for key, value in questions.items()
+                         if key in {c.id for c in CRITERIA}}
+
         if self._unavailable_reason is not None:
             return self._error_assessment(
                 scenario,
@@ -398,7 +462,7 @@ class LayaInterferenceFlow:
 
         try:
             raw_result = self.client.predict(
-                state.to_payload(), build_questions()
+                state.to_payload(), questions
             )
         except LayaUnavailableError as error:
             self._unavailable_reason = str(error)
@@ -433,24 +497,72 @@ class LayaInterferenceFlow:
         self, state: LayaMethodState, raw_result: Dict[str, Any]
     ) -> LayaAssessment:
         criteria: Dict[str, CriterionAssessment] = {}
+        usage = raw_result.get("usage", {}) if isinstance(raw_result, dict) else {}
+        usage = usage if isinstance(usage, dict) else {}
+        truncated_questions = usage.get("truncated_questions")
+        warnings = []
+        if "truncated" not in usage:
+            warnings.append("truncation_telemetry_unavailable")
+        def question_truncated(question_id):
+            if isinstance(truncated_questions, list) and truncated_questions:
+                return question_id in truncated_questions
+            # Contradictory/legacy telemetry cannot establish that any question fit.
+            return bool(usage.get("truncated"))
         for criterion in CRITERIA:
-            probability = noul_probability(raw_result, criterion.id)
+            probability = criterion_probability(raw_result, criterion.id, self.config.question_format)
+            reasons = []
+            missing = sorted(set(criterion.required_branches).intersection(state.missing_branches))
+            if missing:
+                reasons.append("missing_source:" + ",".join(missing))
+            if question_truncated(criterion.id):
+                reasons.append("truncated_state")
+            status = "insufficient_context" if reasons else "assessed"
+            if not reasons and probability is None:
+                status = "invalid_response"
+                reasons.append("missing_or_invalid_probability")
+            threshold = self.config.threshold_for(criterion.id)
             criteria[criterion.id] = CriterionAssessment(
                 criterion_id=criterion.id,
                 number=criterion.number,
                 title=criterion.title,
                 article_definition=criterion.article_definition,
                 probability=probability,
-                threshold=self.config.threshold,
+                threshold=threshold,
                 triggered=(
-                    probability is not None
-                    and probability >= self.config.threshold
+                    status == "assessed" and probability is not None
+                    and probability >= threshold
                 ),
+                status=status,
+                reasons=reasons,
             )
 
         routing = raw_result.get("routing", {}) if isinstance(raw_result, dict) else {}
-        usage = raw_result.get("usage", {}) if isinstance(raw_result, dict) else {}
         answers = raw_result.get("answers", {}) if isinstance(raw_result, dict) else {}
+        triggered = [item for item in criteria.values() if item.triggered]
+        complete = all(item.status == "assessed" for item in criteria.values())
+        primary = (max(triggered, key=lambda item: item.probability).criterion_id if triggered
+                   else "none" if complete else "insufficient_context")
+        model_primary = choice_label(raw_result, PRIMARY_CRITERION_QUESTION_ID)
+        if question_truncated(PRIMARY_CRITERION_QUESTION_ID):
+            model_primary = None
+        if model_primary is not None and model_primary != primary:
+            warnings.append("primary_choice_disagrees_with_criterion_scores")
+        c1, c2, _ = (criteria[c.id] for c in CRITERIA)
+        if c1.status == c2.status == "assessed" and c1.probability > c2.probability:
+            warnings.append("c1_probability_exceeds_c2_despite_logical_implication")
+        affected = choice_label(raw_result, AFFECTED_BRANCH_QUESTION_ID)
+        affected_confidence = choice_confidence(raw_result, AFFECTED_BRANCH_QUESTION_ID)
+        if question_truncated(AFFECTED_BRANCH_QUESTION_ID):
+            affected, affected_confidence = None, None
+        if c2.status != "assessed":
+            affected, affected_confidence = "unclear", None
+        elif not c2.triggered:
+            if affected in {"left", "right", "both"}:
+                warnings.append("affected_branch_without_parent_change_signal")
+            affected, affected_confidence = "not_applicable", None
+        elif affected in {None, "not_applicable"}:
+            warnings.append("parent_change_signal_without_affected_branch")
+            affected, affected_confidence = "unclear", None
 
         return LayaAssessment(
             timestamp=datetime.now().isoformat(timespec="seconds"),
@@ -466,22 +578,18 @@ class LayaInterferenceFlow:
             source_paths=state.source_paths(),
             missing_branches=state.missing_branches,
             criteria=criteria,
-            primary_criterion=choice_label(
-                raw_result, PRIMARY_CRITERION_QUESTION_ID
-            ),
-            primary_criterion_confidence=choice_confidence(
-                raw_result, PRIMARY_CRITERION_QUESTION_ID
-            ),
-            affected_branch=choice_label(
-                raw_result, AFFECTED_BRANCH_QUESTION_ID
-            ),
-            affected_branch_confidence=choice_confidence(
-                raw_result, AFFECTED_BRANCH_QUESTION_ID
-            ),
-            confidence_score=score_value(
+            question_format=self.config.question_format,
+            warnings=warnings,
+            source_errors={branch: source.error or "target body unavailable"
+                           for branch, source in state.branches.items() if not source.available},
+            primary_criterion=primary,
+            primary_criterion_confidence=None,
+            affected_branch=affected,
+            affected_branch_confidence=affected_confidence,
+            confidence_score=None if question_truncated(CONFIDENCE_QUESTION_ID) else score_value(
                 raw_result, CONFIDENCE_QUESTION_ID
             ),
-            confidence_label=score_label(
+            confidence_label=None if question_truncated(CONFIDENCE_QUESTION_ID) else score_label(
                 raw_result, CONFIDENCE_QUESTION_ID
             ),
             routing=routing if isinstance(routing, dict) else {},
@@ -519,8 +627,10 @@ class LayaInterferenceFlow:
                 title=criterion.title,
                 article_definition=criterion.article_definition,
                 probability=None,
-                threshold=self.config.threshold,
+                threshold=self.config.threshold_for(criterion.id),
                 triggered=False,
+                status="error",
+                reasons=[str(error)],
             )
             for criterion in CRITERIA
         }
@@ -541,6 +651,9 @@ class LayaInterferenceFlow:
             criteria=criteria,
             error=str(error),
             error_traceback=error_traceback,
+            question_format=self.config.question_format,
+            source_errors={branch: source.error or "target body unavailable"
+                           for branch, source in state.branches.items() if not source.available},
         )
 
     def _write_classification(self, assessment: LayaAssessment) -> None:
