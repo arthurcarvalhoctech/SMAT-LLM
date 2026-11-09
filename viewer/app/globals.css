@@ -178,11 +178,6 @@ body {
   background-color: #ef4444;
 }
 
-.brand-mark {
-  background-image: linear-gradient(135deg, #ef4444, #991b1b);
-  color: #ffffff;
-}
-
 .hero-gradient,
 .panel-gradient {
   background-image: linear-gradient(

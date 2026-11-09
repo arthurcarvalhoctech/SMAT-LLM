@@ -1,5 +1,6 @@
 import { LayaTable } from "@/components/laya-table";
 import { Badge } from "@/components/ui";
+import { accuracyTone, formatAccuracy } from "@/lib/format";
 import {
   LAYA_CRITERIA,
   criterionLabel,
@@ -47,6 +48,18 @@ export function LayaScenarioBadges({
           {layaStatusShort(summary.status)}
         </Badge>
       </span>
+      {summary.evaluation.labeled ? (
+        <span
+          title={`${summary.evaluation.correct} de ${summary.evaluation.labeled} métodos rotulados`}
+        >
+          <Badge tone={accuracyTone(summary.evaluation.accuracy)}>
+            {summary.evaluation.correct === summary.evaluation.labeled
+              ? "✓"
+              : "✗"}{" "}
+            {formatAccuracy(summary.evaluation.accuracy)}
+          </Badge>
+        </span>
+      ) : null}
       {summary.criteria.map((criterion) => (
         <span
           key={criterion}
@@ -131,6 +144,19 @@ export function LayaScenarioPanel({
           {summary.runIds.length ? (
             <span className="font-mono text-[10px] text-zinc-500">
               runs: {summary.runIds.join(", ")}
+            </span>
+          ) : null}
+          {summary.evaluation.labeled ? (
+            <span
+              className="inline-flex items-center gap-1.5 text-xs text-zinc-600"
+              title={`${summary.evaluation.correct} de ${summary.evaluation.labeled} métodos rotulados`}
+            >
+              <Badge tone={accuracyTone(summary.evaluation.accuracy)}>
+                Acurácia {formatAccuracy(summary.evaluation.accuracy)}
+              </Badge>
+              <span className="text-[10px] text-zinc-500">
+                {summary.evaluation.correct}/{summary.evaluation.labeled}
+              </span>
             </span>
           ) : null}
         </div>

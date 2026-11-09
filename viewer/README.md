@@ -10,8 +10,16 @@ Aplicação Next.js + Tailwind CSS para explorar os artefatos de
   e `merge`.
 - **Fontes**: abas por branch, visualização por classe/fonte, modo bruto,
   cópia e download.
+- **Diff 3 vias**: left, merge e right alinhados; base usada apenas como
+  referência. Mudanças de left em vermelho, merge em verde e right em azul;
+  linhas excluídas em tom mais claro.
 - **Laya**: classificações em `reports/laya/classification/run_*` e logs
   `.log`/`.jsonl`.
+- **LLM**: classificações em `reports/llm_interference/classification/run_*`
+  e logs `.log`/`.jsonl`.
+- **Acurácia**: cada execução de Laya/LLM mostra o percentual de acerto e a
+  lista de métodos em que acertou/errou, comparando com os rótulos de
+  referência em `viewer/data/ground-truth.json`.
 - **Relatórios**: JSONs diretamente em `reports/`.
 - **Arquivos**: navegador genérico de todo o `output-test-dest`, incluindo
   `projects/`, com prévia de texto e download.
@@ -69,3 +77,19 @@ SMAT_OUTPUT_DIR=../SMAT/output-test-dest npm run start
 O `Dockerfile` usa `output: "standalone"` do Next.js e roda como usuário não
 root. O volume de saída é somente leitura; a aplicação não altera os
 artefatos do SMAT.
+
+## Ground truth da acurácia
+
+Os rótulos usados nos indicadores de acerto ficam em
+`viewer/data/ground-truth.json`. O arquivo é gerado a partir de
+`dataset-sintetico/resultados/probe_t1.json`,
+`mergedataset-full/semantic-conflicts/sample-semantic-conflicts.csv` e dos
+manifestos de cenário. Para regenerar:
+
+```bash
+# na raiz do repositório
+python3 scripts/export_viewer_ground_truth.py
+```
+
+A acurácia considera métodos únicos com rótulo disponível. Classificações
+`error`, `uncertain` ou sem predição contam como erro.

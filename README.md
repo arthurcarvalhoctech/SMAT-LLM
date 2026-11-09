@@ -568,6 +568,10 @@ O container monta `./SMAT/output-test-dest` em
 - cenários com abas `base`, `left`, `right` e `merge`;
 - classificações e logs do Laya;
 - classificações e logs do fluxo LLM (coluna e painel por cenário);
+- acurácia de Laya e LLM por execução, com os métodos em que cada fluxo
+  acertou/errou;
+- diff de três vias no detalhe do cenário, comparando left, merge e right
+  (base usada apenas como referência);
 - relatórios JSON em `reports/`;
 - navegador de arquivos de todo o `output-test-dest`.
 

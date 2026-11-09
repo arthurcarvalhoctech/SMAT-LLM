@@ -1,0 +1,714 @@
+{
+  "meta": {
+    "generatedBy": "scripts/export_viewer_ground_truth.py",
+    "note": "Labels are positive for interference (Yes) and negative for no interference (No)."
+  },
+  "sintetico": [
+    {
+      "scenario": "c2a_lista_acumulada",
+      "class": "Keywords",
+      "method": "init",
+      "label": "Yes"
+    },
+    {
+      "scenario": "c2b_taxa_e_arredondamento",
+      "class": "Invoice",
+      "method": "compute",
+      "label": "Yes"
+    },
+    {
+      "scenario": "c2c_texto_espacos_duplicados",
+      "class": "TextCleaner",
+      "method": "cleanText",
+      "label": "Yes"
+    },
+    {
+      "scenario": "c2d_guarda_nula_antes_do_trim",
+      "class": "NameCheck",
+      "method": "valid",
+      "label": "Yes"
+    },
+    {
+      "scenario": "c3a_xyz_apostila",
+      "class": "Flags",
+      "method": "run",
+      "label": "Yes"
+    },
+    {
+      "scenario": "c3b_peso_total",
+      "class": "Parcel",
+      "method": "check",
+      "label": "Yes"
+    },
+    {
+      "scenario": "c3c_capacidade",
+      "class": "Storage",
+      "method": "check",
+      "label": "Yes"
+    },
+    {
+      "scenario": "d1_taxa_sobrescrita",
+      "class": "PriceTable",
+      "method": "quote",
+      "label": "Yes"
+    },
+    {
+      "scenario": "d2_regra_de_preco",
+      "class": "PriceRule",
+      "method": "price",
+      "label": "Yes"
+    },
+    {
+      "scenario": "d3_titulo_formatado",
+      "class": "TitleFormatter",
+      "method": "title",
+      "label": "Yes"
+    },
+    {
+      "scenario": "e1_taxa_e_capacidade",
+      "class": "Checkout",
+      "method": "compute",
+      "label": "Yes"
+    },
+    {
+      "scenario": "e2_custo_e_sobrepeso",
+      "class": "Shipment",
+      "method": "plan",
+      "label": "Yes"
+    },
+    {
+      "scenario": "n01_mapa_chaves_distintas",
+      "class": "TableTypes",
+      "method": "init",
+      "label": "No"
+    },
+    {
+      "scenario": "n02_texto_ordem_independente",
+      "class": "Text",
+      "method": "cleanText",
+      "label": "No"
+    },
+    {
+      "scenario": "n03_mesma_mudanca_dos_dois_lados",
+      "class": "TaxCalculator",
+      "method": "apply",
+      "label": "No"
+    },
+    {
+      "scenario": "n04_campos_independentes",
+      "class": "Cart",
+      "method": "checkout",
+      "label": "No"
+    },
+    {
+      "scenario": "n05_mudanca_so_de_um_lado",
+      "class": "Counter",
+      "method": "increment",
+      "label": "No"
+    },
+    {
+      "scenario": "n06_refatoracao_e_comportamento",
+      "class": "Limiter",
+      "method": "allowed",
+      "label": "No"
+    },
+    {
+      "scenario": "n07_validacao_em_entradas_distintas",
+      "class": "Validator",
+      "method": "valid",
+      "label": "No"
+    },
+    {
+      "scenario": "n08_casos_novos_no_switch",
+      "class": "OrderLabel",
+      "method": "label",
+      "label": "No"
+    }
+  ],
+  "mergedataset": [
+    {
+      "project": "antlr4",
+      "class": "Python2Target",
+      "method": "python2Keywords",
+      "label": "Yes"
+    },
+    {
+      "project": "antlr4",
+      "class": "Python3Target",
+      "method": "python3Keywords",
+      "label": "Yes"
+    },
+    {
+      "project": "cloud-slang",
+      "class": "SlangImpl",
+      "method": "getAllEventTypes",
+      "label": "Yes"
+    },
+    {
+      "project": "spring-boot",
+      "class": "AtomikosProperties",
+      "method": "asProperties",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "AutoConfigurationReportLoggingInitializer",
+      "method": "logAutoConfigurationReport",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "ExplodedArchive",
+      "method": "getUrl",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "ExplodedArchiveTests",
+      "method": "getUrl",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "MongoProperties",
+      "method": "builder",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "SpringBootServletInitializer",
+      "method": "createRootApplicationContext",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "TomcatEmbeddedServletContainerFactory",
+      "method": "customizeConnector",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "UndertowEmbeddedServletContainerFactory",
+      "method": "createDeploymentManager",
+      "label": "No"
+    }
+  ],
+  "mergedataset-full": [
+    {
+      "project": "Activiti",
+      "class": "DeploymentEntityManager",
+      "method": "deleteDeployment",
+      "label": "Yes"
+    },
+    {
+      "project": "Activiti",
+      "class": "UserTaskActivityBehavior",
+      "method": "execute",
+      "label": "No"
+    },
+    {
+      "project": "Antlr4",
+      "class": "Python2Target",
+      "method": "python2Keywords",
+      "label": "Yes"
+    },
+    {
+      "project": "Antlr4",
+      "class": "Python3Target",
+      "method": "python3Keywords",
+      "label": "Yes"
+    },
+    {
+      "project": "HikariCP",
+      "class": "HikariConfig",
+      "method": "validate",
+      "label": "No"
+    },
+    {
+      "project": "MPAndroidChart",
+      "class": "LineChartActivity1",
+      "method": "onCreate",
+      "label": "No"
+    },
+    {
+      "project": "MPAndroidChart",
+      "class": "LineChartActivity2",
+      "method": "onCreate",
+      "label": "No"
+    },
+    {
+      "project": "MPAndroidChart",
+      "class": "PieChartRenderer",
+      "method": "drawData",
+      "label": "No"
+    },
+    {
+      "project": "MPAndroidChart",
+      "class": "RadarChartActivitry",
+      "method": "onCreate",
+      "label": "No"
+    },
+    {
+      "project": "MPAndroidChart",
+      "class": "SimpleFragment",
+      "method": "generateScatterData",
+      "label": "No"
+    },
+    {
+      "project": "MPAndroidChart",
+      "class": "StackedBarActivityNegative",
+      "method": "onCreate",
+      "label": "No"
+    },
+    {
+      "project": "OpenTripPlanner",
+      "class": "MultiShortestPathTree",
+      "method": "dominates",
+      "label": "Yes"
+    },
+    {
+      "project": "RxJava",
+      "class": "OperatorMulticast",
+      "method": "connect",
+      "label": "No"
+    },
+    {
+      "project": "RxJava",
+      "class": "TestScheduler",
+      "method": "triggerActions",
+      "label": "No"
+    },
+    {
+      "project": "SimianArmy",
+      "class": "BasicJanitorMonkeyContext",
+      "method": "getInstanceJanitor",
+      "label": "No"
+    },
+    {
+      "project": "SimianArmy",
+      "class": "BasicSimianArmyContext",
+      "method": "BasicSimianArmyContext",
+      "label": "No"
+    },
+    {
+      "project": "Storm",
+      "class": "KafkaSpout",
+      "method": "emitTupleIfNotEmitted",
+      "label": "No"
+    },
+    {
+      "project": "Storm",
+      "class": "KafkaSpoutConfig",
+      "method": "toString",
+      "label": "Yes"
+    },
+    {
+      "project": "alluxio",
+      "class": "HdfsFileInputStream",
+      "method": "HdfsFileInputStream",
+      "label": "No"
+    },
+    {
+      "project": "atmosphere",
+      "class": "AtmosphereConfig",
+      "method": "constructor",
+      "label": "No"
+    },
+    {
+      "project": "cloud-slang",
+      "class": "SlangImpl",
+      "method": "getAllEventTypes",
+      "label": "Yes"
+    },
+    {
+      "project": "cloud-slang",
+      "class": "SlangImplTest",
+      "method": "ALL_EVENTS_SIZE",
+      "label": "No"
+    },
+    {
+      "project": "crawler4j",
+      "class": "Parser",
+      "method": "parse",
+      "label": "Yes"
+    },
+    {
+      "project": "cucumber-jvm",
+      "class": "JavaLanguage",
+      "method": "load",
+      "label": "No"
+    },
+    {
+      "project": "dropwizard",
+      "class": "Bootstrap",
+      "method": "Bootstrap",
+      "label": "No"
+    },
+    {
+      "project": "druid",
+      "class": "S3SegmentPusher",
+      "method": "push",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "DocWriteResponse",
+      "method": "readFrom",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "DocWriteResponse",
+      "method": "toXContent",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "DocWriteResponse",
+      "method": "writeTo",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "ESSingleNodeTestCase",
+      "method": "newNode",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "NestedInnerQueryParseSupport",
+      "method": "setPathLevel",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "RestIndicesAction",
+      "method": "getTableWithHeader",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "RestNodesAction",
+      "method": "getTableWithHeader",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "RestShardsAction",
+      "method": "getTableWithHeader",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "SimpleIndexQueryParserTests",
+      "method": "setup",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch",
+      "class": "SynonymsAnalysisTest",
+      "method": "testSynonymsAnalysis",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "Indexer",
+      "method": "applyAdvancedTransformation",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "Indexer",
+      "method": "processBlockingQueue",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "MongoDBRiverDefinition",
+      "method": "parseSettings",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "Slurper",
+      "method": "addToStream",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "Slurper",
+      "method": "assignCollections",
+      "label": "Yes"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "Slurper",
+      "method": "run",
+      "label": "No"
+    },
+    {
+      "project": "elasticsearch-river-mongodb",
+      "class": "parseSettings",
+      "method": "parseSettings",
+      "label": "No"
+    },
+    {
+      "project": "eureka",
+      "class": "ApplicationInfoManager",
+      "method": "constructor",
+      "label": "No"
+    },
+    {
+      "project": "fitnesse",
+      "class": "SlimTableFactory",
+      "method": "contructor",
+      "label": "Yes"
+    },
+    {
+      "project": "fitnesse",
+      "class": "SlimTableFactoryTest",
+      "method": "setUp",
+      "label": "No"
+    },
+    {
+      "project": "hector",
+      "class": "HConnectionManager",
+      "method": "operateWithFailover",
+      "label": "No"
+    },
+    {
+      "project": "hector",
+      "class": "HKerberosThriftClient",
+      "method": "open",
+      "label": "No"
+    },
+    {
+      "project": "hector",
+      "class": "HSaslThriftClient",
+      "method": "open",
+      "label": "No"
+    },
+    {
+      "project": "hector",
+      "class": "HThriftClient",
+      "method": "open",
+      "label": "No"
+    },
+    {
+      "project": "jOOQ",
+      "class": "DSL",
+      "method": "coalesce",
+      "label": "No"
+    },
+    {
+      "project": "java-faker",
+      "class": "Faker",
+      "method": "constructor",
+      "label": "No"
+    },
+    {
+      "project": "jenkins",
+      "class": "DefaultJnlpSlaveReceiver",
+      "method": "handle",
+      "label": "No"
+    },
+    {
+      "project": "jsoup",
+      "class": "HttpConnection",
+      "method": "createConnection",
+      "label": "No"
+    },
+    {
+      "project": "jsoup",
+      "class": "HttpConnection",
+      "method": "execute",
+      "label": "Yes"
+    },
+    {
+      "project": "jsoup",
+      "class": "TextNode",
+      "method": "outerHtmlHead",
+      "label": "Yes"
+    },
+    {
+      "project": "libgdx",
+      "class": "Lwjgl3Application",
+      "method": "newWindow",
+      "label": "No"
+    },
+    {
+      "project": "libgdx",
+      "class": "Lwjgl3ApplicationConfiguration",
+      "method": "copy",
+      "label": "No"
+    },
+    {
+      "project": "logback",
+      "class": "TimeBasedFileNamingAndTriggeringPolicyBase",
+      "method": "start",
+      "label": "No"
+    },
+    {
+      "project": "moshi",
+      "class": "ClassJsonAdapter",
+      "method": "create",
+      "label": "Yes"
+    },
+    {
+      "project": "netty",
+      "class": "LengthFieldBasedFrameDecoder",
+      "method": "decode",
+      "label": "Yes"
+    },
+    {
+      "project": "okhttp",
+      "class": "GzipSource",
+      "method": "consumeHeader",
+      "label": "No"
+    },
+    {
+      "project": "okhttp",
+      "class": "OkHttpClient",
+      "method": "copyWithDefaults",
+      "label": "No"
+    },
+    {
+      "project": "orientdb",
+      "class": "Orient",
+      "method": "startup",
+      "label": "No"
+    },
+    {
+      "project": "pushy",
+      "class": "PushManager",
+      "method": "handleConnectionClosure",
+      "label": "No"
+    },
+    {
+      "project": "quickml",
+      "class": "OutOfTimeCrossValidatorRunner",
+      "method": "getRandomForestBuilder",
+      "label": "No"
+    },
+    {
+      "project": "resty-gwt",
+      "class": "DirectRestServiceInterfaceClassCreator",
+      "method": "getMethodCallback",
+      "label": "Yes"
+    },
+    {
+      "project": "retrofit",
+      "class": "RequestBuilder",
+      "method": "build",
+      "label": "Yes"
+    },
+    {
+      "project": "retrofit",
+      "class": "RestAdapter",
+      "method": "logAndReplaceRequest",
+      "label": "No"
+    },
+    {
+      "project": "retrofit",
+      "class": "RestAdapter",
+      "method": "logAndReplaceResponse",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "AtomikosProperties",
+      "method": "asProperties",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "AutoConfigurationReportLoggingInitializer",
+      "method": "logAutoConfigurationReport",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "ExplodedArchive",
+      "method": "getUrl",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "ExplodedArchiveTests",
+      "method": "getUrl",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "MongoProperties",
+      "method": "builder",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "RedisCacheConfiguration",
+      "method": "cacheManager",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "SpringBootServletInitializer",
+      "method": "createRootApplicationContext",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "TomcatEmbeddedServletContainerFactory",
+      "method": "customizeConnector",
+      "label": "No"
+    },
+    {
+      "project": "spring-boot",
+      "class": "UndertowEmbeddedServletContainerFactory",
+      "method": "createDeploymentManager",
+      "label": "No"
+    },
+    {
+      "project": "swagger-core",
+      "class": "OperationParser",
+      "method": "getSchemaFromAnnotation",
+      "label": "No"
+    },
+    {
+      "project": "swagger-maven-plugin",
+      "class": "AbstractReader",
+      "method": "hasValidAnnotations",
+      "label": "Yes"
+    },
+    {
+      "project": "titan",
+      "class": "SerializerInitialization",
+      "method": "initialize",
+      "label": "No"
+    },
+    {
+      "project": "titan",
+      "class": "StandardTitanTx",
+      "method": "StandardTitanTx",
+      "label": "No"
+    },
+    {
+      "project": "voldemort",
+      "class": "VoldemortClientShell",
+      "method": "VoldemortClientShell",
+      "label": "No"
+    },
+    {
+      "project": "voldemort",
+      "class": "VoldemortConfig",
+      "method": "VoldemortConfig",
+      "label": "No"
+    },
+    {
+      "project": "webbit",
+      "class": "WebSocketClient$HandshakeChannelHandler",
+      "method": "adjustPipelineToWebSocket",
+      "label": "No"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { LayaLogList } from "@/components/laya-log-list";
 import { LayaRunList } from "@/components/laya-run-list";
 import { Badge, EmptyState, SectionHeading, StatCard } from "@/components/ui";
-import { formatNumber } from "@/lib/format";
+import { accuracyTone, formatAccuracy, formatNumber } from "@/lib/format";
 import {
   getOutputRoot,
   listLayaLogs,
@@ -15,6 +15,15 @@ export default async function LayaPage() {
   const outputRoot = getOutputRoot();
   const interference = runs.reduce((total, run) => total + run.interference, 0);
   const errors = runs.reduce((total, run) => total + run.errors, 0);
+  const labeled = runs.reduce(
+    (total, run) => total + run.evaluation.labeled,
+    0,
+  );
+  const correct = runs.reduce(
+    (total, run) => total + run.evaluation.correct,
+    0,
+  );
+  const accuracy = labeled ? correct / labeled : null;
 
   return (
     <div className="space-y-10">
@@ -30,7 +39,7 @@ export default async function LayaPage() {
         </p>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard
           label="Execuções Laya"
           value={formatNumber(runs.length)}
@@ -41,6 +50,12 @@ export default async function LayaPage() {
           value={formatNumber(interference)}
           hint="classificadas como interference"
           tone="rose"
+        />
+        <StatCard
+          label="Acurácia média"
+          value={formatAccuracy(accuracy)}
+          hint={`${formatNumber(correct)}/${formatNumber(labeled)} métodos rotulados`}
+          tone={accuracyTone(accuracy)}
         />
         <StatCard
           label="Erros"

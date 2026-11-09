@@ -27,6 +27,32 @@ export function formatProbability(value?: number | null): string {
   return typeof value === "number" ? value.toFixed(3) : "—";
 }
 
+export function formatAccuracy(value?: number | null): string {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "—";
+  return new Intl.NumberFormat("pt-BR", {
+    style: "percent",
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+export function accuracyTone(
+  value?: number | null,
+): "emerald" | "amber" | "rose" | "slate" {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "slate";
+  if (value >= 0.8) return "emerald";
+  if (value >= 0.5) return "amber";
+  return "rose";
+}
+
+export function groundTruthLabel(
+  value?: "Yes" | "No" | null,
+): string {
+  if (value === "Yes") return "interferência";
+  if (value === "No") return "sem interferência";
+  return "sem predição";
+}
+
 export function pluralize(
   count: number,
   singular: string,

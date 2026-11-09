@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { FlowRunGroup } from "@/components/flow-run-group";
 import { JsonViewer } from "@/components/json-viewer";
 import { ScenarioList } from "@/components/scenario-list";
 import {
@@ -13,6 +14,7 @@ import {
 import { formatDate, formatNumber } from "@/lib/format";
 import {
   getExecution,
+  getFlowRunsForExecution,
   getLayaSummariesForScenarios,
   getLlmSummariesForScenarios,
 } from "@/lib/smat-data";
@@ -34,9 +36,18 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
     0,
   );
   const executionRunId = execution.summary.runId || execution.summary.id;
-  const [layaSummaries, llmSummaries] = await Promise.all([
-    getLayaSummariesForScenarios(execution.scenarios, executionRunId),
-    getLlmSummariesForScenarios(execution.scenarios, executionRunId),
+  const [layaSummaries, llmSummaries, flowRuns] = await Promise.all([
+    getLayaSummariesForScenarios(
+      execution.scenarios,
+      executionRunId,
+      execution.summary.dataset,
+    ),
+    getLlmSummariesForScenarios(
+      execution.scenarios,
+      executionRunId,
+      execution.summary.dataset,
+    ),
+    getFlowRunsForExecution(executionRunId),
   ]);
 
   return (
@@ -113,6 +124,28 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
           tone={execution.summary.hasManifest ? "emerald" : "slate"}
         />
       </div>
+
+      <section>
+        <SectionHeading
+          eyebrow="Fluxos"
+          title="Execuções de classificação"
+          description="Laya e LLM executados nesta janela. Cada execução mostra sua acurácia contra os rótulos de referência."
+        />
+        <div className="grid gap-4 lg:grid-cols-2">
+          <FlowRunGroup
+            title="Laya"
+            runs={flowRuns.laya}
+            basePath="/laya"
+            emptyText="Nenhuma execução do fluxo Laya foi encontrada nesta janela."
+          />
+          <FlowRunGroup
+            title="LLM"
+            runs={flowRuns.llm}
+            basePath="/llm"
+            emptyText="Nenhuma execução do fluxo LLM foi encontrada nesta janela."
+          />
+        </div>
+      </section>
 
       <section>
         <SectionHeading

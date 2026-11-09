@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const links = [
   { href: "/executions", label: "Execuções" },
   { href: "/laya", label: "Laya" },
+  { href: "/llm", label: "LLM" },
   { href: "/reports", label: "Relatórios" },
   { href: "/files", label: "Arquivos" },
 ];
@@ -11,10 +13,16 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/80 backdrop-blur">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <span className="brand-mark flex h-9 w-9 items-center justify-center rounded-xl font-mono text-sm font-bold text-white shadow-glow">
-            S
-          </span>
+        <Link href="/" className="flex shrink-0 items-center gap-3">
+          <Image
+            src="/HC.png"
+            alt="Centro de Informática da UFPE"
+            width={3322}
+            height={1149}
+            priority
+            sizes="160px"
+            className="h-10 w-auto"
+          />
           <span className="hidden flex-col leading-tight sm:flex">
             <span className="text-sm font-semibold tracking-tight text-white">
               SMAT Scenario Explorer

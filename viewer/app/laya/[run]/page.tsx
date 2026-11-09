@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { FlowEvaluationPanel } from "@/components/flow-evaluation-panel";
 import { LayaTable } from "@/components/laya-table";
 import {
   Badge,
@@ -8,7 +9,7 @@ import {
   SectionHeading,
   StatCard,
 } from "@/components/ui";
-import { formatDate, formatNumber } from "@/lib/format";
+import { accuracyTone, formatAccuracy, formatDate, formatNumber } from "@/lib/format";
 import { getLayaRun } from "@/lib/smat-data";
 
 export const dynamic = "force-dynamic";
@@ -102,12 +103,25 @@ export default async function LayaRunPage({ params }: LayaRunPageProps) {
           tone={detail.summary.errors ? "amber" : "slate"}
         />
         <StatCard
-          label="Arquivos"
-          value={formatNumber(detail.summary.fileCount)}
-          hint="JSONs de classificação"
-          tone="cyan"
+          label="Acurácia"
+          value={formatAccuracy(detail.summary.evaluation.accuracy)}
+          hint={`${formatNumber(detail.summary.evaluation.correct)}/${formatNumber(detail.summary.evaluation.labeled)} métodos rotulados`}
+          tone={accuracyTone(detail.summary.evaluation.accuracy)}
         />
       </div>
+
+      <section>
+        <SectionHeading
+          eyebrow="Avaliação"
+          title="Acertos e erros da execução"
+          description="Comparação com os rótulos de referência do dataset. Erros e classificações incertas contam como erro."
+        />
+        <FlowEvaluationPanel
+          records={detail.records}
+          evaluation={detail.summary.evaluation}
+          flowLabel="Laya"
+        />
+      </section>
 
       <section>
         <SectionHeading

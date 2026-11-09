@@ -32,8 +32,16 @@ export default async function ScenarioPage({ params }: ScenarioPageProps) {
   if (!detail) notFound();
 
   const [layaSummary, llmSummary] = await Promise.all([
-    getLayaSummaryForScenario(detail.summary, detail.runId),
-    getLlmSummaryForScenario(detail.summary, detail.runId),
+    getLayaSummaryForScenario(
+      detail.summary,
+      detail.runId,
+      detail.dataset,
+    ),
+    getLlmSummaryForScenario(
+      detail.summary,
+      detail.runId,
+      detail.dataset,
+    ),
   ]);
   const targets = normalizeTargets(detail.summary.targets);
   const methodCount = targets.reduce(
@@ -209,7 +217,7 @@ export default async function ScenarioPage({ params }: ScenarioPageProps) {
         <SectionHeading
           eyebrow="Sources"
           title="Versões do cenário"
-          description="Alterne entre o diff textual e as fontes completas. No diff, escolha os pares base/left/right/merge; no modo Fontes, use as abas por branch."
+          description="Alterne entre o diff de duas vias, o diff de três vias (base/left/right/merge) e as fontes completas por branch."
         />
         <ScenarioSourceExplorer branches={detail.branches} />
       </section>

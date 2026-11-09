@@ -4,9 +4,10 @@ import { useState } from "react";
 
 import { BranchViewer } from "@/components/branch-viewer";
 import { MergeDiffViewer } from "@/components/merge-diff-viewer";
+import { ThreeWayDiffViewer } from "@/components/three-way-diff-viewer";
 import type { BranchView } from "@/lib/types";
 
-type SourceView = "diff" | "sources";
+type SourceView = "diff" | "three-way" | "sources";
 
 export function ScenarioSourceExplorer({
   branches,
@@ -27,7 +28,18 @@ export function ScenarioSourceExplorer({
               : "text-zinc-600 hover:text-zinc-900"
           }`}
         >
-          Diff
+          Diff 2 vias
+        </button>
+        <button
+          type="button"
+          onClick={() => setView("three-way")}
+          className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
+            view === "three-way"
+              ? "bg-red-50 text-red-700"
+              : "text-zinc-600 hover:text-zinc-900"
+          }`}
+        >
+          Diff 3 vias
         </button>
         <button
           type="button"
@@ -44,6 +56,8 @@ export function ScenarioSourceExplorer({
 
       {view === "diff" ? (
         <MergeDiffViewer branches={branches} />
+      ) : view === "three-way" ? (
+        <ThreeWayDiffViewer branches={branches} />
       ) : (
         <BranchViewer branches={branches} />
       )}

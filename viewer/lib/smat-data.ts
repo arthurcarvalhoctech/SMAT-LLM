@@ -20,6 +20,7 @@ import type {
 } from "./types";
 import { BRANCH_KEYS, BRANCH_LABELS } from "./types";
 import { normalizeTargets } from "./targets";
+import { evaluateFlowRecords } from "./ground-truth";
 
 const DEFAULT_OUTPUT_DIR = path.resolve(
   process.cwd(),
@@ -532,11 +533,27 @@ function toLayaRecord(raw: LayaJson): LayaRecord {
   };
 }
 
+interface FlowReportSource {
+  root: string;
+  logPrefix: string;
+}
+
+const LAYA_REPORT_SOURCE: FlowReportSource = {
+  root: "laya",
+  logPrefix: "laya_interference",
+};
+
+const LLM_REPORT_SOURCE: FlowReportSource = {
+  root: "llm_interference",
+  logPrefix: "llm_interference",
+};
+
 async function buildLayaSummary(
   id: string,
   dir: string,
   records: LayaRecord[],
   fileCount: number,
+  evaluation?: LayaRunSummary["evaluation"],
 ): Promise<LayaRunSummary> {
   const dirStat = await statSafe(dir);
   const timestamps = records
@@ -564,11 +581,19 @@ async function buildLayaSummary(
       timestamps[timestamps.length - 1] ||
       dirStat?.mtime.toISOString() ||
       "",
+    evaluation: evaluation ?? evaluateFlowRecords(records).summary,
   };
 }
 
-export async function listLayaRuns(): Promise<LayaRunSummary[]> {
-  const root = path.join(getOutputRoot(), "reports", "laya", "classification");
+async function listFlowRuns(
+  source: FlowReportSource,
+): Promise<LayaRunSummary[]> {
+  const root = path.join(
+    getOutputRoot(),
+    "reports",
+    source.root,
+    "classification",
+  );
   const entries = (await listDir(root)).filter(
     (entry) => entry.isDirectory() && entry.name.startsWith("run_"),
   );
@@ -586,7 +611,14 @@ export async function listLayaRuns(): Promise<LayaRunSummary[]> {
       )
         .filter((record): record is LayaJson => Boolean(record))
         .map(toLayaRecord);
-      return buildLayaSummary(entry.name, dir, records, files.length);
+      const evaluation = evaluateFlowRecords(records);
+      return buildLayaSummary(
+        entry.name,
+        dir,
+        records,
+        files.length,
+        evaluation.summary,
+      );
     }),
   );
 
@@ -596,12 +628,21 @@ export async function listLayaRuns(): Promise<LayaRunSummary[]> {
   );
 }
 
-export async function getLayaRun(
+export async function listLayaRuns(): Promise<LayaRunSummary[]> {
+  return listFlowRuns(LAYA_REPORT_SOURCE);
+}
+
+export async function listLlmRuns(): Promise<LayaRunSummary[]> {
+  return listFlowRuns(LLM_REPORT_SOURCE);
+}
+
+async function getFlowRun(
   id: string,
+  source: FlowReportSource,
 ): Promise<LayaRunDetail | null> {
   let dir: string;
   try {
-    dir = safeResolve("reports", "laya", "classification", id);
+    dir = safeResolve("reports", source.root, "classification", id);
   } catch {
     return null;
   }
@@ -620,22 +661,53 @@ export async function getLayaRun(
     .filter((record): record is LayaJson => Boolean(record))
     .map(toLayaRecord);
 
-  const summary = await buildLayaSummary(id, dir, records, files.length);
-  const logFile = `laya_interference_${summary.runId}.log`;
-  const jsonlFile = `laya_interference_${summary.runId}.jsonl`;
-  const logPath = path.join(getOutputRoot(), "reports", "laya", logFile);
-  const jsonlPath = path.join(getOutputRoot(), "reports", "laya", jsonlFile);
+  const evaluation = evaluateFlowRecords(records);
+  const summary = await buildLayaSummary(
+    id,
+    dir,
+    records,
+    files.length,
+    evaluation.summary,
+  );
+  const logFile = `${source.logPrefix}_${summary.runId}.log`;
+  const jsonlFile = `${source.logPrefix}_${summary.runId}.jsonl`;
+  const logPath = path.join(
+    getOutputRoot(),
+    "reports",
+    source.root,
+    logFile,
+  );
+  const jsonlPath = path.join(
+    getOutputRoot(),
+    "reports",
+    source.root,
+    jsonlFile,
+  );
 
   return {
     summary,
-    records,
+    records: evaluation.records,
     logFile: (await exists(logPath)) ? logFile : undefined,
     jsonlFile: (await exists(jsonlPath)) ? jsonlFile : undefined,
   };
 }
 
-export async function listLayaLogs(): Promise<LayaLogFile[]> {
-  const root = path.join(getOutputRoot(), "reports", "laya");
+export async function getLayaRun(
+  id: string,
+): Promise<LayaRunDetail | null> {
+  return getFlowRun(id, LAYA_REPORT_SOURCE);
+}
+
+export async function getLlmRun(
+  id: string,
+): Promise<LayaRunDetail | null> {
+  return getFlowRun(id, LLM_REPORT_SOURCE);
+}
+
+async function listFlowLogs(
+  source: FlowReportSource,
+): Promise<LayaLogFile[]> {
+  const root = path.join(getOutputRoot(), "reports", source.root);
   const entries = (await listDir(root)).filter(
     (entry) =>
       entry.isFile() &&
@@ -657,6 +729,14 @@ export async function listLayaLogs(): Promise<LayaLogFile[]> {
   );
 
   return files.sort((a, b) => b.modified.localeCompare(a.modified));
+}
+
+export async function listLayaLogs(): Promise<LayaLogFile[]> {
+  return listFlowLogs(LAYA_REPORT_SOURCE);
+}
+
+export async function listLlmLogs(): Promise<LayaLogFile[]> {
+  return listFlowLogs(LLM_REPORT_SOURCE);
 }
 
 async function readJsonl(
@@ -683,21 +763,6 @@ async function readJsonl(
     return [];
   }
 }
-
-interface FlowReportSource {
-  root: string;
-  logPrefix: string;
-}
-
-const LAYA_REPORT_SOURCE: FlowReportSource = {
-  root: "laya",
-  logPrefix: "laya_interference",
-};
-
-const LLM_REPORT_SOURCE: FlowReportSource = {
-  root: "llm_interference",
-  logPrefix: "llm_interference",
-};
 
 interface LlmRuntimeConfig {
   provider?: string;
@@ -934,7 +999,11 @@ function matchesScenario(
 
 function summarizeLayaRecords(
   records: LayaRecord[],
+  datasetHint?: string | null,
 ): LayaScenarioSummary {
+  const evaluation = evaluateFlowRecords(records, datasetHint);
+  records = evaluation.records;
+
   const interference = records.some(
     (record) => record.classification === "interference",
   );
@@ -1002,6 +1071,7 @@ function summarizeLayaRecords(
     errorCount: errorRecords.length,
     runIds,
     confidence,
+    evaluation: evaluation.summary,
   };
 }
 
@@ -1081,6 +1151,7 @@ async function getFlowSummariesForScenarios(
   scenarios: ScenarioSummary[],
   runId: string,
   loadRecords: FlowRecordLoader,
+  datasetHint?: string | null,
 ): Promise<Record<string, LayaScenarioSummary>> {
   const window = await getExecutionRunWindow(runId);
   const records = window
@@ -1094,7 +1165,7 @@ async function getFlowSummariesForScenarios(
     const matched = records.filter((record) =>
       matchesScenario(record, scenario),
     );
-    summaries[scenario.folder] = summarizeLayaRecords(matched);
+    summaries[scenario.folder] = summarizeLayaRecords(matched, datasetHint);
   }
 
   return summaries;
@@ -1104,60 +1175,96 @@ async function getFlowSummaryForScenario(
   scenario: ScenarioSummary,
   runId: string,
   loadRecords: FlowRecordLoader,
+  datasetHint?: string | null,
 ): Promise<LayaScenarioSummary> {
   const window = await getExecutionRunWindow(runId);
-  if (!window) return summarizeLayaRecords([]);
+  if (!window) return summarizeLayaRecords([], datasetHint);
 
   const records = (await loadRecords()).filter((record) =>
     isInExecutionWindow(record, window),
   );
   return summarizeLayaRecords(
     records.filter((record) => matchesScenario(record, scenario)),
+    datasetHint,
   );
 }
 
 export async function getLayaSummariesForScenarios(
   scenarios: ScenarioSummary[],
   runId: string,
+  datasetHint?: string | null,
 ): Promise<Record<string, LayaScenarioSummary>> {
   return getFlowSummariesForScenarios(
     scenarios,
     runId,
     loadAllLayaRecords,
+    datasetHint,
   );
 }
 
 export async function getLlmSummariesForScenarios(
   scenarios: ScenarioSummary[],
   runId: string,
+  datasetHint?: string | null,
 ): Promise<Record<string, LayaScenarioSummary>> {
   return getFlowSummariesForScenarios(
     scenarios,
     runId,
     loadAllLlmRecords,
+    datasetHint,
   );
 }
 
 export async function getLayaSummaryForScenario(
   scenario: ScenarioSummary,
   runId: string,
+  datasetHint?: string | null,
 ): Promise<LayaScenarioSummary> {
   return getFlowSummaryForScenario(
     scenario,
     runId,
     loadAllLayaRecords,
+    datasetHint,
   );
 }
 
 export async function getLlmSummaryForScenario(
   scenario: ScenarioSummary,
   runId: string,
+  datasetHint?: string | null,
 ): Promise<LayaScenarioSummary> {
   return getFlowSummaryForScenario(
     scenario,
     runId,
     loadAllLlmRecords,
+    datasetHint,
   );
+}
+
+export async function getFlowRunsForExecution(
+  runId: string,
+): Promise<{ laya: LayaRunSummary[]; llm: LayaRunSummary[] }> {
+  const window = await getExecutionRunWindow(runId);
+  if (!window) return { laya: [], llm: [] };
+
+  const within = (runs: LayaRunSummary[]) =>
+    runs
+      .filter((run) => {
+        const timestamp = parseRunIdTimestamp(run.id);
+        return (
+          timestamp != null &&
+          timestamp >= window.start &&
+          (window.end == null || timestamp < window.end)
+        );
+      })
+      .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+
+  const [laya, llm] = await Promise.all([
+    listFlowRuns(LAYA_REPORT_SOURCE),
+    listFlowRuns(LLM_REPORT_SOURCE),
+  ]);
+
+  return { laya: within(laya), llm: within(llm) };
 }
 
 export async function listReports(): Promise<ReportSummary[]> {

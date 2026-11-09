@@ -2,7 +2,13 @@ import { MobileLabel } from "@/components/mobile-label";
 import { formatBytes, formatDate } from "@/lib/format";
 import type { LayaLogFile } from "@/lib/types";
 
-export function LayaLogList({ logs }: { logs: LayaLogFile[] }) {
+export function LayaLogList({
+  logs,
+  basePath = "reports/laya",
+}: {
+  logs: LayaLogFile[];
+  basePath?: string;
+}) {
   return (
     <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
       <div className="hidden grid-cols-[1.8fr_auto_auto_auto_auto] gap-4 border-b border-zinc-200 bg-zinc-100 px-4 py-3 text-[10px] font-medium uppercase tracking-[0.16em] text-zinc-600 sm:grid">
@@ -17,7 +23,7 @@ export function LayaLogList({ logs }: { logs: LayaLogFile[] }) {
         {logs.map((log) => (
           <a
             key={log.name}
-            href={`/api/file/reports/laya/${encodeURIComponent(log.name)}`}
+            href={`/api/file/${basePath}/${encodeURIComponent(log.name)}`}
             target="_blank"
             rel="noreferrer"
             className="grid gap-2 px-4 py-4 transition hover:bg-zinc-50 sm:grid-cols-[1.8fr_auto_auto_auto_auto] sm:items-center sm:gap-4"

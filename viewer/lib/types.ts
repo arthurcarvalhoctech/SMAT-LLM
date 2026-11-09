@@ -80,6 +80,28 @@ export interface TargetClass {
   methods: TargetMethod[];
 }
 
+export type GroundTruthLabel = "Yes" | "No";
+
+export type GroundTruthDataset =
+  | "sintetico"
+  | "mergedataset"
+  | "mergedataset-full";
+
+export interface FlowRecordEvaluation {
+  dataset: GroundTruthDataset;
+  expected: GroundTruthLabel;
+  predicted: GroundTruthLabel | null;
+  correct: boolean;
+  scenario?: string;
+}
+
+export interface FlowEvaluationSummary {
+  dataset: GroundTruthDataset | null;
+  labeled: number;
+  correct: number;
+  accuracy: number | null;
+}
+
 export interface LayaRecord {
   runId?: string;
   timestamp?: string;
@@ -122,6 +144,7 @@ export interface LayaRecord {
   }>;
   error?: string | null;
   note?: string | null;
+  evaluation?: FlowRecordEvaluation;
 }
 
 export type LayaScenarioStatus =
@@ -142,6 +165,7 @@ export interface LayaScenarioSummary {
   errorCount: number;
   runIds: string[];
   confidence?: string | null;
+  evaluation: FlowEvaluationSummary;
 }
 
 export interface LayaRunSummary {
@@ -152,6 +176,7 @@ export interface LayaRunSummary {
   noInterference: number;
   errors: number;
   createdAt: string;
+  evaluation: FlowEvaluationSummary;
 }
 
 export interface LayaRunDetail {
