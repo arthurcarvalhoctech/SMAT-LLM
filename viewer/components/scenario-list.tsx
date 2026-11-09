@@ -65,7 +65,10 @@ export function ScenarioList({
               <div>
                 <MobileLabel>Targets</MobileLabel>
                 <span className="text-xs text-zinc-600">
-                  {targets.length} classes · {methodCount} métodos
+                  {targets.length}{" "}
+                  {targets.length === 1 ? "classe" : "classes"} ·{" "}
+                  {methodCount}{" "}
+                  {methodCount === 1 ? "método" : "métodos"}
                 </span>
               </div>
 

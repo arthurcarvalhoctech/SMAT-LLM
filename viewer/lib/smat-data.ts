@@ -977,24 +977,40 @@ function matchesScenario(
     !scenario.project ||
     record.project.toLowerCase() === scenario.project.toLowerCase();
 
-  const classMatches =
-    Boolean(recordClass) &&
-    targets.some(
-      (target) => simpleClassName(target.className) === recordClass,
+  if (!projectMatches) return false;
+
+  // Quando o cenário declara métodos, o match precisa ser por classe + método.
+  // O match apenas por classe juntava métodos de outros cenários que usavam a
+  // mesma classe (por exemplo, dois commits diferentes do Slurper).
+  const classTargets = targets.filter(
+    (target) => simpleClassName(target.className) === recordClass,
+  );
+
+  if (classTargets.length > 0) {
+    const targetsWithMethods = classTargets.filter(
+      (target) => target.methods.length > 0,
     );
 
-  const methodMatches =
-    Boolean(recordMethod) &&
-    targets.some((target) =>
+    if (recordMethod && targetsWithMethods.length > 0) {
+      return targetsWithMethods.some((target) =>
+        target.methods.some(
+          (method) => simpleMethodName(method.name) === recordMethod,
+        ),
+      );
+    }
+
+    return true;
+  }
+
+  if (!recordClass && recordMethod) {
+    return targets.some((target) =>
       target.methods.some(
         (method) => simpleMethodName(method.name) === recordMethod,
       ),
     );
+  }
 
-  if (classMatches) return true;
-  if (methodMatches) return projectMatches;
-  if (targets.length === 0) return projectMatches;
-  return false;
+  return targets.length === 0;
 }
 
 function summarizeLayaRecords(

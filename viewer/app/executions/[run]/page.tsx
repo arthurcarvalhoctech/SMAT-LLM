@@ -11,19 +11,81 @@ import {
   SectionHeading,
   StatCard,
 } from "@/components/ui";
-import { formatDate, formatNumber } from "@/lib/format";
+import { formatDate, formatAccuracy, formatNumber } from "@/lib/format";
 import {
   getExecution,
   getFlowRunsForExecution,
   getLayaSummariesForScenarios,
   getLlmSummariesForScenarios,
 } from "@/lib/smat-data";
+import type { LayaScenarioSummary } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 type ExecutionPageProps = {
   params: Promise<{ run: string }>;
 };
+
+type FlowStats = {
+  accuracy: number | null;
+  correct: number;
+  labeled: number;
+  scenariosCorrect: number;
+  scenariosLabeled: number;
+};
+
+function summarizeFlow(
+  summaries: Record<string, LayaScenarioSummary>,
+): FlowStats {
+  const evaluated = Object.values(summaries).filter(
+    (summary) => summary.evaluation.labeled > 0,
+  );
+  const correct = evaluated.reduce(
+    (total, summary) => total + summary.evaluation.correct,
+    0,
+  );
+  const labeled = evaluated.reduce(
+    (total, summary) => total + summary.evaluation.labeled,
+    0,
+  );
+
+  return {
+    accuracy: labeled ? correct / labeled : null,
+    correct,
+    labeled,
+    scenariosCorrect: evaluated.filter(
+      (summary) =>
+        summary.evaluation.correct === summary.evaluation.labeled,
+    ).length,
+    scenariosLabeled: evaluated.length,
+  };
+}
+
+function FlowAccuracyStat({
+  label,
+  stats,
+}: {
+  label: string;
+  stats: FlowStats;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+      <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-slate-500">
+        Acurácia {label}
+      </p>
+      <p className="mt-1 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+        {formatAccuracy(stats.accuracy)}
+      </p>
+      <p className="mt-2 text-base text-slate-200">
+        {formatNumber(stats.correct)}/{formatNumber(stats.labeled)} métodos
+      </p>
+      <p className="mt-0.5 text-sm text-slate-400">
+        {formatNumber(stats.scenariosCorrect)}/
+        {formatNumber(stats.scenariosLabeled)} cenários com 100% de acerto
+      </p>
+    </div>
+  );
+}
 
 export default async function ExecutionPage({ params }: ExecutionPageProps) {
   const { run } = await params;
@@ -49,6 +111,8 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
     ),
     getFlowRunsForExecution(executionRunId),
   ]);
+  const layaStats = summarizeFlow(layaSummaries);
+  const llmStats = summarizeFlow(llmSummaries);
 
   return (
     <div className="space-y-8">
@@ -83,6 +147,10 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
             input: {execution.inputPath}
           </p>
         ) : null}
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <FlowAccuracyStat label="Laya" stats={layaStats} />
+          <FlowAccuracyStat label="LLM" stats={llmStats} />
+        </div>
         <div className="mt-5 flex flex-wrap gap-3">
           <Link
             href="/executions"
@@ -151,7 +219,7 @@ export default async function ExecutionPage({ params }: ExecutionPageProps) {
         <SectionHeading
           eyebrow="Cenários"
           title="Versões do merge"
-          description="Clique em uma linha para comparar os fontes de base, left, right e merge."
+          description="Clique em uma linha para comparar os fontes de base, left, right e merge. Bolas verdes indicam métodos avaliados com acerto; vermelhas, com erro."
         />
         {execution.scenarios.length ? (
           <ScenarioList

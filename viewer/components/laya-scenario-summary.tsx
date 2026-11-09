@@ -1,4 +1,5 @@
 import { LayaTable } from "@/components/laya-table";
+import { EvaluationDots } from "@/components/evaluation-dots";
 import { Badge } from "@/components/ui";
 import { accuracyTone, formatAccuracy } from "@/lib/format";
 import {
@@ -60,6 +61,7 @@ export function LayaScenarioBadges({
           </Badge>
         </span>
       ) : null}
+      <EvaluationDots records={summary.records} />
       {summary.criteria.map((criterion) => (
         <span
           key={criterion}
