@@ -1,0 +1,19 @@
+FROM python:3.12-slim
+
+ARG LAYA_REVISION=b8a0f0991d95a953411f2e16f91bddc2ffdaf79a
+ARG TORCH_VERSION=2.14.1
+ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 USE_TF=0 \
+    HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HOME=/tmp/huggingface \
+    OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
+
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+RUN python -m pip install --no-cache-dir "torch==${TORCH_VERSION}" --index-url https://download.pytorch.org/whl/cpu
+RUN python -m pip install --no-cache-dir \
+    "transformers==5.22.1" "huggingface_hub==1.33.0" \
+    "tokenizers==0.23.3" "safetensors==0.8.0" "numpy==2.4.6" \
+    "scipy==1.16.3" "cryptography==50.0.2" \
+    "vegaml==0.16.1" \
+    "laya @ git+https://github.com/NandhaKishorM/laya.git@${LAYA_REVISION}"
+WORKDIR /app
+ENTRYPOINT ["python", "/app/evaluate_laya_synthetic.py"]

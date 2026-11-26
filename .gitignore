@@ -1,11 +1,56 @@
-# Local secrets and generated experiment artifacts
+# Local configuration
 .env
+.env.*
+!.env.example
+!.env.*.example
+/.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.orig
+
+# Development and test artifacts
 .venv/
 __pycache__/
+*.py[cod]
+*.class
 .pytest_cache/
-SMAT/output-test-dest/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+.coverage
+.coverage.*
+*.log
+
+# Experiment outputs and generated datasets
+/outputs/
+output-test-dest/
 runs/
 .laya_smat/
 laya_checkpoints/
-output-test-dest
-**/*.orig
+/laya_training_data/
+/mergedataset-full/resultados/
+/dataset-sintetico/*.jsonl
+/dataset-sintetico/resultados/*
+# Reference probe data used by the experiment docs and scripts.
+!/dataset-sintetico/resultados/probe_formats.json
+!/dataset-sintetico/resultados/probe_t1.json
+
+# Model exports, columnar datasets, and artifact archives
+*.safetensors
+*.ckpt
+*.gguf
+*.onnx
+*.pt
+*.pth
+*.parquet
+*.arrow
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.*
+*.tgz
+
+# Local presentation workflow
+/skills/apresentar-evolucao-de-projeto/

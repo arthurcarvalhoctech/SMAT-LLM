@@ -1,0 +1,80 @@
+services:
+  laya-eval:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.laya-eval
+    image: smat-laya-global-eval:local
+    init: true
+    network_mode: none
+    read_only: true
+    tmpfs:
+      - /tmp:size=536870912
+    volumes:
+      - ./scripts/evaluate_laya_synthetic.py:/app/evaluate_laya_synthetic.py:ro
+      - ./dataset-sintetico:/data:ro
+      - ./laya_checkpoints/laya_semantic_global:/model:ro
+      - ./dataset-sintetico/resultados:/results
+    command:
+      - --model
+      - /model
+      - --data
+      - /data/laya_global_eval.jsonl
+      - --out
+      - /results/laya_semantic_global_eval.json
+      - --device
+      - cpu
+
+  laya-eval-holdout45:
+    extends:
+      service: laya-eval
+    entrypoint: ["python", "/app/evaluate_laya_holdout.py"]
+    volumes:
+      - ./scripts/evaluate_laya_holdout.py:/app/evaluate_laya_holdout.py:ro
+      - ./laya_checkpoints/laya_semantic_45_45_checkpoint:/model:ro
+      - ./laya_training_data/mergedataset_45_45:/data:ro
+      - ./mergedataset-full/resultados:/results
+    command:
+      - --model
+      - /model
+      - --data
+      - /data/holdout.jsonl
+      - --out
+      - /results/holdout_45_evaluation_local.json
+      - --device
+      - cpu
+
+  laya-eval-all90:
+    extends:
+      service: laya-eval-mergedataset
+    entrypoint: ["python", "/app/evaluate_laya_all90.py"]
+    volumes:
+      - ./scripts/evaluate_laya_all90.py:/app/evaluate_laya_all90.py:ro
+    command:
+      - --model
+      - /model
+      - --data-dir
+      - /data
+      - --reuse-report
+      - /results/laya_semantic_global_eval.json
+      - --out
+      - /results/laya_semantic_global_all90.json
+      - --device
+      - cpu
+
+  laya-eval-mergedataset:
+    extends:
+      service: laya-eval
+    entrypoint: ["python", "/app/evaluate_laya_mergedataset.py"]
+    volumes:
+      - ./scripts/evaluate_laya_mergedataset.py:/app/evaluate_laya_mergedataset.py:ro
+      - ./laya_training_data/mergedataset_full_colab:/data:ro
+      - ./mergedataset-full/resultados:/results
+    command:
+      - --model
+      - /model
+      - --data-dir
+      - /data
+      - --out
+      - /results/laya_semantic_global_eval.json
+      - --device
+      - cpu

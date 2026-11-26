@@ -24,6 +24,26 @@ e os artefatos do [Zenodo](https://doi.org/10.5281/zenodo.20938400).
 - Resolução de fontes para o layout do `mergedataset` e do ASTER.
 - Docker com Python 3.11, Java 8 e Maven.
 
+## Treino do Laya no Google Colab
+
+O [notebook](notebooks/laya_semantic_interference_colab.ipynb) e o
+[pacote de dados](notebooks/laya_mergedataset_full_colab.zip) preparam RLCD em
+uma GPU com 360 apresentações de 90 casos reais do `mergedataset-full`, sem
+casos sintéticos. Veja o [guia de treinamento](docs/laya-colab-training.md).
+O Yes/No da planilha supervisiona a detecção global; os sete campos específicos
+de `criteria.py` precisam de anotações próprias e não recebem rótulos inventados.
+Também está disponível uma [versão para Kaggle](notebooks/laya_semantic_interference_kaggle.ipynb),
+que utiliza o mesmo ZIP de dados.
+
+Para avaliar o checkpoint global nos 20 casos sintéticos via Docker, use
+`docker compose -f docker-compose.laya-eval.yml run --rm --build laya-eval`.
+O [guia do dataset sintético](dataset-sintetico/README.md) descreve os relatórios,
+o limiar fixo e o cálculo da ROC/AUC.
+Para os casos reais, use
+`docker compose -f docker-compose.laya-eval.yml run --rm laya-eval-mergedataset`.
+O [guia de avaliação do mergedataset](mergedataset-full/README-laya-eval.md)
+explica a separação entre casos de treino, validação e teste.
+
 ## 1. Pré-requisitos
 
 - Docker e Docker Compose (recomendado); ou
